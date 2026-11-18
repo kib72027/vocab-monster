@@ -517,9 +517,13 @@ h1:{st:'slash',act:'lunge'},h2:{st:'orb',act:'cast'},h3:{st:'arrow',act:'draw'},
 h5:{st:'spin',e:'🔱',act:'lunge'},h6:{st:'drop',e:'✨',act:'cast'},h7:{st:'spin',e:'🗡️',act:'throw',sp:22},
 h8:{st:'pet',e:'🐱',act:'cast'},h9:{st:'spin',e:'🔧',act:'throw',sp:12},h10:{st:'spin',e:'🔮',act:'cast',sp:5}};
 function hid0(){return(E.hero&&E.hero.himg)||'h1';}
-function heroAct(act,dur){const h=E.hero,F={lunge:1.3,dash:2.2,throw:.35,draw:-.3,cast:0}[act];const f=F===undefined?.3:F;
-  tween(dur,u=>{const a=u<.3?-2.2*ease(u/.3):u<.55?-2.2+2.4*ease((u-.3)/.25):.2*(1-ease((u-.55)/.45));h.armR.r[0]=a;
-    h.off.y=(act==='cast'?.3:.14)*Math.sin(PI*cl(u/.6));h.off.x=f*Math.sin(PI*cl(u/.8));h.off.sq=1-.08*Math.sin(PI*cl(u/.3));});}
+function heroAct(act,dur){const h=E.hero,hid=hid0(),th=ULT[hid]||ULT.h1,gl=utex(hid,th);
+  const Q={lunge:[.45,1.7,.28,.3,0,.25],dash:[.6,2.6,.3,.35,0,.3],throw:[.5,.5,.4,.32,0,.3],draw:[.7,.2,.3,.1,0,.12],cast:[.1,.25,.08,.15,.55,.1]}[act]||[.4,1,.25,.25,0,.2];
+  const bx=Q[0],fx=Q[1],rb=Q[2],rf=Q[3],yc=Q[4],yf=Q[5];
+  at(.02,()=>{const p=hpos();flare([p[0]+.5,p[1]+.3,p[2]+.8],2.2,.35,gl);goldBurst([p[0]+.5,p[1]+.3,p[2]+.8],8,2,.4,.28,gl);});
+  tween(dur,u=>{const T=.35,back=u<T?ease(u/T):1-ease(cl((u-T)/.2)),fwd=u<T?0:Math.sin(PI*cl((u-T)/(1-T)));
+    h.off.x=-bx*back+fx*fwd;h.off.rz=rb*back-rf*fwd;h.off.sq=1-.12*back+.06*fwd;
+    h.off.y=yc*Math.sin(PI*cl(u))+yf*fwd;h.armR.r[0]=-2.2*back+2*fwd;});}
 function projFly(hid,from,to,dur,delay,sz,arc){
   const A=ATK[hid]||ATK.h1,th=ULT[hid]||ULT.h1,gl=utex(hid,th),st=A.st;
   const tex=(st==='slash'||st==='arrow')?uslash(hid,th):st==='orb'?gl:emojiTex(A.e);
@@ -540,30 +544,30 @@ function projFly(hid,from,to,dur,delay,sz,arc){
 function letter(ch,i){ // one hero-specific projectile + letter flies from hero to monster
   if(!E.mon)return;const m=E.mon,hid=hid0(),A=ATK[hid]||ATK.h1,th=ULT[hid]||ULT.h1,gl=utex(hid,th),star=ustar(hid,th),tex=letterTex(ch,i);
   const sp={tex,pos:[-1.5,2.1,.8],w:0,h:0,rot:0,a:0};
-  heroAct(A.act,.45);
+  heroAct(A.act,.75);
   const s0=hpos(),from=[s0[0]+.9,s0[1]+.6,s0[2]+.9];
-  at(.1,()=>{flare(from,1.2,.25,gl);goldBurst(from,6,2,.3,.25,gl);});
-  projFly(hid,from,[mpos()[0],mpos()[1],mpos()[2]+.5],.3,.12,1.1,.5);
-  at(.14,()=>{E.sprites.push(sp);});
-  tween(.34,u=>{const s=hpos(),t=mpos();const e=ease(u);
+  at(.3,()=>{flare(from,1.4,.3,gl);goldBurst(from,8,2.2,.3,.28,gl);});
+  projFly(hid,from,[mpos()[0],mpos()[1],mpos()[2]+.5],.42,.3,1.4,.5);
+  at(.32,()=>{E.sprites.push(sp);});
+  tween(.42,u=>{const s=hpos(),t=mpos();const e=ease(u);
     sp.pos=[s[0]+.9+(t[0]-s[0]-.9)*e-.3,s[1]+.5+(t[1]-s[1]-.5)*e+.7*Math.sin(PI*u)+.45,s[2]+.9-.4*e];
-    const k=.9+.5*e;sp.w=sp.h=k*1.05;sp.rot=.3*Math.sin(u*PI*2)*(i%2?1:-1);sp.a=1;},.14);
-  at(.48,()=>{const j=E.sprites.indexOf(sp);if(j>=0)E.sprites.splice(j,1);
+    const k=.9+.5*e;sp.w=sp.h=k*1.05;sp.rot=.3*Math.sin(u*PI*2)*(i%2?1:-1);sp.a=1;},.32);
+  at(.74,()=>{const j=E.sprites.indexOf(sp);if(j>=0)E.sprites.splice(j,1);
     const t=mpos();burst(t,5,star,3.2,.32);goldBurst(t,12,3.6,.45,.3,gl);flare(t,1.6,.3,gl);E.shake=Math.max(E.shake,.18);E.flash.mon=[th.fl[0],th.fl[1],th.fl[2],.5];
     tween(.26,u=>{const e=Math.sin(PI*u);m.off.x=.22*e;m.off.rz=-.1*e;m.off.sq=1-.1*e;});});
 }
 function finale(word,big){ // hero-specific volley + word after the last letter
   if(!E.mon)return;const m=E.mon,hid=hid0(),A=ATK[hid]||ATK.h1,th=ULT[hid]||ULT.h1,gl=utex(hid,th),star=ustar(hid,th),wt=wordTex(word);
-  heroAct(A.act,.6);
+  heroAct(A.act,.8);
   const s0=hpos(),from=[s0[0]+.9,s0[1]+.6,s0[2]+.9],t0=mpos(),n=big?7:3;
-  at(.05,()=>{flare(from,big?2.4:1.6,.35,gl);goldBurst(from,big?16:8,3,.4,.3,gl);});
-  for(let k=0;k<n;k++){const yy=(k-(n-1)/2)*.38;projFly(hid,from,[t0[0]+(A.st==='drop'?yy*1.2:0),t0[1]+yy*.8,t0[2]+.5],.26,.1+k*.04,big?1.1:.9,(k-(n-1)/2)*.35);}
+  at(.3,()=>{flare(from,big?2.4:1.8,.35,gl);goldBurst(from,big?16:10,3,.4,.3,gl);});
+  for(let k=0;k<n;k++){const yy=(k-(n-1)/2)*.38;projFly(hid,from,[t0[0]+(A.st==='drop'?yy*1.2:0),t0[1]+yy*.8,t0[2]+.5],.36,.3+k*.05,big?1.3:1.15,(k-(n-1)/2)*.35);}
   const sp={tex:wt.tex,pos:t0,w:0,h:0,rot:0,a:1};
-  at(.42,()=>{E.sprites.push(sp);const t=mpos();burst(t,20,star,5.5,.5);goldBurst(t,big?40:22,big?6.5:5,.7,.38,gl);flare(t,big?4.2:2.6,.5,gl);E.shake=big?.9:.7;E.flash.mon=[th.fl[0],th.fl[1],th.fl[2],.9];
+  at(.68,()=>{E.sprites.push(sp);const t=mpos();burst(t,20,star,5.5,.5);goldBurst(t,big?40:22,big?6.5:5,.7,.38,gl);flare(t,big?4.2:2.6,.5,gl);E.shake=big?.9:.7;E.flash.mon=[th.fl[0],th.fl[1],th.fl[2],.9];
     const rg=E.ring;if(rg){rg.p=[t[0],.05,t[2]];tween(.7,u=>{const r=.3+(big?3.2:2.2)*u;rg.s=[r,.01,r];rg.a=.95*(1-u);});}
     tween(.7,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);m.off.x=.8*e;m.off.rz=-.3*e;m.off.sq=1-.22*Math.sin(PI*cl(u*1.4));m.off.sc=1+.07*Math.sin(PI*u);});
     tween(.8,u=>{const t=mpos();sp.pos=[t[0]-.4,t[1]+.55+.3*u,t[2]+.8];const k=.42+.2*ease(Math.min(1,u*3));sp.h=k;sp.w=k*wt.asp;sp.a=u<.7?1:1-(u-.7)/.3;});});
-  at(1.3,()=>{const j=E.sprites.indexOf(sp);if(j>=0)E.sprites.splice(j,1);});
+  at(1.55,()=>{const j=E.sprites.indexOf(sp);if(j>=0)E.sprites.splice(j,1);});
 }
 
 function sentTex(word,hue,glow,lo){const c=cv(64,64),x=c.getContext('2d'),fam='"Fredoka","Noto Sans TC","Arial Black",Arial,sans-serif',fs=96;
