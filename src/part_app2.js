@@ -997,23 +997,26 @@ function sigH1(sentence,th){const K=sigBase(sentence,th,'h1'),{m,gl,rm,n}=K,TOT=
   at(TOT,()=>{[...K.sps,K.bsp,sw,...rays].forEach(rm);});
   return TOT;}
 // --- 龍騎士：冰龍吐息 (ice dragon head, blizzard carries the words, monster freezes then shatters) ---
-function sigH5(sentence,th){const K=sigBase(sentence,th,'h5'),{m,gl,rm,n}=K,TOT=5.0,big=E.big?1.3:1;
-  const dr={tex:tDragon(),pos:mpos(),w:0,h:0,rot:0,a:0},dg={tex:gtex([110,200,255]),pos:mpos(),w:0,h:0,rot:0,a:0},ice={tex:tIce(),pos:mpos(),w:0,h:0,rot:0,a:0};
+function sigH5(sentence,th){const K=sigBase(sentence,th,'h5'),{m,gl,rm,n}=K,TOT=5.0,big=E.big?1.3:1,h=E.hero;
+  const aura={tex:gtex([110,200,255]),pos:mpos(),w:0,h:0,rot:0,a:0},ice={tex:tIce(),pos:mpos(),w:0,h:0,rot:0,a:0};
   const snow=emojiTex('❄️'),shard=tShard(),mist=gtex([200,240,255]);
   swing(.8);const s0=hpos(),from=[s0[0]+.9,s0[1]+.6,s0[2]+.9];
   at(.05,()=>{flare(from,3,.5,gl);goldBurst(from,22,3.5,.5,.32,gl);});
   sigBanner(K,TOT);
-  const mouth=c=>[c[0]+.7,c[1]+3.1,c[2]+.6];
-  sigWords(K,(k,t,c)=>{const M=mouth(c),t0=1.0+k*.11;
+  const mouth=()=>{const p=hpos();return[p[0]+1.0,p[1]+1.5,p[2]+.9];};
+  // the hero (a dragon knight) breathes the blizzard himself
+  tween(.4,u=>{const e=ease(u);h.off.x=.7*e;h.off.rz=-.22*e;h.off.sq=1+.05*e;},.9);
+  tween(.5,u=>{const e=ease(u);h.off.x=.7*(1-e);h.off.rz=-.22*(1-e);h.off.sq=1.05-.05*e;},2.9);
+  sigWords(K,(k,t,c)=>{const M=mouth(),t0=1.0+k*.11;
     if(t<.1)return null;
-    if(t<t0){const f=ease(cl((t-.1)/.8));return{pos:[from[0]+(M[0]-from[0])*f+Math.sin(k+t*3)*.3,from[1]+(M[1]+.4-from[1])*f+Math.sin(PI*f)*.7,from[2]],a:1,sc:.55+.35*f,rot:.15*Math.sin(t*5+k)};}
-    const f=cl((t-t0)/.55);if(f>=1)return null;const e=f*f,tg=[c[0]+(k%3-1)*.35,c[1]+.6,c[2]+.7];
-    return{pos:[M[0]+(tg[0]-M[0])*e+Math.sin(f*9+k)*.35*(1-f),M[1]+(tg[1]-M[1])*e,M[2]+(tg[2]-M[2])*f],a:1-f*f,sc:.9-.2*f,rot:.4*Math.sin(f*8+k)};},2.9);
-  E.sprites.push(dg,dr,ice);
-  tween(TOT,u=>{const t=u*TOT,c=mpos(),M=mouth(c),g=ease(cl((t-.25)/.5))*(t>3.4?Math.max(0,1-(t-3.4)/.5):1);
-    dr.pos=[M[0],M[1]+.2+.1*Math.sin(t*5),M[2]+.5];dr.w=dr.h=3.4*g;dr.a=g;dg.pos=[M[0],M[1]+.2,M[2]+.3];dg.w=dg.h=5.6*g;dg.a=.55*g;
-    if(t>1.0&&t<2.7)for(let j=0;j<5;j++){const r=Math.random(),tg=[c[0]+(Math.random()-.5)*1.6,c[1]+.6+Math.random()*1.2,c[2]+.6],d=.45+.2*r;
-      E.parts.push({x:M[0]+(Math.random()-.5)*.4,y:M[1]-.2,z:M[2],vx:(tg[0]-M[0])/d,vy:(tg[1]-M[1]+.2)/d,vz:0,g:0,life:d,max:d,size:.34+.34*r,tex:r<.4?snow:r<.7?shard:mist,rot:r*6,vr:4});}
+    if(t<t0){const f=ease(cl((t-.1)/.8));return{pos:[from[0]+(M[0]-from[0])*f+Math.sin(k+t*3)*.3,from[1]+(M[1]+.5-from[1])*f+Math.sin(PI*f)*.7,from[2]],a:1,sc:.55+.35*f,rot:.15*Math.sin(t*5+k)};}
+    const f=cl((t-t0)/.6);if(f>=1)return null;const e=f*f,tg=[c[0]+(k%3-1)*.35,c[1]+.9,c[2]+.7];
+    return{pos:[M[0]+(tg[0]-M[0])*e,M[1]+(tg[1]-M[1])*e+Math.sin(f*8+k)*.3*(1-f),M[2]+(tg[2]-M[2])*f],a:1-f*f,sc:.9-.2*f,rot:.4*Math.sin(f*8+k)};},2.9);
+  E.sprites.push(aura,ice);
+  tween(TOT,u=>{const t=u*TOT,c=mpos(),M=mouth(),p=hpos(),g=ease(cl((t-.2)/.4))*(t>2.9?Math.max(0,1-(t-2.9)/.5):1);
+    aura.pos=[p[0]+.2,p[1]+1.1,p[2]+.3];aura.w=aura.h=(3.6+.3*Math.sin(t*8))*g;aura.a=.5*g;
+    if(t>1.0&&t<2.7)for(let j=0;j<6;j++){const r=Math.random(),tg=[c[0]+(Math.random()-.5)*1.6,c[1]+.6+Math.random()*1.4,c[2]+.6],d=.4+.25*r;
+      E.parts.push({x:M[0]+(Math.random()-.5)*.3,y:M[1]+(Math.random()-.5)*.4,z:M[2],vx:(tg[0]-M[0])/d,vy:(tg[1]-M[1])/d,vz:0,g:0,life:d,max:d,size:.36+.36*r,tex:r<.4?snow:r<.7?shard:mist,rot:r*6,vr:4});}
     const ik=ease(cl((t-1.7)/.5))*(t<3.55?1:0);ice.pos=[c[0],c[1]+.9*big,c[2]+.8];ice.w=3.5*big*ik;ice.h=3.9*big*ik;ice.a=.9*ik;
     if(t>1.7&&t<3.5)E.flash.mon=[.55,.85,1,.55];});
   at(3.35,()=>{E.shake=Math.max(E.shake,.5);const t=mpos();burst(t,8,shard,3,.35);});
@@ -1021,7 +1024,7 @@ function sigH5(sentence,th){const K=sigBase(sentence,th,'h5'),{m,gl,rm,n}=K,TOT=
     for(let j=0;j<42;j++){const a=Math.random()*PI*2,v=3+Math.random()*5;E.parts.push({x:t[0]+(Math.random()-.5)*1.2,y:t[1]+.3+Math.random()*1.4,z:t[2]+.6,vx:Math.cos(a)*v,vy:2+Math.random()*4,vz:(Math.random()-.4)*2,g:7,life:1.0,max:1.0,size:.3+Math.random()*.32,tex:shard,rot:Math.random()*6,vr:(Math.random()-.5)*10});}
     for(let j=0;j<26;j++){const a=Math.random()*PI*2,v=2+Math.random()*4;E.parts.push({x:t[0],y:t[1]+.8,z:t[2]+.6,vx:Math.cos(a)*v,vy:Math.random()*3,vz:0,g:1.5,life:1.2,max:1.2,size:.3+Math.random()*.3,tex:Math.random()<.6?snow:mist,rot:0,vr:3});}
     tween(.8,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);m.off.x=.9*e;m.off.rz=-.3*e;m.off.sq=1-.22*Math.sin(PI*cl(u*1.4));});});
-  at(TOT,()=>{[...K.sps,K.bsp,dr,dg,ice].forEach(rm);});
+  at(TOT,()=>{[...K.sps,K.bsp,aura,ice].forEach(rm);h.off.x=0;h.off.rz=0;h.off.sq=1;});
   return TOT;}
 // --- 盜賊：暗影連斬 (screen dims, shadow dashes, one slash per word, final crit) ---
 function sigH7(sentence,th){const K=sigBase(sentence,th,'h7'),{m,gl,rm,n}=K,ray=uslash('h7',th),smoke=tSmoke(),h=E.hero;
