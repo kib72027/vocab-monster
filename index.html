@@ -1717,7 +1717,7 @@ function startBattle(kind,id){
   const g=G();rollDay();
   let pool,mon,hp,name,k;
   if(kind==='set'){
-    const s=SETS.find(x=>x.id===id);pool=s.words.slice();hp=Math.min(8,pool.length);mon=SETMON[id];name=monName(mon);k=s.k;
+    const s=SETS.find(x=>x.id===id);pool=s.words.slice();hp=pool.length+3;mon=SETMON[id];name=monName(mon);k=s.k;
   }else if(kind==='elite'||kind==='boss'){
     const b=BATTLE[id];if(!b)return;
     if(kind==='elite'?!eliteOpen(b):!bossOpen(b))return;
@@ -1727,15 +1727,15 @@ function startBattle(kind,id){
     pool=store.missed.map(w=>WORDS.get(w)).filter(Boolean);if(!pool.length)return;
     hp=Math.min(6,pool.length);mon=shuffle(MON_IDS)[0];name='復仇・'+monName(mon);k='k7';
   }
-  const queue=((kind==='boss'||kind==='elite')?pool.slice(0,hp):shuffle(pool).slice(0,hp));
-  B={kind,id,mon,name,k,pool,queue,hp,maxhp:hp,shown:hp,php:pmax(),pm:pmax(),mana:0,skill:false,q:null,sheet:false,anim:'',dmg:0,crit:false,right:0,wrongN:0,healed:false,lockUntil:0,qStart:0,wrong:[],lvl0:lvlOf(g.xp),qn:0,busy:false,opened:false,res:null,goalMsg:''};
+  const queue=((kind==='boss'||kind==='elite')?pool.slice(0,hp):kind==='set'?shuffle(pool):shuffle(pool).slice(0,hp));
+  B={asked:new Set(),kind,id,mon,name,k,pool,queue,hp,maxhp:hp,shown:hp,php:pmax(),pm:pmax(),mana:0,skill:false,q:null,sheet:false,anim:'',dmg:0,crit:false,right:0,wrongN:0,healed:false,lockUntil:0,qStart:0,wrong:[],lvl0:lvlOf(g.xp),qn:0,busy:false,opened:false,res:null,goalMsg:''};
   nextQ();
   if(ENG.ensure()){try{ENG.setup(mon,heroEq(),G().heroId,kind==='boss');}catch(e){E3.ok=false;}}
   S.view='battle';render();top();
 }
 function nextQ(){
   if(!B.queue.length)B.queue=shuffle(B.pool).slice(0,4);
-  const t0=B.queue.shift(),t=variant(t0);
+  const t0=B.queue.shift(),t=variant(t0);B.asked.add(t0.w);
   const type=Math.random()<.5?'cloze':'def';
   B.q={type,t,choices:makeChoices(t,type),pick:null,hint:false};B.qStart=Date.now();
 }
@@ -1749,7 +1749,7 @@ function answerB(idx){
     const crit=false,ult=(B.mana||0)>=5,dmg=ult?3:1;B.ult=ult;
     if(!ult)B.mana=Math.min(5,(B.mana||0)+1);B.skill=B.mana>=5;
     B.ultExtra='';if(ult){const hid=g.heroId;if(hid==='h6'&&B.php<B.pm){B.php++;B.ultExtra='heal';}else if(hid==='h5'){B.frozen=true;B.ultExtra='freeze';}}
-    B.right++;B.crit=crit;B.dmg=Math.min(dmg,B.hp);B.hp=Math.max(0,B.hp-dmg);B.anim=crit?'crit':'hit';
+    B.right++;B.crit=crit;const keep=(B.kind==='set'&&B.asked.size<B.pool.length)?1:0;B.dmg=Math.max(0,Math.min(dmg,B.hp-keep));B.hp=Math.max(keep,B.hp-dmg);B.anim=crit?'crit':'hit';
     g.mast[w]=Math.min(3,(g.mast[w]||0)+1);dropMissed(w);addXp(5);
     B.revived=false;
     if(B.wrongSet&&B.wrongSet.has(w)&&g.inv.note){B.wrongSet.delete(w);g.coins+=3;B.noteMsg=true;}else B.noteMsg=false;
