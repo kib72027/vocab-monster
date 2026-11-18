@@ -530,6 +530,50 @@ button.sk{cursor:pointer;pointer-events:auto}button.sk:disabled{filter:grayscale
 @media (min-width:900px){.stage.c3{min-height:520px}.hport{width:64px;height:64px}.hn{font-size:14px}.bar{height:20px}.bar span{font:800 12px/16px var(--font-body)}.sk{width:64px;height:64px}.blog{font-size:14px}.hud{max-width:44%}}
 @media (max-width:420px){.hport{width:44px;height:44px}.bar{min-width:70px;height:14px}.bar span{font-size:9px;line-height:10px}.hn{font-size:11px}.sk{width:46px;height:46px}.sk b{font-size:17px}.blog{font-size:11px;padding:5px 8px;max-width:48%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.confetti{display:none}}
+
+/* ===== battle: fit any screen without scrolling; feedback card in the middle ===== */
+.wrap.bat{position:fixed;inset:0;max-width:none;margin:0;gap:8px;overflow:hidden;box-sizing:border-box;
+  padding:max(10px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.wrap.bat .btop{flex:none;width:100%;max-width:1800px;margin:0 auto}
+.wrap.bat .btop .x{width:40px;height:40px}
+.wrap.bat .bgrid{flex:1 1 auto;min-height:0;width:100%;max-width:1800px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.wrap.bat .stage.c3{flex:3 1 auto;width:100%;height:auto;min-height:150px;max-height:min(96vw,620px)}
+.wrap.bat .bq{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:10px}
+.wrap.bat .qcard{flex:1 1 auto;min-height:clamp(90px,16dvh,200px);overflow:auto;padding:16px 16px 12px;gap:8px;justify-content:center}
+.wrap.bat .qcard .tags{gap:6px}.wrap.bat .qcard .tag{font-size:clamp(11px,1.6dvh,14px);padding:2px 10px}
+.wrap.bat .qprompt{font-size:clamp(12px,1.9dvh,18px)}
+.wrap.bat .qsent{font-size:clamp(18px,3.1dvh,40px);line-height:1.35;margin:0}
+.wrap.bat .choices{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}
+.wrap.bat .choice{min-height:clamp(46px,7.2dvh,84px);font-size:clamp(16px,2.6dvh,28px);padding:6px 12px;gap:10px;border-radius:16px;line-height:1.2}
+.wrap.bat .choice .key{width:clamp(26px,3.6dvh,38px);height:clamp(26px,3.6dvh,38px);font-size:clamp(13px,2dvh,18px);border-radius:9px}
+.wrap.bat .crystal{padding:6px 12px;font-size:13px}
+/* landscape / wide: arena left, question + options right */
+@media (min-aspect-ratio:11/10){
+  .wrap.bat .bgrid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:clamp(12px,2vw,32px);align-items:stretch}
+  .wrap.bat .stage.c3{height:100%;max-height:none;align-self:stretch}
+  .wrap.bat .bq{height:100%}
+  .wrap.bat .qsent{font-size:clamp(18px,4.2dvh,44px)}
+  .wrap.bat .choice{min-height:clamp(42px,9dvh,96px);font-size:clamp(16px,3.2dvh,30px)}
+}
+@media (min-aspect-ratio:11/10) and (min-height:700px){
+  .wrap.bat .choices{grid-template-columns:1fr}
+}
+@media (max-height:480px){
+  .wrap.bat .btop{gap:8px}.wrap.bat .btop .x{width:34px;height:34px}.wrap.bat .qprompt{display:none}
+  .wrap.bat .qcard{padding:8px 12px}.wrap.bat .choice{min-height:38px}
+}
+/* feedback: centered card over a dim backdrop */
+.sheet{inset:0;top:0;bottom:0;display:grid;place-items:center;border:0;max-height:none;overflow:auto;background:rgba(12,22,48,.5);
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);animation:fadein .2s ease-out;
+  padding:max(14px,env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px))}
+.sheet.ok,.sheet.no{background:rgba(12,22,48,.5)}
+.sheet .sheet-in{display:flex;flex-direction:column;align-items:stretch;gap:10px;width:min(640px,100%);max-width:640px;max-height:calc(100dvh - 28px);overflow:auto;
+  margin:0;padding:clamp(14px,3dvh,26px) clamp(16px,3vw,30px);border-radius:26px;border:3px solid;box-shadow:0 18px 50px rgba(8,16,40,.45);animation:pop .28s cubic-bezier(.2,1.3,.4,1)}
+.sheet.ok .sheet-in{background:var(--good-bg);border-color:var(--good-solid)}
+.sheet.no .sheet-in{background:var(--bad-bg);border-color:var(--bad-solid)}
+@keyframes fadein{from{opacity:0}to{opacity:1}}@keyframes pop{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
+@media (min-width:900px){.sheet .sheet-in{display:flex;align-items:stretch;grid-template-columns:none;max-width:760px;width:min(760px,100%)}}
+@media (max-height:480px){.sheet .sheet-in{gap:6px;padding:10px 16px}.sheet h3{font-size:20px}}
 </style>
 
 <div class="wrap" id="app"></div>

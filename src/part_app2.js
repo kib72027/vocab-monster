@@ -174,7 +174,7 @@ function viewCards(){
 
 function render(){
   const gv=['game','battle','reward','defeat','coll','shop','heroes'].includes(S.view);
-  app.className='wrap'+(S.view==='home'?' pad-dock':(S.view==='quiz'&&S.quiz.qs[S.quiz.i].pick!==null?' pad-sheet':''))+(gv?' gm':'')+(S.view==='battle'&&B&&B.sheet?' pad-sheet':'')+(S.view==='battle'&&B&&B.anim==='atk'?' shake':'')+(S.view==='battle'&&E3.ok?' c3on':'');
+  app.className='wrap'+(S.view==='home'?' pad-dock':(S.view==='quiz'&&S.quiz.qs[S.quiz.i].pick!==null?' pad-sheet':''))+(gv?' gm':'')+(S.view==='battle'?' bat':'')+(S.view==='battle'&&B&&B.anim==='atk'?' shake':'')+(S.view==='battle'&&E3.ok?' c3on':'');
   app.innerHTML=S.view==='game'?viewGame():S.view==='battle'?viewBattle():S.view==='reward'?viewReward():S.view==='defeat'?viewDefeat():S.view==='coll'?viewColl():S.view==='shop'?viewShop():S.view==='heroes'?viewHeroes():S.view==='home'?viewHome():S.view==='quiz'?viewQuiz():S.view==='result'?viewResult():viewCards();
   if(S.view==='quiz'&&S.quiz.qs[S.quiz.i].pick!==null){const nx=document.getElementById('next');if(nx)nx.focus({preventScroll:true});}
   afterGameRender();
