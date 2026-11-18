@@ -125,3 +125,7 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 - Assign monsters to lessons by story theme (currently interleaved by element).
 - The after-answer sheet still shows the Chinese meaning (quiz prompts themselves are English-only).
 - Ultimate move deals 2 damage (could be reverted to 1).
+
+## 攻擊演出（補充）
+- 每位英雄的普通攻擊都不同：勇者／劍士為劍氣斬、魔法師為魔法球、弓箭手為箭矢、龍騎士為三叉戟、牧師為從天而降的聖光、盜賊為飛刀、召喚師為小精靈、工程師為扳手、神秘使者為水晶球。
+- 怪物反擊依屬性不同：火球、冰晶連發、落雷、毒氣、落葉、海浪、落石、旋風、幽靈、飛彈、骨頭、龍息。
