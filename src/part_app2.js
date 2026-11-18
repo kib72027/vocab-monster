@@ -791,8 +791,8 @@ function update(dt){
   [E.mon,E.hero].forEach((o,i)=>{if(!o)return;o.off.sqi=1+.03*Math.sin(t*2.3+i);});
   const m=E.mon,h=E.hero;if(!m)return;
   m.bob=.05*Math.sin(t*2.3);h.bob=.04*Math.sin(t*2.6+1);
-  E.tl=E.tl.filter(e=>{if(t>=e.t){e.fn();return false;}return true;});
-  E.tw=E.tw.filter(w=>{const u=(t-w.t0)/w.dur;if(u<0)return true;w.fn(cl(u));return u<1;});
+  {const cur=E.tl;E.tl=[];cur.forEach(e=>{if(t>=e.t)e.fn();else E.tl.push(e);});}
+  {const cur=E.tw,keep=[];E.tw=[];cur.forEach(w=>{const u=(t-w.t0)/w.dur;if(u<0){keep.push(w);return;}w.fn(cl(u));if(u<1)keep.push(w);});E.tw=keep.concat(E.tw);}
   E.parts=E.parts.filter(p=>{p.life-=dt;if(p.life<=0)return false;p.vy-=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.rot+=p.vr*dt;return true;});
   E.shake=Math.max(0,E.shake-dt*2.2);
   ['mon','hero'].forEach(k=>{const f=E.flash[k];if(f){f[3]=Math.max(0,f[3]-dt*3);if(f[3]<=0)E.flash[k]=null;}});
