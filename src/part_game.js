@@ -1071,7 +1071,7 @@ function viewGame(){
   const rtypes=[['stats','成長升級','多拿經驗，快點升級'],['cards','怪物卡片','收集 96 隻怪物'],['coins','金幣','買學習道具']];
   const lcard=s=>{
     const mid=SETMON[s.id],L=learned(s),done=!!g.def[s.id],st=starsOf(s.id);
-    return `<button class="mcard ${s.k}${done?' done':''}" data-act="fight" data-id="${s.id}"><span class="mart">${monSvg(mid)}</span>${done?starsHTML(st,'cs'):''}<span class="mname">${monName(mid)}</span><span class="mles">${s.week.replace("Week ","W")} · ${s.title}</span><span class="mprog"><i style="width:${Math.round(L/s.words.length*100)}%"></i></span><span class="mnum">學會 ${L}/${s.words.length} 字</span></button>`;};
+    return `<button class="mcard ${s.k}${done?' done':''}" data-act="fight" data-id="${s.id}"><span class="mart">${monSvg(mid)}</span>${done?starsHTML(st,'cs'):''}<span class="mname">${monName(mid)}</span><span class="mles">${s.week.replace("Week ","W")} · ${s.title}</span></button>`;};
   const ecard=e=>{
     const open=eliteOpen(e),done=!!g.def[e.id],ok=e.sets.filter(s=>starsOf(s.id)>=2).length;
     return `<button class="mcard elitecard ${e.k}${open?'':' locked'}${done?' done':''}" data-act="elite" data-id="${e.id}" ${open?'':'disabled'}><span class="mart">${monSvg(e.mon)}</span>${done?starsHTML(starsOf(e.id),'cs'):''}<span class="mtier">精英</span><span class="mname">${monName(e.mon)}</span><span class="mles">${open?`W${e.week} 全週單字 · 10 題`:`W${e.week} 精英怪`}</span><span class="mnum">${open?(done?'再挑戰一次':'本週課文已通過 ✓'):`🔒 本週課文 2★以上 ${ok}/${e.sets.length}`}</span></button>`;};
