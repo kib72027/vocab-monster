@@ -1,0 +1,353 @@
+[
+{
+"lesson": "w9-cold",
+"title": "Too Cold",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/d839bf58-image.jpg",
+"words": [
+{
+"w": "check",
+"zh": "查看；檢查",
+"pos": "v",
+"defs": [
+"to look at something to see if it is all right",
+"to make sure something is good or correct",
+"to take a look to find out how something is"
+],
+"exs": [
+"Please check on the baby.",
+"Always check your answers before you hand in the test.",
+"Mom will check if the cake is ready."
+]
+},
+{
+"w": "climb",
+"zh": "爬進；爬上",
+"pos": "v",
+"defs": [
+"to go up or into something",
+"to move up or over something using hands and feet",
+"to get into something by stepping up"
+],
+"exs": [
+"Be careful when you climb into the tub.",
+"The monkey likes to climb the tall tree.",
+"Climb up the ladder slowly."
+]
+},
+{
+"w": "gasp",
+"zh": "倒抽一口氣",
+"pos": "v",
+"defs": [
+"to breathe in quickly because you are surprised",
+"to take a sudden short breath because of a shock",
+"to suck in air quickly"
+],
+"exs": [
+"Everyone began to gasp when the lights went out.",
+"I gasp every time the scary part of the movie starts.",
+"You will gasp when you see the huge cake!"
+]
+},
+{
+"w": "lay on",
+"zh": "躺在…上",
+"pos": "phr",
+"defs": [
+"to rest your body on something",
+"rested flat on top of something",
+"was stretched out on a surface"
+],
+"exs": [
+"Yesterday the dog lay on the sofa all day.",
+"Last night, I lay on the grass and watched the stars.",
+"The baby lay on a soft blanket."
+]
+},
+{
+"w": "moan",
+"zh": "呻吟；哀嘆",
+"pos": "v",
+"defs": [
+"to make a long, low sound when you are unhappy or in pain",
+"to make a sad sound because you are unhappy",
+"to complain in a low, sad voice"
+],
+"exs": [
+"He began to moan when he saw all the homework.",
+"The sick puppy began to moan softly.",
+"Mom heard Carlos moan about the cold morning."
+]
+},
+{
+"w": "scowled",
+"zh": "皺眉；怒視",
+"pos": "v",
+"defs": [
+"looked at someone with an angry face",
+"frowned because you were angry or upset",
+"gave a cross, unhappy look"
+],
+"exs": [
+"Dad scowled when I broke the cup.",
+"The boy scowled at his broken toy.",
+"She scowled when her brother took her seat."
+]
+},
+{
+"w": "top",
+"zh": "頂端；最上面",
+"pos": "n",
+"defs": [
+"the highest part of something",
+"the highest place or point",
+"the upper end of a hill or tower"
+],
+"exs": [
+"Don't fill the cup to the top.",
+"Carlos climbed to the top of the hill.",
+"Put the red book on top of the pile."
+]
+},
+{
+"w": "without",
+"zh": "沒有；不（做某事）",
+"pos": "prep",
+"defs": [
+"not having or not doing something",
+"not having someone or something with you",
+"used when you do not do an action"
+],
+"exs": [
+"He left without saying goodbye.",
+"I can't see without my glasses.",
+"She walked home without an umbrella."
+]
+}
+]
+},
+{
+"lesson": "w9-mosh",
+"title": "Mosh Speaks",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/d9b9a4c7-image.jpg",
+"words": [
+{
+"w": "order",
+"zh": "順序；命令",
+"pos": "n",
+"defs": [
+"a special way things are arranged; also something you tell someone to do",
+"the way things come one after another",
+"to tell someone what they must do"
+],
+"exs": [
+"Please say the numbers in order.",
+"Line up in order from short to tall.",
+"The captain gave an order to the robots."
+]
+},
+{
+"w": "pouch",
+"zh": "小袋子；（袋鼠的）育兒袋",
+"pos": "n",
+"defs": [
+"a small bag",
+"a bag on a kangaroo for carrying its baby",
+"a little bag for keeping small things"
+],
+"exs": [
+"The kangaroo keeps her baby in a pouch.",
+"Mosh peeked out of the pouch.",
+"She kept her coins in a small pouch."
+]
+},
+{
+"w": "roar",
+"zh": "吼叫；大聲喊（笑）",
+"pos": "v",
+"defs": [
+"to make a loud, deep sound, or to laugh very loudly",
+"to make a very loud, deep sound like a lion",
+"to shout or laugh very loudly"
+],
+"exs": [
+"The class began to roar with laughter.",
+"The lion began to roar at the zoo.",
+"The crowd began to roar when the team scored."
+]
+},
+{
+"w": "sharing",
+"zh": "分享；一起分享",
+"pos": "n",
+"defs": [
+"doing or giving something together with others",
+"letting other people have a part of what you have",
+"using something together with friends"
+],
+"exs": [
+"It is time for sharing, so tell us about your weekend.",
+"Sharing your snacks makes friends happy.",
+"Carlos likes sharing his toys with Mosh."
+]
+},
+{
+"w": "voice",
+"zh": "聲音；說話聲",
+"pos": "n",
+"defs": [
+"the sound you make when you speak",
+"what comes out of your mouth when you talk or sing",
+"the sound a person makes when speaking"
+],
+"exs": [
+"She has a sweet voice.",
+"Carlos heard a strange voice in the dark.",
+"The singer has a beautiful voice."
+]
+}
+]
+},
+{
+"lesson": "w10-captain",
+"title": "Captain Carlos",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/faecbf0f-image.jpg",
+"words": [
+{
+"w": "calmly",
+"zh": "冷靜地；平靜地",
+"pos": "adv",
+"defs": [
+"in a quiet way, without worry",
+"in a relaxed way, not scared or angry",
+"quietly and without getting upset"
+],
+"exs": [
+"She calmly walked out of the room.",
+"Carlos spoke calmly to the frightened puppy.",
+"The captain calmly told everyone to sit down."
+]
+},
+{
+"w": "captain",
+"zh": "船長；隊長",
+"pos": "n",
+"defs": [
+"the leader of a ship, team or group",
+"the person in charge of a plane, ship or team",
+"the boss on a ship"
+],
+"exs": [
+"Our team captain is Tom.",
+"The captain steered the ship through the storm.",
+"Who will be captain of our soccer team?"
+]
+},
+{
+"w": "disappointed",
+"zh": "失望的；難過的",
+"pos": "adj",
+"defs": [
+"sad because things were not as good as you hoped",
+"unhappy because you did not get what you wanted",
+"a little sad about something that went wrong"
+],
+"exs": [
+"I was disappointed when the game was cancelled.",
+"Carlos felt disappointed when it rained on picnic day.",
+"She was disappointed with her low score."
+]
+},
+{
+"w": "nervous",
+"zh": "緊張的；不安的",
+"pos": "adj",
+"defs": [
+"worried about something that will happen",
+"feeling a little scared before something big",
+"jumpy and worried inside"
+],
+"exs": [
+"I felt nervous on my first day of school.",
+"She felt nervous before singing on stage.",
+"The nervous boy bit his nails before the test."
+]
+},
+{
+"w": "officer",
+"zh": "軍官；（船上的）官員",
+"pos": "n",
+"defs": [
+"a person with an important job on a ship, or in the army or police",
+"someone with a high job on a ship or in the army",
+"a person in charge who gives orders"
+],
+"exs": [
+"The officer on the ship helped the captain.",
+"The police officer helped us cross the street.",
+"An officer showed the visitors around the ship."
+]
+},
+{
+"w": "part",
+"zh": "角色（戲劇中的）",
+"pos": "n",
+"defs": [
+"what a person in a play says and does",
+"a role an actor plays in a show",
+"a piece of something bigger"
+],
+"exs": [
+"I want the part of the captain in the play.",
+"She has the funniest part in the school play.",
+"Carlos learned his part by heart."
+]
+},
+{
+"w": "promise",
+"zh": "保證；答應",
+"pos": "v",
+"defs": [
+"to say that you will surely do something",
+"to tell someone you will certainly do something",
+"to give your word"
+],
+"exs": [
+"I promise to be on time.",
+"I promise to feed Mosh every day.",
+"Please promise you will not tell the secret."
+]
+},
+{
+"w": "recess",
+"zh": "下課休息時間",
+"pos": "n",
+"defs": [
+"a break from class",
+"the time between lessons when kids go out to play",
+"a short school break for playing"
+],
+"exs": [
+"We play ball at recess.",
+"Carlos played tag with his friends at recess.",
+"The bell rang for recess."
+]
+},
+{
+"w": "snapped",
+"zh": "厲聲說；說話很兇",
+"pos": "v",
+"defs": [
+"said something in an angry or mean way",
+"spoke in a sharp, cross voice to someone",
+"said words quickly in an unkind, grumpy way"
+],
+"exs": [
+"Mom snapped at us when we were too loud.",
+"The tired teacher snapped at the noisy class.",
+"\"Leave me alone!\" he snapped at his little sister."
+]
+}
+]
+}
+]

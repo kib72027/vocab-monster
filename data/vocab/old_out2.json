@@ -1,0 +1,482 @@
+[
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "amazing",
+  "zh": "了不起的；令人驚奇的",
+  "pos": "adj",
+  "defs": [
+   "Very good and surprising",
+   "So great that you say wow",
+   "Wonderful and hard to believe"
+  ],
+  "exs": [
+   "Wow, your drawing is amazing!",
+   "The magic show at school was amazing.",
+   "My dog can open the door. It is amazing!"
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "amused",
+  "zh": "覺得好笑的；被逗樂的",
+  "pos": "adj",
+  "defs": [
+   "Finding something funny and smiling",
+   "Happy because something is funny",
+   "Smiling at a funny thing"
+  ],
+  "exs": [
+   "Dad was amused by the dog's funny dance.",
+   "The teacher looked amused when the class laughed.",
+   "She felt amused by her little brother's joke."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "cozy",
+  "zh": "溫暖舒適的",
+  "pos": "adj",
+  "defs": [
+   "Warm, soft and nice to stay in",
+   "Comfortable and warm",
+   "Soft and warm, like a good bed"
+  ],
+  "exs": [
+   "My bed is warm and cozy.",
+   "We drank hot milk in the cozy room.",
+   "The cat sleeps in a cozy box."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "fluffy",
+  "zh": "毛茸茸的；蓬鬆柔軟的",
+  "pos": "adj",
+  "defs": [
+   "Soft and light, like a cloud",
+   "Covered with soft hair",
+   "Soft and round, with lots of hair"
+  ],
+  "exs": [
+   "The white rabbit has fluffy ears.",
+   "I like my fluffy new pillow.",
+   "The baby chicken is small and fluffy."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "investigate",
+  "zh": "調查；仔細查看",
+  "pos": "v",
+  "defs": [
+   "Look closely to learn about something",
+   "Check something to find out what it is",
+   "Look at something carefully to know more"
+  ],
+  "exs": [
+   "The cat came to investigate the new box.",
+   "Let's investigate the strange noise in the kitchen.",
+   "The boy went to investigate the big bag."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "jealous",
+  "zh": "嫉妒的",
+  "pos": "adj",
+  "defs": [
+   "Unhappy because someone gets more love",
+   "Sad because another person has something you want",
+   "Not happy when a friend gets your toy"
+  ],
+  "exs": [
+   "Tom was jealous of his sister's new bike.",
+   "The dog is jealous when I pet the cat.",
+   "She felt jealous when Mom hugged the baby."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "search",
+  "zh": "搜尋；尋找",
+  "pos": "v",
+  "defs": [
+   "Look for something you cannot find",
+   "Try to find something",
+   "Look everywhere for a lost thing"
+  ],
+  "exs": [
+   "I search for my shoes every morning.",
+   "We search the house for the lost cat.",
+   "Let's search the bag for my pen."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "slightly",
+  "zh": "稍微；有一點",
+  "pos": "adv",
+  "defs": [
+   "A little bit",
+   "Only a small amount",
+   "Not very much"
+  ],
+  "exs": [
+   "The soup is slightly hot.",
+   "He was slightly late for school.",
+   "My new shoes are slightly big."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "teased",
+  "zh": "開玩笑地說；取笑",
+  "pos": "v",
+  "defs": [
+   "Said something funny to a friend",
+   "Joked in a playful way",
+   "Played a joke with words"
+  ],
+  "exs": [
+   "My brother teased me about my big hat.",
+   "Dad teased Mom about her funny song.",
+   "The kids teased the teacher in a kind way."
+  ]
+ },
+ {
+  "lesson": "Rabbit-Sitting",
+  "w": "towels",
+  "zh": "毛巾",
+  "pos": "n",
+  "defs": [
+   "Soft cloths for drying your body",
+   "Cloths you use after a bath",
+   "Cloths that dry water on you"
+  ],
+  "exs": [
+   "Please bring two towels to the pool.",
+   "The towels are in the bathroom.",
+   "I dry my hands with clean towels."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "afraid of",
+  "zh": "害怕…",
+  "pos": "phr",
+  "defs": [
+   "Feeling scared about something",
+   "Not brave when you see something",
+   "Scared when you see something"
+  ],
+  "exs": [
+   "Many children are afraid of dark rooms.",
+   "My little sister is afraid of big dogs.",
+   "Are you afraid of snakes at the zoo?"
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "allow",
+  "zh": "允許；准許",
+  "pos": "v",
+  "defs": [
+   "Say yes so someone can do it",
+   "Let someone do something",
+   "Say that it is okay to do"
+  ],
+  "exs": [
+   "Mom does not allow us to eat in bed.",
+   "The school will allow dogs on Friday.",
+   "Do your parents allow you to have a pet?"
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "decide",
+  "zh": "決定",
+  "pos": "v",
+  "defs": [
+   "Choose what to do after thinking",
+   "Pick one thing to do",
+   "Make up your mind"
+  ],
+  "exs": [
+   "I will decide what to eat for lunch.",
+   "We must decide which game to play.",
+   "She can't decide which red dress to buy."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "direction",
+  "zh": "方向；方位",
+  "pos": "n",
+  "defs": [
+   "The way something moves or goes",
+   "Where something is going, like north or left",
+   "The way you turn or walk"
+  ],
+  "exs": [
+   "The bus went in the wrong direction.",
+   "Which direction is the school from here?",
+   "The birds flew in one direction."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "disguised",
+  "zh": "偽裝的；喬裝的",
+  "pos": "adj",
+  "defs": [
+   "Dressed up so no one knows who",
+   "Changed to look like something else",
+   "Covered so people can't see what it is"
+  ],
+  "exs": [
+   "The disguised girl looked like a cat.",
+   "A disguised dog came to the party.",
+   "The boy was disguised as a big bear."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "frightened",
+  "zh": "受驚嚇的",
+  "pos": "adj",
+  "defs": [
+   "Very scared",
+   "Feeling a lot of fear",
+   "Afraid because of something bad"
+  ],
+  "exs": [
+   "The little boy was frightened by the thunder.",
+   "I felt frightened in the dark room.",
+   "The frightened cat ran under the bed."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "furry",
+  "zh": "毛茸茸的；長滿軟毛的",
+  "pos": "adj",
+  "defs": [
+   "Covered with soft hair",
+   "Having soft hair like a cat",
+   "With thick soft hair on the body"
+  ],
+  "exs": [
+   "My cat is soft and furry.",
+   "I want a furry puppy.",
+   "The furry bear sleeps all winter."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "magazine",
+  "zh": "雜誌",
+  "pos": "n",
+  "defs": [
+   "A thin book with pictures and stories",
+   "Something you read with news and photos",
+   "A paper book that comes out every month"
+  ],
+  "exs": [
+   "Dad reads a magazine on the sofa.",
+   "This magazine has many pictures of animals.",
+   "I found a funny story in the magazine."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "proudly",
+  "zh": "得意地；自豪地",
+  "pos": "adv",
+  "defs": [
+   "In a happy way about what you did",
+   "With a big smile about your work",
+   "Feeling very good about yourself"
+  ],
+  "exs": [
+   "She proudly showed us her drawing.",
+   "He proudly held up his prize.",
+   "The boy proudly said, \"I did it myself!\""
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "shaggy",
+  "zh": "毛髮蓬亂的",
+  "pos": "adj",
+  "defs": [
+   "Having long, messy hair",
+   "With long hair going everywhere",
+   "Covered with long rough hair"
+  ],
+  "exs": [
+   "The shaggy dog needs a bath.",
+   "He wore a shaggy hat in winter.",
+   "My uncle has long, shaggy hair."
+  ]
+ },
+ {
+  "lesson": "A Pet for Carlos",
+  "w": "suddenly",
+  "zh": "突然",
+  "pos": "adv",
+  "defs": [
+   "Very fast and not expected",
+   "All at once",
+   "In a quick way with no warning"
+  ],
+  "exs": [
+   "Suddenly, the lights went out.",
+   "The dog suddenly jumped off the bed.",
+   "It was sunny, but suddenly it rained."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "building",
+  "zh": "建築物；大樓",
+  "pos": "n",
+  "defs": [
+   "A place with walls and a roof",
+   "A big place like a school or a house",
+   "A tall or big place where people go in"
+  ],
+  "exs": [
+   "Our school building is very big.",
+   "The tall building has twenty floors.",
+   "We walked into the building together."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "closet",
+  "zh": "儲藏室；壁櫥",
+  "pos": "n",
+  "defs": [
+   "A small room for keeping things",
+   "A place to keep clothes or tools",
+   "A small space with a door for things"
+  ],
+  "exs": [
+   "Mom put my coat in the closet.",
+   "The broom is in the closet.",
+   "The cat hid in the closet."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "nervous",
+  "zh": "緊張的；不安的",
+  "pos": "adj",
+  "defs": [
+   "A little afraid and not calm",
+   "Worried about something new",
+   "Not relaxed, with a fast heart"
+  ],
+  "exs": [
+   "I feel nervous on the first day of school.",
+   "She was nervous before the big test.",
+   "He felt nervous about the new class."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "principal",
+  "zh": "校長",
+  "pos": "n",
+  "defs": [
+   "The head teacher of a school",
+   "The boss of all teachers at school",
+   "The person who runs the school"
+  ],
+  "exs": [
+   "The principal spoke to all the students.",
+   "Our principal is kind and tall.",
+   "The principal visited our classroom today."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "rag",
+  "zh": "破布；抹布",
+  "pos": "n",
+  "defs": [
+   "An old piece of cloth",
+   "A cloth for cleaning",
+   "A piece of old cloth for wiping"
+  ],
+  "exs": [
+   "Dad used a rag to clean the car.",
+   "Please wipe the table with a rag.",
+   "I put an old rag over the box."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "raise",
+  "zh": "舉起",
+  "pos": "v",
+  "defs": [
+   "Put your hand up high",
+   "Lift something up",
+   "Move something to a higher place"
+  ],
+  "exs": [
+   "Please raise your hand if you know.",
+   "I can raise my arms over my head.",
+   "Raise the flag in the morning."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "staring",
+  "zh": "盯著看",
+  "pos": "v",
+  "defs": [
+   "Looking at someone for a long time",
+   "Looking hard without moving the eyes",
+   "Looking at something and not stopping"
+  ],
+  "exs": [
+   "The baby is staring at the big dog.",
+   "Why are you staring at my hat?",
+   "The boy was staring at the cake."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "suggest",
+  "zh": "建議；提議",
+  "pos": "v",
+  "defs": [
+   "Say an idea for others to think about",
+   "Give an idea about what to do",
+   "Tell someone a good idea"
+  ],
+  "exs": [
+   "I suggest we play soccer after school.",
+   "Can you suggest a good book for me?",
+   "Mom will suggest a place for lunch."
+  ]
+ },
+ {
+  "lesson": "The First Day of School",
+  "w": "supplies",
+  "zh": "用品；用具",
+  "pos": "n",
+  "defs": [
+   "Things you need to do a job",
+   "Things kept for use, like soap and paper",
+   "Tools and things for school or work"
+  ],
+  "exs": [
+   "We bought school supplies for the new year.",
+   "The cleaning supplies are under the sink.",
+   "Bring your art supplies to class."
+  ]
+ }
+]

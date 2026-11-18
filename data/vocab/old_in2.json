@@ -1,0 +1,473 @@
+[
+{
+"lesson": "w8-rabbit",
+"title": "Rabbit-Sitting",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/88cfac7f-image.jpg",
+"words": [
+{
+"w": "amazing",
+"zh": "了不起的；令人驚奇的",
+"pos": "adj",
+"defs": [
+"very surprising and great",
+"so wonderful that you can hardly believe it",
+"great and full of wonder"
+],
+"exs": [
+"What an amazing show!",
+"The magician did an amazing trick with a rope.",
+"We saw an amazing view from the top of the hill."
+]
+},
+{
+"w": "amused",
+"zh": "覺得好笑的；被逗樂的",
+"pos": "adj",
+"defs": [
+"finding something funny",
+"entertained and smiling because something is funny",
+"laughing a little at something silly"
+],
+"exs": [
+"Dad was amused by my joke.",
+"The clown's funny dance left the kids amused.",
+"Grandpa was amused when the cat chased its tail."
+]
+},
+{
+"w": "cozy",
+"zh": "溫暖舒適的",
+"pos": "adj",
+"defs": [
+"warm and comfortable",
+"snug, soft, and nice to rest in",
+"pleasantly warm, like being under a blanket"
+],
+"exs": [
+"Our room is warm and cozy.",
+"We sat by the fire in the cozy cabin.",
+"My cozy blanket keeps me warm in winter."
+]
+},
+{
+"w": "fluffy",
+"zh": "毛茸茸的；蓬鬆柔軟的",
+"pos": "adj",
+"defs": [
+"soft and light, like a cloud",
+"soft and full of air, like a feather",
+"light and puffy to touch"
+],
+"exs": [
+"The little bunny is soft and fluffy.",
+"The fluffy clouds floated across the blue sky.",
+"She hugged her fluffy teddy bear."
+]
+},
+{
+"w": "investigate",
+"zh": "調查；仔細查看",
+"pos": "v",
+"defs": [
+"to look into something to find out more",
+"to study something closely to learn the truth",
+"to look carefully for clues"
+],
+"exs": [
+"Let's investigate the strange noise.",
+"The detective will investigate who took the cookies.",
+"We went outside to investigate the strange light."
+]
+},
+{
+"w": "jealous",
+"zh": "嫉妒的",
+"pos": "adj",
+"defs": [
+"wanting something that someone else has",
+"unhappy because someone has something you want",
+"feeling upset that another person got more"
+],
+"exs": [
+"I felt jealous of her new bike.",
+"Tim was jealous when his friend got a puppy.",
+"Don't be jealous of your sister's prize."
+]
+},
+{
+"w": "search",
+"zh": "搜尋；尋找",
+"pos": "v",
+"defs": [
+"to look for something",
+"to look carefully in many places for something",
+"to hunt for something that is lost"
+],
+"exs": [
+"I search for my keys every morning.",
+"Let's search the whole house for the lost cat.",
+"The children search for shells on the beach."
+]
+},
+{
+"w": "slightly",
+"zh": "稍微；有一點",
+"pos": "adv",
+"defs": [
+"a little bit",
+"only a tiny bit",
+"not very much; just a little"
+],
+"exs": [
+"It is slightly cold today.",
+"The soup is slightly too salty for me.",
+"He was slightly taller than his brother."
+]
+},
+{
+"w": "teased",
+"zh": "開玩笑地說；取笑",
+"pos": "v",
+"defs": [
+"made fun of someone, often as a joke",
+"played tricks or joked with someone in a funny way",
+"said funny things about someone, sometimes making them sad"
+],
+"exs": [
+"My brother teased me about my new hat.",
+"The kids teased Ben about his big boots.",
+"Grandma teased us that she had eaten all the pie."
+]
+},
+{
+"w": "towels",
+"zh": "毛巾",
+"pos": "n",
+"defs": [
+"cloths used for drying",
+"soft cloths you use after a bath or swim",
+"big pieces of cloth that soak up water from your body"
+],
+"exs": [
+"Bring two towels to the pool.",
+"Mom hung the wet towels on the line.",
+"After swimming, we wrapped ourselves in warm towels."
+]
+}
+]
+},
+{
+"lesson": "w8-carlos",
+"title": "A Pet for Carlos",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/69312ab4-image.jpg",
+"words": [
+{
+"w": "afraid of",
+"zh": "害怕…",
+"pos": "phr",
+"defs": [
+"feeling fear about something",
+"scared by something",
+"feeling worried that something will hurt you"
+],
+"exs": [
+"I am afraid of dogs.",
+"Many children are afraid of the dark.",
+"Are you afraid of spiders?"
+]
+},
+{
+"w": "allow",
+"zh": "允許；准許",
+"pos": "v",
+"defs": [
+"to let someone do something",
+"to say yes when someone asks to do something",
+"to give permission"
+],
+"exs": [
+"Mom doesn't allow me to stay up late.",
+"The rules do not allow us to run in the hall.",
+"Will your parents allow you to sleep over?"
+]
+},
+{
+"w": "decide",
+"zh": "決定",
+"pos": "v",
+"defs": [
+"to choose",
+"to make up your mind about something",
+"to pick one thing after thinking about it"
+],
+"exs": [
+"I can't decide what to eat.",
+"It is hard to decide between ice cream and cake.",
+"We need to decide where to go on Saturday."
+]
+},
+{
+"w": "direction",
+"zh": "方向；方位",
+"pos": "n",
+"defs": [
+"the way something moves or points",
+"where you are heading, like north or left",
+"the line along which something goes"
+],
+"exs": [
+"Which direction should we go?",
+"The wind changed direction and blew from the east.",
+"She pointed in the direction of the park."
+]
+},
+{
+"w": "disguised",
+"zh": "偽裝的；喬裝的",
+"pos": "adj",
+"defs": [
+"dressed or changed so people cannot tell what you really are",
+"wearing a costume so no one knows who you are",
+"made to look like something else"
+],
+"exs": [
+"The cat was disguised as a tiger.",
+"The prince disguised himself as a poor farmer.",
+"The disguised fox wore a sheep's coat."
+]
+},
+{
+"w": "frightened",
+"zh": "受驚嚇的",
+"pos": "adj",
+"defs": [
+"very scared",
+"filled with fear",
+"so scared that your heart beats fast"
+],
+"exs": [
+"The frightened puppy hid under the bed.",
+"The frightened kitten ran up the tree.",
+"I was frightened by the loud thunder."
+]
+},
+{
+"w": "furry",
+"zh": "毛茸茸的；長滿軟毛的",
+"pos": "adj",
+"defs": [
+"covered with a lot of soft hair",
+"having soft, thick hair like a bear",
+"covered in fur"
+],
+"exs": [
+"My cat is soft and furry.",
+"The furry rabbit hopped across the lawn.",
+"I love my furry slippers in the winter."
+]
+},
+{
+"w": "magazine",
+"zh": "雜誌",
+"pos": "n",
+"defs": [
+"a thin book with pictures and stories that comes out every month",
+"a paper book with many pictures that you read for fun",
+"a book of short articles that comes out on a schedule"
+],
+"exs": [
+"I read a magazine about animals.",
+"Dad found a funny comic in a magazine.",
+"The doctor's office has an old magazine on the table."
+]
+},
+{
+"w": "proudly",
+"zh": "得意地；自豪地",
+"pos": "adv",
+"defs": [
+"in a way that shows you are happy about what you have or did",
+"with a happy feeling about something good you did",
+"in a way that shows you feel great about yourself"
+],
+"exs": [
+"She proudly showed her drawing.",
+"The boy proudly held up his gold medal.",
+"Mom proudly told everyone about my good grades."
+]
+},
+{
+"w": "shaggy",
+"zh": "毛髮蓬亂的",
+"pos": "adj",
+"defs": [
+"having long, rough hair",
+"with long hair that looks messy",
+"covered in thick, untidy fur"
+],
+"exs": [
+"The shaggy dog needs a bath.",
+"The shaggy sheepdog ran through the field.",
+"He had a shaggy beard like a wizard."
+]
+},
+{
+"w": "suddenly",
+"zh": "突然",
+"pos": "adv",
+"defs": [
+"quickly and without warning",
+"all at once, with no time to get ready",
+"in a very fast and surprising way"
+],
+"exs": [
+"Suddenly, it began to rain.",
+"The lights suddenly went out in the whole house.",
+"A bird suddenly flew out of the bush."
+]
+}
+]
+},
+{
+"lesson": "w9-first",
+"title": "The First Day of School",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/347f93c8-image.jpg",
+"words": [
+{
+"w": "building",
+"zh": "建築物；大樓",
+"pos": "n",
+"defs": [
+"a place with walls and a roof",
+"a big structure like a house, school, or shop",
+"something people make with bricks and walls"
+],
+"exs": [
+"They walked into the building through the front door.",
+"The tall building has twenty floors.",
+"Our school is a big red building."
+]
+},
+{
+"w": "closet",
+"zh": "儲藏室；壁櫥",
+"pos": "n",
+"defs": [
+"a small room or cupboard for keeping things",
+"a small space in a room where you hang clothes",
+"a cupboard built into a wall"
+],
+"exs": [
+"The mop is in the closet.",
+"I hung my coat in the closet.",
+"The cat hid in the dark closet."
+]
+},
+{
+"w": "nervous",
+"zh": "緊張的；不安的",
+"pos": "adj",
+"defs": [
+"worried about something that will happen",
+"feeling a little scared before something big",
+"jumpy and worried inside"
+],
+"exs": [
+"I felt nervous on my first day of school.",
+"She felt nervous before singing on stage.",
+"The nervous boy bit his nails before the test."
+]
+},
+{
+"w": "principal",
+"zh": "校長",
+"pos": "n",
+"defs": [
+"the head of a school",
+"the person who runs a school",
+"the leader of all the teachers and students"
+],
+"exs": [
+"The principal welcomed the new students.",
+"The principal gave a speech at the school party.",
+"We were sent to the principal's office to say thanks."
+]
+},
+{
+"w": "rag",
+"zh": "破布；抹布",
+"pos": "n",
+"defs": [
+"an old piece of cloth",
+"a scrap of old cloth used for wiping",
+"a worn piece of cloth for cleaning"
+],
+"exs": [
+"Dad cleaned the car with a rag.",
+"Wipe the window with a clean rag.",
+"He used an old rag to polish his shoes."
+]
+},
+{
+"w": "raise",
+"zh": "舉起",
+"pos": "v",
+"defs": [
+"to lift something up",
+"to move something up higher",
+"to put your hand or arm up"
+],
+"exs": [
+"Raise your hand if you know the answer.",
+"We raise the flag at school every morning.",
+"Please raise your voice so we can all hear."
+]
+},
+{
+"w": "staring",
+"zh": "盯著看",
+"pos": "v",
+"defs": [
+"looking at something for a long time",
+"looking hard and not looking away",
+"keeping your eyes on someone or something"
+],
+"exs": [
+"Why is everyone staring at me?",
+"The boy kept staring at the big birthday cake.",
+"It is not polite to be staring at people."
+]
+},
+{
+"w": "suggest",
+"zh": "建議；提議",
+"pos": "v",
+"defs": [
+"to tell someone your idea",
+"to offer an idea for someone to think about",
+"to put forward a plan"
+],
+"exs": [
+"I suggest we play outside.",
+"Can you suggest a good book for me?",
+"I suggest that we take a short rest."
+]
+},
+{
+"w": "supplies",
+"zh": "用品；用具",
+"pos": "n",
+"defs": [
+"things you need to do a job",
+"the items you need for a task or trip",
+"a stock of things like pencils and paper"
+],
+"exs": [
+"We bought school supplies at the store.",
+"We packed food and other supplies for the camping trip.",
+"The art room has plenty of paint supplies."
+]
+}
+]
+}
+]

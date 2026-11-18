@@ -1,0 +1,1282 @@
+[
+ {
+  "lesson": "w14-nightmare",
+  "w": "nightmare",
+  "zh": "惡夢",
+  "pos": "n",
+  "defs": [
+   "A very scary dream you have at night",
+   "A bad dream that wakes you up",
+   "A frightening dream while you are sleeping"
+  ],
+  "exs": [
+   "Carlos woke up from a nightmare.",
+   "Mom hugged me after my nightmare.",
+   "The nightmare was about a very tall monster."
+  ]
+ },
+ {
+  "lesson": "w14-nightmare",
+  "w": "swung",
+  "zh": "擺盪",
+  "pos": "v",
+  "defs": [
+   "Moved back and forth through the air",
+   "Moved while hanging from a rope or branch",
+   "Went from one side to the other in the air"
+  ],
+  "exs": [
+   "The monkey swung from branch to branch.",
+   "Carlos swung on the rope over the water.",
+   "The children swung on the rope at the park."
+  ]
+ },
+ {
+  "lesson": "w14-nightmare",
+  "w": "unless",
+  "zh": "除非",
+  "pos": "conj",
+  "defs": [
+   "Used to mean if not",
+   "Except if something else happens",
+   "Only if something does not happen"
+  ],
+  "exs": [
+   "We will go camping unless it rains.",
+   "You can't come in unless you take off your boots.",
+   "Mosh will not eat unless you call him."
+  ]
+ },
+ {
+  "lesson": "w14-nightmare",
+  "w": "piled",
+  "zh": "堆起來",
+  "pos": "v",
+  "defs": [
+   "Put many things on top of each other",
+   "Stacked things up high in one place",
+   "Put things in a big stack"
+  ],
+  "exs": [
+   "Carlos piled the logs by the fire.",
+   "Snow piled up outside the door.",
+   "She piled books on her desk."
+  ]
+ },
+ {
+  "lesson": "w14-nightmare",
+  "w": "hoping",
+  "zh": "希望",
+  "pos": "v",
+  "defs": [
+   "Wishing and wanting something to happen",
+   "Wanting something good to come true",
+   "Looking forward to a good thing"
+  ],
+  "exs": [
+   "Carlos was hoping for a snow day.",
+   "I am hoping Mom will bake cookies.",
+   "Mosh sat by the door, hoping for a walk."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "batter",
+  "zh": "麵糊",
+  "pos": "n",
+  "defs": [
+   "A thick mix of flour and eggs before baking",
+   "Soft mix you pour into a pan for cake",
+   "A soft mix you cook to make pancakes"
+  ],
+  "exs": [
+   "Carlos poured the batter into the pan.",
+   "The pancake batter was thick and sweet.",
+   "Mom licked the spoon covered in cake batter."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "cookbook",
+  "zh": "食譜書",
+  "pos": "n",
+  "defs": [
+   "A book that shows how to make food",
+   "A book that tells you how to cook meals",
+   "A kitchen book with pages of food instructions"
+  ],
+  "exs": [
+   "Mom found the banana bread page in her cookbook.",
+   "Carlos looked in the cookbook for a cake idea.",
+   "The cookbook has pictures of every dish."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "favorite",
+  "zh": "最喜歡的",
+  "pos": "adj",
+  "defs": [
+   "Liked better than all others",
+   "The one you like the most",
+   "Loved more than anything else of its kind"
+  ],
+  "exs": [
+   "Banana bread is my favorite food.",
+   "Blue is Carlos's favorite color of all.",
+   "What is your favorite game at recess?"
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "flour",
+  "zh": "麵粉",
+  "pos": "n",
+  "defs": [
+   "White powder used to bake bread and cakes",
+   "A soft powder you mix to make bread",
+   "A soft powder used in cakes and cookies"
+  ],
+  "exs": [
+   "Add two cups of flour to the bowl.",
+   "Flour got all over Carlos's nose.",
+   "Mom mixed flour and eggs to make cake."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "mash",
+  "zh": "壓成泥",
+  "pos": "v",
+  "defs": [
+   "To squash soft food until it is flat",
+   "To crush food until it is smooth and soft",
+   "To press potatoes or fruit with a fork until soft"
+  ],
+  "exs": [
+   "Mash the bananas with a fork.",
+   "Dad will mash the potatoes for dinner.",
+   "Carlos had to mash the beans until smooth."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "measuring cup",
+  "zh": "量杯",
+  "pos": "phr",
+  "defs": [
+   "A kitchen tool with lines for milk or flour",
+   "You use it to get the right amount",
+   "A see-through tool with numbers on the side"
+  ],
+  "exs": [
+   "Fill the measuring cup with milk.",
+   "Carlos used a measuring cup to scoop sugar.",
+   "Mom washed the measuring cup and put it away."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "obeyed",
+  "zh": "服從",
+  "pos": "v",
+  "defs": [
+   "Did what someone told you to do",
+   "Followed a rule or an order",
+   "Listened and did as you were asked"
+  ],
+  "exs": [
+   "Mosh obeyed and sat down at once.",
+   "The children obeyed the teacher and lined up.",
+   "Carlos obeyed the sign and stopped."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "peel",
+  "zh": "剝皮",
+  "pos": "v",
+  "defs": [
+   "To take the skin off a fruit",
+   "To pull off the outer layer of something",
+   "To remove the covering of a banana or orange"
+  ],
+  "exs": [
+   "Carlos will peel the bananas for the bread.",
+   "Please peel the orange for me.",
+   "Dad uses a knife to peel the apples."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "recipe",
+  "zh": "食譜",
+  "pos": "n",
+  "defs": [
+   "Instructions that tell how to make a food",
+   "A list of things and steps for cooking",
+   "A set of directions for baking a cake"
+  ],
+  "exs": [
+   "Mom followed the recipe for banana bread.",
+   "Grandma's recipe for soup is a family secret.",
+   "Carlos read the recipe before he started."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "stir",
+  "zh": "攪拌",
+  "pos": "v",
+  "defs": [
+   "To mix food by moving a spoon around",
+   "To move a spoon in circles in a bowl",
+   "To blend things in a pot with a spoon"
+  ],
+  "exs": [
+   "Stir the batter until it is smooth.",
+   "Carlos had to stir the soup so it would not burn.",
+   "Please stir your hot chocolate before you drink it."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "sugar",
+  "zh": "糖",
+  "pos": "n",
+  "defs": [
+   "A sweet white powder put in food and drinks",
+   "What makes cookies and candy taste sweet",
+   "Sweet grains you stir into tea"
+  ],
+  "exs": [
+   "Add a cup of sugar to the bowl.",
+   "Too much sugar is bad for your teeth.",
+   "Carlos put sugar in his tea."
+  ]
+ },
+ {
+  "lesson": "w14-banana",
+  "w": "wipe",
+  "zh": "擦拭",
+  "pos": "v",
+  "defs": [
+   "To rub something to make it clean or dry",
+   "To clean a surface with a cloth",
+   "To remove dirt by rubbing"
+  ],
+  "exs": [
+   "Wipe the table with a wet cloth.",
+   "Carlos used a towel to wipe his hands.",
+   "Please wipe your feet before you come in."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "blow out",
+  "zh": "吹熄",
+  "pos": "phr",
+  "defs": [
+   "To put out a flame with your breath",
+   "To make a fire stop by puffing air",
+   "To make a candle go dark with air"
+  ],
+  "exs": [
+   "Make a wish and blow out the candles.",
+   "Carlos took a deep breath to blow out the flame.",
+   "Dad had to blow out the match."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "candle",
+  "zh": "蠟燭",
+  "pos": "n",
+  "defs": [
+   "A stick that burns and gives soft light",
+   "Something you light on a birthday cake",
+   "It gives light when you light it"
+  ],
+  "exs": [
+   "Carlos put a candle on the cake.",
+   "The candle melted slowly on the table.",
+   "Mom lit a candle when the power went out."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "delicious",
+  "zh": "美味的",
+  "pos": "adj",
+  "defs": [
+   "Tasting very good to eat",
+   "Yummy and wonderful to eat",
+   "Having a great flavor"
+  ],
+  "exs": [
+   "The banana bread was warm and delicious.",
+   "Mom made a delicious soup for dinner.",
+   "What a delicious smell from the kitchen!"
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "excuse",
+  "zh": "藉口",
+  "pos": "n",
+  "defs": [
+   "A reason you give to explain a mistake",
+   "What you say to explain why you did something wrong",
+   "A reason, true or not, for not doing something"
+  ],
+  "exs": [
+   "Carlos had no excuse for being late.",
+   "\"The dog ate it\" is a silly excuse.",
+   "She gave an excuse for missing practice."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "prevent",
+  "zh": "防止",
+  "pos": "v",
+  "defs": [
+   "To stop something from happening",
+   "To keep a bad thing from taking place",
+   "To block something before it starts"
+  ],
+  "exs": [
+   "Wear a helmet to prevent getting hurt.",
+   "Carlos used a lid to prevent the soup from spilling.",
+   "A fence can prevent Mosh from running away."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "puddle",
+  "zh": "水坑",
+  "pos": "n",
+  "defs": [
+   "A small pool of water on the ground",
+   "Water left on the road after rain",
+   "A small wet spot you can splash in"
+  ],
+  "exs": [
+   "Mosh splashed in a muddy puddle.",
+   "A puddle of water spread over the floor.",
+   "Carlos jumped over the puddle in his boots."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "safety",
+  "zh": "安全",
+  "pos": "n",
+  "defs": [
+   "Being protected from harm",
+   "Being free from danger",
+   "Rules that keep you from getting hurt"
+  ],
+  "exs": [
+   "Wear a helmet for your safety.",
+   "Fire safety is important at home.",
+   "Mom taught us water safety at the pool."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "drowned",
+  "zh": "淹沒",
+  "pos": "v",
+  "defs": [
+   "Covered completely by lots of water",
+   "Filled up with too much water",
+   "Went under so much water that it was lost"
+  ],
+  "exs": [
+   "The little flame drowned in the spilled water.",
+   "The flowers drowned in the heavy rain.",
+   "Carlos's cereal drowned in too much milk."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "mopped",
+  "zh": "拖地",
+  "pos": "v",
+  "defs": [
+   "Cleaned the floor with a wet tool on a stick",
+   "Washed the floor using a tool with a long stick",
+   "Wiped up a spill from the floor"
+  ],
+  "exs": [
+   "Mom mopped the sticky kitchen floor.",
+   "Carlos mopped up the spilled water.",
+   "Dad mopped the muddy hallway after dinner."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "lit",
+  "zh": "點燃",
+  "pos": "v",
+  "defs": [
+   "Set fire to something so it burns",
+   "Made a flame begin on something",
+   "Started a flame with a match"
+  ],
+  "exs": [
+   "Dad lit the candles on the cake.",
+   "She lit the campfire with a match.",
+   "Carlos lit the lamp when it got dark."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "went out",
+  "zh": "熄滅",
+  "pos": "phr",
+  "defs": [
+   "Stopped burning or shining",
+   "Became dark when the light ended",
+   "Stopped giving any light at all"
+  ],
+  "exs": [
+   "The candles went out in the wind.",
+   "All the lights went out during the storm.",
+   "The campfire went out when it rained."
+  ]
+ },
+ {
+  "lesson": "w15-candles",
+  "w": "in case",
+  "zh": "以防萬一",
+  "pos": "phr",
+  "defs": [
+   "Because something might happen",
+   "To be ready if something happens later",
+   "As a safe plan for what may come"
+  ],
+  "exs": [
+   "Take a coat in case it gets cold.",
+   "Carlos packed extra socks in case his feet got wet.",
+   "Keep a flashlight in case the lights go out."
+  ]
+ },
+ {
+  "lesson": "w15-laura",
+  "w": "bothered",
+  "zh": "煩擾；打擾",
+  "pos": "v",
+  "defs": [
+   "Made someone feel upset or unhappy",
+   "Made someone unable to rest or read",
+   "Kept making someone feel a little angry"
+  ],
+  "exs": [
+   "The loud music bothered Carlos while he was reading.",
+   "The noise bothered Dad while he was sleeping.",
+   "The buzzing fly bothered Mosh all afternoon."
+  ]
+ },
+ {
+  "lesson": "w15-laura",
+  "w": "buddy",
+  "zh": "好朋友；夥伴",
+  "pos": "n",
+  "defs": [
+   "A good friend you like to play with",
+   "Another word for a good friend",
+   "A friend who is always with you"
+  ],
+  "exs": [
+   "Mosh is Carlos's best buddy.",
+   "Come on, buddy, let's race to the park!",
+   "My buddy sits next to me at lunch."
+  ]
+ },
+ {
+  "lesson": "w15-laura",
+  "w": "den",
+  "zh": "窩；巢穴",
+  "pos": "n",
+  "defs": [
+   "A hidden home where a wild animal lives",
+   "A cozy, quiet place where an animal sleeps",
+   "An animal's home in a cave or hole"
+  ],
+  "exs": [
+   "The fox ran back to its den.",
+   "Mosh made a warm den under the bed.",
+   "A bear sleeps in its den all winter."
+  ]
+ },
+ {
+  "lesson": "w15-laura",
+  "w": "fluffed",
+  "zh": "拍鬆；使蓬鬆",
+  "pos": "v",
+  "defs": [
+   "Shook or patted something soft to make it puffy",
+   "Made a pillow or feathers look light and full",
+   "Patted something until it became soft and round"
+  ],
+  "exs": [
+   "Mom fluffed the pillow before Carlos lay down.",
+   "The bird fluffed its feathers on the cold morning.",
+   "Laura fluffed her hair after taking off her hat."
+  ]
+ },
+ {
+  "lesson": "w15-laura",
+  "w": "shaky",
+  "zh": "發抖的",
+  "pos": "adj",
+  "defs": [
+   "Moving a little because you are scared",
+   "Not steady, and moving from side to side",
+   "Moving a little instead of staying still"
+  ],
+  "exs": [
+   "Carlos felt shaky when he climbed the tall ladder.",
+   "Mosh felt shaky after the loud thunder.",
+   "Her voice was shaky before the big show."
+  ]
+ },
+ {
+  "lesson": "w15-laura",
+  "w": "spoiled",
+  "zh": "寵壞的",
+  "pos": "adj",
+  "defs": [
+   "Given everything you want by others",
+   "Always getting too many treats and gifts",
+   "Too used to getting what you want"
+  ],
+  "exs": [
+   "Mosh is a spoiled pet and gets many treats.",
+   "The spoiled child cried when he could not have a toy.",
+   "Her spoiled cat only eats the best food."
+  ]
+ },
+ {
+  "lesson": "w15-laura",
+  "w": "sweetie",
+  "zh": "親愛的；甜心",
+  "pos": "n",
+  "defs": [
+   "A loving name for someone you care about",
+   "A kind name Mom may call you",
+   "A sweet name for a dear child"
+  ],
+  "exs": [
+   "Come here, sweetie, and give Mom a hug.",
+   "Grandma called me sweetie and gave me a cookie.",
+   "Good night, sweetie, sleep well."
+  ]
+ },
+ {
+  "lesson": "w16-friend",
+  "w": "awful",
+  "zh": "糟糕的；可怕的",
+  "pos": "adj",
+  "defs": [
+   "Very bad and not nice at all",
+   "Making you feel upset or sick",
+   "Much worse than just bad"
+  ],
+  "exs": [
+   "The medicine tasted awful to me.",
+   "We had an awful storm last night.",
+   "I feel awful because I broke my friend's toy."
+  ]
+ },
+ {
+  "lesson": "w16-friend",
+  "w": "bet",
+  "zh": "我敢說",
+  "pos": "v",
+  "defs": [
+   "To feel sure that something is true",
+   "To say you think something will happen",
+   "To guess something and feel very sure"
+  ],
+  "exs": [
+   "I bet Mosh can catch the ball.",
+   "I bet it will snow tomorrow.",
+   "I bet you are hungry after the long hike."
+  ]
+ },
+ {
+  "lesson": "w16-friend",
+  "w": "curled up",
+  "zh": "蜷縮著",
+  "pos": "phr",
+  "defs": [
+   "Lying in a small round shape to rest",
+   "Resting in a cozy ball, like a sleepy cat",
+   "Tucked in tightly with knees close to the chest"
+  ],
+  "exs": [
+   "Mosh curled up on the soft rug.",
+   "Carlos curled up with a book on the sofa.",
+   "The kitten curled up in a warm box."
+  ]
+ },
+ {
+  "lesson": "w16-friend",
+  "w": "leash",
+  "zh": "牽繩",
+  "pos": "n",
+  "defs": [
+   "A long strap used to lead a dog",
+   "A rope that keeps a pet close to you",
+   "A cord that you hold while walking your dog"
+  ],
+  "exs": [
+   "Carlos clipped the leash onto Mosh's collar.",
+   "Dogs must stay on a leash in the park.",
+   "Mosh pulled hard on the leash when he saw a squirrel."
+  ]
+ },
+ {
+  "lesson": "w16-friend",
+  "w": "lick",
+  "zh": "舔",
+  "pos": "v",
+  "defs": [
+   "To touch something with your tongue",
+   "To pass the tongue over food or a face",
+   "What a dog does to show it likes you"
+  ],
+  "exs": [
+   "Mosh likes to lick Carlos's hand.",
+   "Please do not lick the spoon.",
+   "I like to lick my ice cream cone."
+  ]
+ },
+ {
+  "lesson": "w16-nurse",
+  "w": "hungry",
+  "zh": "餓的",
+  "pos": "adj",
+  "defs": [
+   "Wanting to eat food",
+   "Having an empty belly and needing a meal",
+   "Feeling a need for something to eat"
+  ],
+  "exs": [
+   "Carlos was hungry after the long game.",
+   "Mosh looked hungry, so Carlos filled his bowl.",
+   "I am hungry; let's make a sandwich."
+  ]
+ },
+ {
+  "lesson": "w16-nurse",
+  "w": "nurse",
+  "zh": "護士",
+  "pos": "n",
+  "defs": [
+   "A person who helps sick people",
+   "A helper who gives medicine at school",
+   "The person at school who helps when you feel sick"
+  ],
+  "exs": [
+   "The nurse checked Carlos's forehead.",
+   "I went to the nurse because my head hurt.",
+   "The kind nurse gave him a bandage."
+  ]
+ },
+ {
+  "lesson": "w16-nurse",
+  "w": "stomach",
+  "zh": "肚子；胃",
+  "pos": "n",
+  "defs": [
+   "The part of your body where food goes",
+   "Your belly, where you feel hungry or sick",
+   "The inside part that holds the food you eat"
+  ],
+  "exs": [
+   "Carlos had a pain in his stomach.",
+   "My stomach growled before lunch.",
+   "My stomach hurts after I eat too much."
+  ]
+ },
+ {
+  "lesson": "w16-nurse",
+  "w": "temperature",
+  "zh": "體溫",
+  "pos": "n",
+  "defs": [
+   "How hot or cold your body is",
+   "A number that shows how warm you are",
+   "A number the nurse checks when you feel sick"
+  ],
+  "exs": [
+   "The nurse took Carlos's temperature.",
+   "My temperature was normal, so I went to class.",
+   "Mom checked my temperature when I felt hot."
+  ]
+ },
+ {
+  "lesson": "w16-nurse",
+  "w": "thirsty",
+  "zh": "口渴的",
+  "pos": "adj",
+  "defs": [
+   "Wanting to drink water",
+   "Needing something to drink",
+   "Having a dry mouth and wanting a drink"
+  ],
+  "exs": [
+   "After running, Carlos was very thirsty.",
+   "Mosh was thirsty and drank all the water.",
+   "I get thirsty on hot summer days."
+  ]
+ },
+ {
+  "lesson": "w16-nurse",
+  "w": "well",
+  "zh": "健康的；舒服的",
+  "pos": "adj",
+  "defs": [
+   "Healthy and not sick",
+   "In good health and feeling fine",
+   "Feeling good, with no sickness or pain"
+  ],
+  "exs": [
+   "Carlos did not feel well, so he stayed home.",
+   "I hope you get well soon.",
+   "Mosh is well again and ready to play."
+  ]
+ },
+ {
+  "lesson": "w16-clean",
+  "w": "a pail of",
+  "zh": "一桶",
+  "pos": "phr",
+  "defs": [
+   "A bucket full of something",
+   "A round container filled up with water or sand",
+   "One bucket with something inside"
+  ],
+  "exs": [
+   "Carlos carried a pail of water to the garden.",
+   "She filled a pail of sand at the beach.",
+   "Dad brought a pail of apples from the farm."
+  ]
+ },
+ {
+  "lesson": "w16-clean",
+  "w": "handle",
+  "zh": "把手",
+  "pos": "n",
+  "defs": [
+   "The part you hold to carry or open something",
+   "The part of a door or cup that you grab",
+   "The grip on a tool or bucket"
+  ],
+  "exs": [
+   "Carlos held the handle of the pail.",
+   "The cup handle broke, so I used two hands.",
+   "Turn the door handle to open it."
+  ]
+ },
+ {
+  "lesson": "w16-clean",
+  "w": "marvelous",
+  "zh": "極好的；了不起的",
+  "pos": "adj",
+  "defs": [
+   "Wonderful and very, very good",
+   "Amazing in a happy way",
+   "Great, better than just good"
+  ],
+  "exs": [
+   "What a marvelous day for a picnic!",
+   "Mom said the clean room looked marvelous.",
+   "The magic show was marvelous."
+  ]
+ },
+ {
+  "lesson": "w16-clean",
+  "w": "splashing",
+  "zh": "濺水",
+  "pos": "v",
+  "defs": [
+   "Making water fly up in drops all around",
+   "Hitting water so it sprays out",
+   "Playing in water and making it jump about"
+  ],
+  "exs": [
+   "Mosh was splashing in the puddle.",
+   "The kids were splashing in the pool.",
+   "Stop splashing, or the floor will get wet!"
+  ]
+ },
+ {
+  "lesson": "w16-clean",
+  "w": "spread",
+  "zh": "塗抹",
+  "pos": "v",
+  "defs": [
+   "To put jam or butter on bread",
+   "To rub soft food over bread",
+   "To cover bread with butter or jam"
+  ],
+  "exs": [
+   "Carlos will spread jam on his toast.",
+   "Please spread peanut butter on my sandwich.",
+   "Dad likes to spread honey on pancakes."
+  ]
+ },
+ {
+  "lesson": "w17-dinner",
+  "w": "baking soda",
+  "zh": "小蘇打",
+  "pos": "phr",
+  "defs": [
+   "A white powder used in cooking and cleaning",
+   "A white powder used in cakes and cleaning",
+   "A white kitchen powder that bubbles in a science trick"
+  ],
+  "exs": [
+   "Mom added baking soda to the cake mix.",
+   "Carlos mixed baking soda and vinegar to make bubbles.",
+   "We cleaned the sink with baking soda."
+  ]
+ },
+ {
+  "lesson": "w17-dinner",
+  "w": "behave",
+  "zh": "守規矩；表現得體",
+  "pos": "v",
+  "defs": [
+   "To act in a polite and good way",
+   "To follow the rules and be well mannered",
+   "To show good manners when others are around"
+  ],
+  "exs": [
+   "Please behave when we have visitors.",
+   "Mosh tries to behave at the dinner table.",
+   "Our class will behave well on the trip."
+  ]
+ },
+ {
+  "lesson": "w17-dinner",
+  "w": "guest",
+  "zh": "客人",
+  "pos": "n",
+  "defs": [
+   "A person who comes to visit your home",
+   "Someone you invite to eat or stay with you",
+   "A visitor who is welcomed by the host"
+  ],
+  "exs": [
+   "Our guest arrived just before dinner.",
+   "Carlos gave his guest the best seat.",
+   "Grandpa is a guest at our house this week."
+  ]
+ },
+ {
+  "lesson": "w17-dinner",
+  "w": "invite",
+  "zh": "邀請",
+  "pos": "v",
+  "defs": [
+   "To ask someone to come to a party or event",
+   "To ask a friend to join you",
+   "To say, \"Would you like to come?\""
+  ],
+  "exs": [
+   "Carlos wants to invite his friends to dinner.",
+   "I will invite my class to my birthday party.",
+   "Let's invite Grandma to the school show."
+  ]
+ },
+ {
+  "lesson": "w17-dinner",
+  "w": "mix-ups",
+  "zh": "混淆；搞錯",
+  "pos": "n",
+  "defs": [
+   "Mistakes when you get the wrong thing",
+   "Times when things are put in the wrong place",
+   "Mistakes when two things get switched"
+  ],
+  "exs": [
+   "There were two mix-ups at the party.",
+   "The mix-ups with the coats made everyone laugh.",
+   "Name tags help stop mix-ups."
+  ]
+ },
+ {
+  "lesson": "w17-dinner",
+  "w": "powder",
+  "zh": "粉末",
+  "pos": "n",
+  "defs": [
+   "Very tiny pieces of something dry, like dust",
+   "Dry stuff that is soft like dust",
+   "Something dry and fine that can be poured"
+  ],
+  "exs": [
+   "The white powder spilled on the table.",
+   "Mom put chocolate powder in the milk.",
+   "The baby powder smelled sweet."
+  ]
+ },
+ {
+  "lesson": "w17-dinner",
+  "w": "warn",
+  "zh": "警告；提醒",
+  "pos": "v",
+  "defs": [
+   "To tell someone about danger before it happens",
+   "To say \"be careful\" so no one gets hurt",
+   "To give notice that something bad may happen"
+  ],
+  "exs": [
+   "Carlos tried to warn his friend about the wet floor.",
+   "The sign will warn people about the deep water.",
+   "Dad did warn us that the soup was hot."
+  ]
+ },
+ {
+  "lesson": "w17-coats",
+  "w": "delightful",
+  "zh": "令人愉快的",
+  "pos": "adj",
+  "defs": [
+   "Very nice and makes you happy",
+   "Pleasing and full of joy",
+   "Lovely in a way that brings a smile"
+  ],
+  "exs": [
+   "We had a delightful afternoon at the park.",
+   "The warm cake was delightful.",
+   "Her song was delightful to hear."
+  ]
+ },
+ {
+  "lesson": "w17-coats",
+  "w": "dresser",
+  "zh": "五斗櫃",
+  "pos": "n",
+  "defs": [
+   "A tall piece of furniture with drawers for clothes",
+   "A bedroom chest where you keep socks and shirts",
+   "Furniture with drawers that holds your clothes"
+  ],
+  "exs": [
+   "Carlos put his shirts in the dresser.",
+   "The lost sock was behind the dresser.",
+   "Mom's brush is on top of the dresser."
+  ]
+ },
+ {
+  "lesson": "w17-coats",
+  "w": "exactly",
+  "zh": "正好；確切地",
+  "pos": "adv",
+  "defs": [
+   "Just right, with no difference at all",
+   "In a way that is perfectly correct",
+   "Without being even a little off"
+  ],
+  "exs": [
+   "This is exactly the coat I was looking for.",
+   "It is exactly noon now.",
+   "Carlos did exactly what the teacher said."
+  ]
+ },
+ {
+  "lesson": "w17-coats",
+  "w": "forgive",
+  "zh": "原諒",
+  "pos": "v",
+  "defs": [
+   "To stop being angry at someone who did wrong",
+   "To say it is okay after a mistake",
+   "To let go of blame for a friend"
+  ],
+  "exs": [
+   "Please forgive me for being late.",
+   "Carlos will forgive Mosh for chewing his shoe.",
+   "I forgive you for breaking my pencil."
+  ]
+ },
+ {
+  "lesson": "w17-coats",
+  "w": "gone",
+  "zh": "不見了",
+  "pos": "adj",
+  "defs": [
+   "Not here anymore; missing",
+   "Left and not able to be found",
+   "No longer here or there"
+  ],
+  "exs": [
+   "The cookies are all gone.",
+   "When Carlos looked, his coat was gone.",
+   "Mom is gone, but she will be back soon."
+  ]
+ },
+ {
+  "lesson": "w17-coats",
+  "w": "problem",
+  "zh": "問題；麻煩",
+  "pos": "n",
+  "defs": [
+   "Something that is hard and needs a fix",
+   "A trouble that you have to solve",
+   "A difficult thing that makes you worry"
+  ],
+  "exs": [
+   "We have a problem; the door will not open.",
+   "Carlos solved the math problem.",
+   "The lost coats were a big problem."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "croaking",
+  "zh": "呱呱叫",
+  "pos": "v",
+  "defs": [
+   "Making a deep, rough sound like a frog",
+   "Calling in a low, scratchy voice",
+   "What frogs do by the pond at night"
+  ],
+  "exs": [
+   "The frogs were croaking by the pond.",
+   "I heard croaking all night at the camp.",
+   "Something was croaking in the dark grass."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "hike",
+  "zh": "健行",
+  "pos": "v",
+  "defs": [
+   "To take a long walk in the hills or woods",
+   "To walk a long way outdoors for fun",
+   "To go on a trail on foot"
+  ],
+  "exs": [
+   "We will hike up the hill tomorrow.",
+   "Carlos likes to hike with his dad.",
+   "Wear good shoes when you hike."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "hundred",
+  "zh": "一百",
+  "pos": "n",
+  "defs": [
+   "The number after ninety-nine",
+   "Ten times the number ten",
+   "A big number written as 100"
+  ],
+  "exs": [
+   "There are a hundred stars in the sky tonight.",
+   "Carlos counted one hundred steps.",
+   "A hundred children came to the camp."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "loudly",
+  "zh": "大聲地",
+  "pos": "adv",
+  "defs": [
+   "In a way that makes a lot of noise",
+   "With a big sound that is easy to hear",
+   "Not quietly at all"
+  ],
+  "exs": [
+   "Mosh barked loudly at the door.",
+   "The thunder rumbled loudly last night.",
+   "Please do not talk loudly in the library."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "nature",
+  "zh": "大自然",
+  "pos": "n",
+  "defs": [
+   "Plants, animals, and everything outdoors not made by people",
+   "The trees, rivers, and wild places around us",
+   "The wild world of forests and mountains"
+  ],
+  "exs": [
+   "We love to walk in nature.",
+   "Carlos took a photo of nature at the lake.",
+   "Birds and trees are part of nature."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "shoo",
+  "zh": "趕走",
+  "pos": "v",
+  "defs": [
+   "To wave your hands to make an animal go away",
+   "To say \"go away!\" to a bug or bird",
+   "To chase away a small creature gently"
+  ],
+  "exs": [
+   "Carlos tried to shoo the bug away.",
+   "Please shoo the chickens out of the garden.",
+   "Mom will shoo the cat off the table."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "uneasily",
+  "zh": "不安地",
+  "pos": "adv",
+  "defs": [
+   "In a worried way, not feeling calm",
+   "In a nervous way, not feeling comfortable",
+   "In a scared way, like something is wrong"
+  ],
+  "exs": [
+   "Carlos looked around uneasily in the dark.",
+   "Mosh sat uneasily by the tent.",
+   "She waited uneasily for her turn."
+  ]
+ },
+ {
+  "lesson": "w18-camping",
+  "w": "wonder",
+  "zh": "好奇；想知道",
+  "pos": "v",
+  "defs": [
+   "To think about something and want to know",
+   "To ask yourself a question in your mind",
+   "To be curious about a thing"
+  ],
+  "exs": [
+   "I wonder what is in the box.",
+   "Carlos began to wonder where Mosh went.",
+   "Do you ever wonder how birds fly?"
+  ]
+ },
+ {
+  "lesson": "w18-night",
+  "w": "scary",
+  "zh": "可怕的",
+  "pos": "adj",
+  "defs": [
+   "Making you feel afraid or nervous",
+   "Making you want to hide",
+   "Something that gives you a fright"
+  ],
+  "exs": [
+   "The dark forest felt scary.",
+   "Carlos told a scary story at the campfire.",
+   "That mask is too scary for me."
+  ]
+ },
+ {
+  "lesson": "w18-night",
+  "w": "creature",
+  "zh": "生物；動物",
+  "pos": "n",
+  "defs": [
+   "A living animal or strange being",
+   "Something alive, like a bug, bird, or beast",
+   "Any living thing that is not a plant"
+  ],
+  "exs": [
+   "A small creature ran under the tent.",
+   "Carlos saw a glowing creature in the lake.",
+   "The tiny creature hid under a leaf."
+  ]
+ },
+ {
+  "lesson": "w18-night",
+  "w": "glow",
+  "zh": "發光",
+  "pos": "v",
+  "defs": [
+   "To shine softly with light",
+   "To give off a gentle bright light",
+   "To shine like a firefly in the dark"
+  ],
+  "exs": [
+   "Fireflies glow in the dark.",
+   "The moon will glow over the lake.",
+   "Carlos's watch can glow at night."
+  ]
+ },
+ {
+  "lesson": "w18-night",
+  "w": "caught",
+  "zh": "抓住",
+  "pos": "v",
+  "defs": [
+   "Grabbed something that was moving",
+   "Found and held on to something",
+   "Took hold of a ball or a fish"
+  ],
+  "exs": [
+   "Mosh caught the ball in his mouth.",
+   "Carlos caught a small fish in the stream.",
+   "Mom caught the glass before it fell."
+  ]
+ },
+ {
+  "lesson": "w18-night",
+  "w": "jumpier",
+  "zh": "更容易受驚的",
+  "pos": "adj",
+  "defs": [
+   "More easily scared than before",
+   "Quicker to jump at small sounds",
+   "More nervous than usual"
+  ],
+  "exs": [
+   "After the story, Carlos felt jumpier than before.",
+   "The dark made Mosh jumpier.",
+   "I am jumpier at night than during the day."
+  ]
+ },
+ {
+  "lesson": "w18-night",
+  "w": "roam",
+  "zh": "漫遊；閒逛",
+  "pos": "v",
+  "defs": [
+   "To walk around with no plan",
+   "To walk around freely in a big place",
+   "To move from place to place without a goal"
+  ],
+  "exs": [
+   "Wild horses roam across the field.",
+   "Mosh likes to roam around the yard.",
+   "Cows roam on the green hills."
+  ]
+ },
+ {
+  "lesson": "w18-night",
+  "w": "shadow",
+  "zh": "影子",
+  "pos": "n",
+  "defs": [
+   "A dark shape made when something blocks the light",
+   "The dark shape that follows you in the sun",
+   "A dark shape on the ground or wall"
+  ],
+  "exs": [
+   "Carlos saw his shadow on the wall.",
+   "A big shadow moved across the tent.",
+   "The tree made a long shadow."
+  ]
+ }
+]

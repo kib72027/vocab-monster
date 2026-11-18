@@ -1,0 +1,402 @@
+[
+ {
+  "lesson": "Sara and Bill",
+  "w": "snapped",
+  "zh": "厲聲說；說話很兇",
+  "pos": "v",
+  "defs": [
+   "spoke in a short, angry voice",
+   "said something in an angry way",
+   "answered with a cross voice"
+  ],
+  "exs": [
+   "\"Leave me alone!\" my brother snapped at me.",
+   "The tired teacher snapped when the class was too loud.",
+   "Dad snapped, \"Stop running in the house!\""
+  ]
+ },
+ {
+  "lesson": "Sara and Bill",
+  "w": "innocently",
+  "zh": "裝無辜地；天真地",
+  "pos": "adv",
+  "defs": [
+   "in a way that looks like you did nothing wrong",
+   "as if you know nothing about it",
+   "in a sweet way, with no bad plan"
+  ],
+  "exs": [
+   "The boy smiled innocently when Mom asked about the cookies.",
+   "She looked innocently at the teacher and said, \"Who, me?\"",
+   "My dog sat innocently next to the broken cup."
+  ]
+ },
+ {
+  "lesson": "Sara and Bill",
+  "w": "appears",
+  "zh": "似乎；看起來",
+  "pos": "v",
+  "defs": [
+   "seems to be true",
+   "looks like it is so",
+   "seems when you look at it"
+  ],
+  "exs": [
+   "It appears that it will rain, so take your umbrella.",
+   "It appears that my cat is asleep on the sofa.",
+   "The test appears easy, but it is hard."
+  ]
+ },
+ {
+  "lesson": "Sara and Bill",
+  "w": "mess",
+  "zh": "髒亂；一團糟",
+  "pos": "n",
+  "defs": [
+   "a place that is dirty or not neat",
+   "a lot of things all over the floor",
+   "things that are not put away"
+  ],
+  "exs": [
+   "Please clean up the mess in your room.",
+   "The kids made a big mess with paint.",
+   "My puppy left a mess on the floor."
+  ]
+ },
+ {
+  "lesson": "Sara and Bill",
+  "w": "lemonade",
+  "zh": "檸檬汁",
+  "pos": "n",
+  "defs": [
+   "a cold yellow drink made from lemons",
+   "a sweet sour drink that you drink on hot days",
+   "a drink made with lemon, water, and sugar"
+  ],
+  "exs": [
+   "On a hot day, I like cold lemonade.",
+   "Mom made a big jug of lemonade for the party.",
+   "We sold lemonade at our little stand."
+  ]
+ },
+ {
+  "lesson": "Sara and Bill",
+  "w": "dumb",
+  "zh": "笨的；愚蠢的",
+  "pos": "adj",
+  "defs": [
+   "not smart; silly",
+   "not clever at all",
+   "showing a lack of good thinking"
+  ],
+  "exs": [
+   "That was a dumb mistake, but I fixed it.",
+   "He felt dumb when he forgot his own name.",
+   "It is not nice to call a friend dumb."
+  ]
+ },
+ {
+  "lesson": "Sara and Bill",
+  "w": "actions",
+  "zh": "行動；行為",
+  "pos": "n",
+  "defs": [
+   "the things that a person does",
+   "what you do, not what you say",
+   "ways that people act"
+  ],
+  "exs": [
+   "Your kind actions make everyone in class happy.",
+   "Good actions are better than nice words.",
+   "The teacher said our actions at school are important."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "complain",
+  "zh": "抱怨；投訴",
+  "pos": "v",
+  "defs": [
+   "say that you are not happy about something",
+   "tell people that something is bad",
+   "say what you do not like"
+  ],
+  "exs": [
+   "Do not complain about the food, just eat it.",
+   "Some people complain when the bus is late.",
+   "My sister likes to complain about her homework."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "deliver",
+  "zh": "遞送；送（報紙、信件）",
+  "pos": "v",
+  "defs": [
+   "take something to a person's home",
+   "bring things to people",
+   "carry mail or papers to a house"
+  ],
+  "exs": [
+   "The postman will deliver the letter this morning.",
+   "I get up early to deliver milk to our neighbors.",
+   "The pizza man came to deliver our dinner."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "mumbled",
+  "zh": "含糊地說；喃喃自語",
+  "pos": "v",
+  "defs": [
+   "spoke in a low voice that is hard to hear",
+   "said something quietly and not clearly",
+   "talked softly to himself"
+  ],
+  "exs": [
+   "\"I do not know,\" the shy boy mumbled.",
+   "She mumbled her answer, so nobody could hear.",
+   "Grandpa mumbled something while he read the news."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "neatly",
+  "zh": "整齊地",
+  "pos": "adv",
+  "defs": [
+   "in a clean and tidy way",
+   "with everything in the right place",
+   "in a careful way, not messy"
+  ],
+  "exs": [
+   "She put her books neatly on the shelf.",
+   "Please write your name neatly on the paper.",
+   "The clothes were folded neatly in the drawer."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "patient",
+  "zh": "有耐心的",
+  "pos": "adj",
+  "defs": [
+   "able to wait without getting angry",
+   "calm when things take a long time",
+   "not in a hurry or upset"
+  ],
+  "exs": [
+   "Please be patient, the bus will come soon.",
+   "A good teacher is kind and patient.",
+   "I tried to be patient while my dog learned to sit."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "prove",
+  "zh": "證明",
+  "pos": "v",
+  "defs": [
+   "show that something is true",
+   "give a way to show you are right",
+   "make people see it is true"
+  ],
+  "exs": [
+   "I can prove that I did my homework.",
+   "He ran fast to prove he was the best.",
+   "Can you prove that the cat took the fish?"
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "puzzled",
+  "zh": "困惑的",
+  "pos": "adj",
+  "defs": [
+   "not able to understand something",
+   "confused and not sure what is going on",
+   "wondering why something happened"
+  ],
+  "exs": [
+   "I felt puzzled when my bag was not on my desk.",
+   "The puzzled boy looked at the hard math question.",
+   "She looked puzzled when the lights went out."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "route",
+  "zh": "路線；送貨路線",
+  "pos": "n",
+  "defs": [
+   "the way you go from one place to another",
+   "the road you take to get somewhere",
+   "the places you visit on your way"
+  ],
+  "exs": [
+   "My bus route goes past the school.",
+   "The mail man walks the same route every day.",
+   "We took a different route to the park."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "rubber bands",
+  "zh": "橡皮筋",
+  "pos": "n",
+  "defs": [
+   "thin round pieces of stretchy material",
+   "small stretchy circles used to hold things together",
+   "stretchy loops that tie papers or hair"
+  ],
+  "exs": [
+   "I put two rubber bands around the pencils.",
+   "Rubber bands can hold my homework papers together.",
+   "The girl used rubber bands to tie up her hair."
+  ]
+ },
+ {
+  "lesson": "Disappearing Newspapers",
+  "w": "vanish",
+  "zh": "消失",
+  "pos": "v",
+  "defs": [
+   "go away so you cannot see it",
+   "suddenly disappear",
+   "be here, then not be here"
+  ],
+  "exs": [
+   "Watch the magician make the coin vanish.",
+   "My cookies seem to vanish when I leave the room.",
+   "The rabbit can vanish into the tall grass."
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "announce",
+  "zh": "宣布；宣佈",
+  "pos": "v",
+  "defs": [
+   "tell everyone something in a loud voice",
+   "say important news to many people",
+   "tell people what will happen"
+  ],
+  "exs": [
+   "The teacher will announce the winner of the game.",
+   "Please announce that lunch is ready.",
+   "Dad will announce our trip at dinner."
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "baby-sit",
+  "zh": "當保姆；照顧小孩",
+  "pos": "v",
+  "defs": [
+   "take care of children while their parents are away",
+   "look after a small child for money",
+   "stay with kids when parents go out"
+  ],
+  "exs": [
+   "I baby-sit my little cousin on Saturday nights.",
+   "My big sister will baby-sit for our neighbor.",
+   "Can you baby-sit the twins while we go shopping?"
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "birdbath",
+  "zh": "鳥浴盆",
+  "pos": "n",
+  "defs": [
+   "a small bowl of water for birds in a garden",
+   "a place where birds drink and play in water",
+   "a shallow dish of water outside"
+  ],
+  "exs": [
+   "A small bird sat on the birdbath and drank water.",
+   "We put water in the birdbath every morning.",
+   "The birdbath in the garden is full of birds."
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "happily",
+  "zh": "高興地；快樂地",
+  "pos": "adv",
+  "defs": [
+   "in a glad way",
+   "with a smile and good feelings",
+   "in a way that shows joy"
+  ],
+  "exs": [
+   "The kids played happily in the park.",
+   "She happily opened the box from Grandma.",
+   "My dog wagged his tail happily."
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "paused",
+  "zh": "停頓；停了一下",
+  "pos": "v",
+  "defs": [
+   "stopped for a short time",
+   "stopped talking or moving for a moment",
+   "waited a little before going on"
+  ],
+  "exs": [
+   "He paused at the door to look for his key.",
+   "The girl paused to think about the question.",
+   "The singer paused, then began the next song."
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "pretend",
+  "zh": "假裝",
+  "pos": "v",
+  "defs": [
+   "act as if something is real when it is not",
+   "make believe",
+   "play a game of acting"
+  ],
+  "exs": [
+   "Let's pretend we are lions in the zoo.",
+   "The little girl likes to pretend she is a doctor.",
+   "I pretend this box is my spaceship."
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "share",
+  "zh": "分享；分給",
+  "pos": "v",
+  "defs": [
+   "give some of what you have to others",
+   "let other people have a part",
+   "use something together with someone"
+  ],
+  "exs": [
+   "Please share your cake with your friends.",
+   "I will share my crayons with my sister.",
+   "Good friends share their snacks at lunch."
+  ]
+ },
+ {
+  "lesson": "Car Wash",
+  "w": "soak",
+  "zh": "浸濕；泡濕",
+  "pos": "v",
+  "defs": [
+   "make something very wet",
+   "put something in water for a long time",
+   "wet all the way through"
+  ],
+  "exs": [
+   "Please do not soak my new shoes in the water.",
+   "Mom will soak the dirty dishes in the sink.",
+   "The big wave can soak us at the beach."
+  ]
+ }
+]

@@ -1,0 +1,301 @@
+[
+{
+"lesson": "w10-stage",
+"title": "Trouble on Stage",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/bdd00a01-image.jpg",
+"words": [
+{
+"w": "terrible",
+"zh": "糟糕的；可怕的（terribly＝非常）",
+"pos": "adj",
+"defs": [
+"very bad or awful",
+"making you feel upset or afraid",
+"something that is much worse than you wished"
+],
+"exs": [
+"The weather was terrible.",
+"We had a terrible storm last night.",
+"The soup tasted terrible."
+]
+},
+{
+"w": "curtain",
+"zh": "（舞台的）布幕；窗簾",
+"pos": "n",
+"defs": [
+"a large piece of cloth that hangs in front of a stage or window",
+"a cloth that opens and closes on a stage",
+"cloth that covers a window"
+],
+"exs": [
+"The curtain opened and the play began.",
+"The red curtain rose on the stage.",
+"Close the curtain so the sun won't wake me."
+]
+},
+{
+"w": "deserved",
+"zh": "應得的；活該",
+"pos": "v",
+"defs": [
+"earned something because of what you did",
+"should get something because it was earned",
+"was worth a reward or a result"
+],
+"exs": [
+"She deserved the prize because she worked hard.",
+"The winner deserved a big hug.",
+"He deserved a rest after working so hard."
+]
+},
+{
+"w": "dramatically",
+"zh": "戲劇性地；誇張地",
+"pos": "adv",
+"defs": [
+"in an exciting, big way, like an actor",
+"in a big, show-off way like a movie star",
+"in a way that is very exciting to watch"
+],
+"exs": [
+"He fell dramatically onto the floor.",
+"She dramatically waved her arms on stage.",
+"The actor dramatically gasped when he saw the ghost."
+]
+},
+{
+"w": "sickness",
+"zh": "病；不舒服",
+"pos": "n",
+"defs": [
+"being ill",
+"the state of not being healthy",
+"when your body feels bad and you have a fever"
+],
+"exs": [
+"He stayed home because of his sickness.",
+"Her sickness lasted three days.",
+"The doctor helped him get over his sickness."
+]
+},
+{
+"w": "spaceship",
+"zh": "太空船",
+"pos": "n",
+"defs": [
+"a vehicle that travels in space",
+"a vehicle that flies among the stars",
+"a craft that carries people to other planets"
+],
+"exs": [
+"The spaceship flew to Mars.",
+"The spaceship landed on the moon.",
+"Carlos built a spaceship out of boxes."
+]
+},
+{
+"w": "spoil",
+"zh": "破壞；搞砸",
+"pos": "v",
+"defs": [
+"to ruin something",
+"to make something bad or no good",
+"to ruin a fun plan or a nice time"
+],
+"exs": [
+"Don't spoil the surprise.",
+"Rain can spoil a picnic.",
+"Don't spoil the ending of the story."
+]
+}
+]
+},
+{
+"lesson": "w10-johnson",
+"title": "Mr. Johnson's Offer",
+"story_photo": "/mnt/user-data/attachments/a3c55631-b360-5eee-bc8c-a284734dea09/d033b023-image.jpg",
+"words": [
+{
+"w": "attracting",
+"zh": "吸引",
+"pos": "v",
+"defs": [
+"pulling people toward something",
+"drawing people near because it is interesting",
+"making people want to come and look"
+],
+"exs": [
+"The bright sign is attracting many people.",
+"The colorful balloons are attracting many kids.",
+"Honey is attracting bees to the garden."
+]
+},
+{
+"w": "business",
+"zh": "生意；商店",
+"pos": "n",
+"defs": [
+"a shop or a company that sells things",
+"a place that makes or sells things for money",
+"a company or shop that people run"
+],
+"exs": [
+"His family has a small business.",
+"Her uncle runs a business that sells shoes.",
+"The bakery is a good business."
+]
+},
+{
+"w": "crackers",
+"zh": "薄脆餅乾",
+"pos": "n",
+"defs": [
+"thin, dry biscuits",
+"small, flat, crunchy snacks",
+"dry baked food often eaten with soup or cheese"
+],
+"exs": [
+"I ate crackers with cheese.",
+"We put cheese on the crackers.",
+"Mom packed crackers for our trip."
+]
+},
+{
+"w": "crowd",
+"zh": "人群",
+"pos": "n",
+"defs": [
+"a large group of people",
+"lots of people gathered in one place",
+"many people standing close together"
+],
+"exs": [
+"A big crowd came to the park.",
+"The crowd cheered at the parade.",
+"A crowd waited outside the store."
+]
+},
+{
+"w": "earn",
+"zh": "賺（錢）",
+"pos": "v",
+"defs": [
+"to get money for work",
+"to get paid for doing a job",
+"to get something because you worked hard"
+],
+"exs": [
+"She wants to earn money.",
+"Carlos wants to earn money by washing cars.",
+"You can earn a star by reading every day."
+]
+},
+{
+"w": "extra",
+"zh": "額外的",
+"pos": "adj",
+"defs": [
+"more than usual",
+"added to what you already have",
+"more than what is needed"
+],
+"exs": [
+"Please bring extra food.",
+"Take an extra jacket in case it gets cold.",
+"I got extra dessert today."
+]
+},
+{
+"w": "grocery",
+"zh": "雜貨店；食品店",
+"pos": "n",
+"defs": [
+"a store that sells food",
+"a shop where people buy food and drinks",
+"a place to get milk, bread and fruit"
+],
+"exs": [
+"We bought milk at the grocery store.",
+"Dad went to the grocery to buy eggs.",
+"The grocery was full of fresh fruit."
+]
+},
+{
+"w": "hips",
+"zh": "臀部；髖部",
+"pos": "n",
+"defs": [
+"the parts of your body at the sides, below your waist",
+"the body parts where your legs join your body",
+"the sides of your body under your waist"
+],
+"exs": [
+"She put her hands on her hips.",
+"He danced and moved his hips.",
+"The girl put her hands on her hips."
+]
+},
+{
+"w": "hopefully",
+"zh": "懷著希望地",
+"pos": "adv",
+"defs": [
+"in a way that shows you wish for something",
+"wishing very much that something good will happen",
+"with a wish that things will work out"
+],
+"exs": [
+"She looked at the door hopefully.",
+"Carlos looked hopefully at the cookie jar.",
+"Mosh waited hopefully by the door for a walk."
+]
+},
+{
+"w": "mumble",
+"zh": "含糊地說",
+"pos": "v",
+"defs": [
+"to speak quietly and not clearly",
+"to talk in a soft way so people can't hear",
+"to say words that are hard to understand"
+],
+"exs": [
+"Please don't mumble. Speak loudly.",
+"The shy boy began to mumble his answer.",
+"Don't mumble when you read aloud."
+]
+},
+{
+"w": "samples",
+"zh": "樣品；試吃品",
+"pos": "n",
+"defs": [
+"small amounts of something to try",
+"little bits of food or goods to try for free",
+"small amounts that show what something is like"
+],
+"exs": [
+"The shop gave free samples of cookies.",
+"The store gave out samples of cheese.",
+"We tried samples of the new juice."
+]
+},
+{
+"w": "speaker",
+"zh": "擴音器；喇叭",
+"pos": "n",
+"defs": [
+"a machine that makes sounds louder",
+"a box that plays music or voices loudly",
+"something that makes sound come out louder"
+],
+"exs": [
+"The voice came from the speaker on the wall.",
+"Turn up the speaker so we can hear.",
+"Music played from the speaker in the corner."
+]
+}
+]
+}
+]

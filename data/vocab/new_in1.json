@@ -1,0 +1,1314 @@
+[
+{
+"lesson": "w1-office",
+"w": "ads",
+"zh": "廣告",
+"pos": "n",
+"defs": [
+"short messages that try to make you buy things",
+"pictures or videos on TV that sell products",
+"notices in papers or online about things for sale"
+],
+"exs": [
+"I saw funny ads on TV about toys.",
+"The shop put ads in the newspaper.",
+"Carlos skipped the ads before the video."
+]
+},
+{
+"lesson": "w1-office",
+"w": "button",
+"zh": "按鈕；鈕扣",
+"pos": "n",
+"defs": [
+"a small round thing you push to make a machine work",
+"a small round piece that closes a shirt",
+"a part of a coat that fits through a hole"
+],
+"exs": [
+"Carlos pressed the red button on the robot.",
+"My coat has a loose button.",
+"Push the button to start the elevator."
+]
+},
+{
+"lesson": "w1-office",
+"w": "device",
+"zh": "裝置；機器",
+"pos": "n",
+"defs": [
+"a small machine made to do a special job",
+"a tool that uses electricity, like a phone",
+"something people invent to help with work"
+],
+"exs": [
+"The new device can wash dishes.",
+"Carlos fixed the broken device with a screwdriver.",
+"Mom's phone is a handy device."
+]
+},
+{
+"lesson": "w1-office",
+"w": "dollar",
+"zh": "元；美元",
+"pos": "n",
+"defs": [
+"money used in the United States",
+"a bill or coin worth one hundred cents",
+"what you pay with at a store"
+],
+"exs": [
+"The pencil costs one dollar.",
+"Carlos found a dollar on the sidewalk.",
+"She paid a dollar for the lemonade."
+]
+},
+{
+"lesson": "w1-office",
+"w": "metal",
+"zh": "金屬",
+"pos": "n",
+"defs": [
+"a hard, shiny material like iron or steel",
+"the strong stuff that robots are often made of",
+"something that feels cold and can be heated and bent"
+],
+"exs": [
+"The robot was made of metal.",
+"A metal spoon felt cold in my hand.",
+"Magnets stick to some kinds of metal."
+]
+},
+{
+"lesson": "w1-office",
+"w": "minutes",
+"zh": "分鐘",
+"pos": "n",
+"defs": [
+"short parts of time, sixty make an hour",
+"units used to measure a short time",
+"how long it takes to do a quick job"
+],
+"exs": [
+"The bus will come in five minutes.",
+"Carlos read for twenty minutes.",
+"Wait a few minutes, then come back."
+]
+},
+{
+"lesson": "w1-office",
+"w": "notice",
+"zh": "注意到；告示",
+"pos": "v",
+"defs": [
+"to see or become aware of something",
+"to spot something that is small or hidden",
+"to pay attention to what is around you"
+],
+"exs": [
+"Did you notice the new robot?",
+"Carlos did not notice the mud on his shoes.",
+"I noticed a bird in the tree."
+]
+},
+{
+"lesson": "w1-office",
+"w": "office",
+"zh": "辦公室",
+"pos": "n",
+"defs": [
+"a room where people work at desks",
+"a place where a boss or teacher does paperwork",
+"a room where workers use computers and phones"
+],
+"exs": [
+"Dad works in an office downtown.",
+"The principal's office is down the hall.",
+"Carlos went to the office to get a form."
+]
+},
+{
+"lesson": "w1-office",
+"w": "robot",
+"zh": "機器人",
+"pos": "n",
+"defs": [
+"a machine that can move and do jobs by itself",
+"a metal helper controlled by a computer",
+"a machine that looks and acts a bit like a person"
+],
+"exs": [
+"The robot picked up the box.",
+"Carlos built a small robot at school.",
+"The robot said hello in a funny voice."
+]
+},
+{
+"lesson": "w1-office",
+"w": "silver",
+"zh": "銀色的；銀",
+"pos": "adj",
+"defs": [
+"having a shiny gray-white color like a coin",
+"the color of a shiny spoon",
+"made of a bright, light-colored metal"
+],
+"exs": [
+"The robot had a silver face.",
+"She wore a silver ring on her finger.",
+"The moon looked silver in the sky."
+]
+},
+{
+"lesson": "w1-office",
+"w": "storeroom",
+"zh": "儲藏室",
+"pos": "n",
+"defs": [
+"a room where things are kept until they are needed",
+"a place at school for extra supplies",
+"a small room full of boxes and tools"
+],
+"exs": [
+"The mops are in the storeroom.",
+"Carlos found the old robot in the storeroom.",
+"The storeroom was dark and dusty."
+]
+},
+{
+"lesson": "w1-office",
+"w": "wander",
+"zh": "閒逛；漫步",
+"pos": "v",
+"defs": [
+"to walk around slowly with no plan",
+"to go from place to place without a goal",
+"to move away from where you should be"
+],
+"exs": [
+"Mosh likes to wander around the garden.",
+"Don't wander off in the crowded market.",
+"We wander along the beach every summer."
+]
+},
+{
+"lesson": "w1-ride",
+"w": "admit",
+"zh": "承認",
+"pos": "v",
+"defs": [
+"to say that something is true, even if it is hard",
+"to agree that you did something wrong",
+"to tell the truth about a mistake"
+],
+"exs": [
+"Carlos had to admit he broke the lamp.",
+"I admit I was scared of the dark.",
+"She did not want to admit she was wrong."
+]
+},
+{
+"lesson": "w1-ride",
+"w": "dusty",
+"zh": "滿是灰塵的",
+"pos": "adj",
+"defs": [
+"covered with tiny bits of dry dirt",
+"not clean because no one has wiped it",
+"full of fine powder from the ground"
+],
+"exs": [
+"The old books were dusty.",
+"Carlos sneezed in the dusty attic.",
+"A dusty road led to the farm."
+]
+},
+{
+"lesson": "w1-ride",
+"w": "excited",
+"zh": "興奮的",
+"pos": "adj",
+"defs": [
+"very happy and full of energy about something",
+"eager and thrilled because something fun will happen",
+"having a lot of joy and can't wait"
+],
+"exs": [
+"Carlos was excited about the trip.",
+"The kids were excited to see the snow.",
+"Mosh jumped up, excited to play."
+]
+},
+{
+"lesson": "w1-ride",
+"w": "grab",
+"zh": "抓住；搶",
+"pos": "v",
+"defs": [
+"to take something quickly with your hand",
+"to hold onto something suddenly",
+"to snatch up something in a hurry"
+],
+"exs": [
+"Grab your coat and let's go!",
+"Carlos had to grab the rope.",
+"I will grab a snack before school."
+]
+},
+{
+"lesson": "w1-ride",
+"w": "grumbled",
+"zh": "抱怨；嘀咕",
+"pos": "v",
+"defs": [
+"complained in a low, unhappy voice",
+"said something in a cross way under your breath",
+"spoke in a not-so-happy tone"
+],
+"exs": [
+"Carlos grumbled about his homework.",
+"She grumbled when it started to rain.",
+"Grandpa grumbled that the soup was cold."
+]
+},
+{
+"lesson": "w1-ride",
+"w": "piece",
+"zh": "一塊；一片",
+"pos": "n",
+"defs": [
+"a part that is cut or broken from something",
+"one bit of a larger thing",
+"a single part such as of a puzzle or cake"
+],
+"exs": [
+"I ate a piece of cake.",
+"Carlos lost one piece of the puzzle.",
+"Mom handed me a piece of paper."
+]
+},
+{
+"lesson": "w1-ride",
+"w": "slammed",
+"zh": "砰地關上",
+"pos": "v",
+"defs": [
+"shut something with a loud bang",
+"closed a door very hard and fast",
+"hit something hard so it made a big noise"
+],
+"exs": [
+"Carlos slammed the door by accident.",
+"The wind slammed the window shut.",
+"He slammed the book on the desk."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "battery",
+"zh": "電池",
+"pos": "n",
+"defs": [
+"a small thing that gives power to toys and phones",
+"something you put in a remote to make it work",
+"a part that stores electricity for a machine"
+],
+"exs": [
+"The robot needs a new battery.",
+"My flashlight has a weak battery.",
+"Carlos changed the battery in the clock."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "driveway",
+"zh": "車道",
+"pos": "n",
+"defs": [
+"a short road that leads from the street to a house",
+"the place beside a house where cars park",
+"a paved path next to the garage"
+],
+"exs": [
+"Dad parked the car in the driveway.",
+"Carlos shoveled snow off the driveway.",
+"We played ball in the driveway."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "frantic",
+"zh": "慌亂的",
+"pos": "adj",
+"defs": [
+"Very worried and rushing about because you are scared",
+"Wild with fear or worry, unable to stay calm",
+"Hurrying around in a nervous, upset way"
+],
+"exs": [
+"Carlos made a frantic search for his lost robot key.",
+"The frantic puppy ran in circles when it heard thunder.",
+"Mom grew frantic when she could not find the baby."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "halt",
+"zh": "停止",
+"pos": "v",
+"defs": [
+"To stop moving or stop what you are doing",
+"To come to a stop right now",
+"A word you shout so someone will stand still"
+],
+"exs": [
+"The robot had to halt when its battery ran out.",
+"The teacher told the class to halt at the door.",
+"Please halt your bike before you cross the road."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "lantern",
+"zh": "燈籠",
+"pos": "n",
+"defs": [
+"A light inside a case that you can carry by a handle",
+"A lamp with a glass cover, used when camping",
+"A glowing paper light often hung up at festivals"
+],
+"exs": [
+"Carlos hung a lantern outside the tent at night.",
+"We carried a lantern down the dark path.",
+"The lantern lit up the whole cave."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "neighbor",
+"zh": "鄰居",
+"pos": "n",
+"defs": [
+"A person who lives in the house next to yours",
+"Someone who lives close to you",
+"A person who lives near your home"
+],
+"exs": [
+"Our neighbor waters his flowers every morning.",
+"Carlos waved at his neighbor over the fence.",
+"The friendly neighbor gave us fresh apples."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "oil",
+"zh": "油；上油",
+"pos": "n",
+"defs": [
+"A slippery liquid used to help machine parts move smoothly",
+"A thick liquid used for cooking or for engines",
+"To put this slippery liquid on a squeaky part"
+],
+"exs": [
+"The robot's arm needed a drop of oil.",
+"Mom put oil in the pan to fry eggs.",
+"Dad used oil to stop the door squeaking."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "press",
+"zh": "按；壓",
+"pos": "v",
+"defs": [
+"To push down on something with your finger",
+"To push on a button to make it work",
+"To squeeze something firmly with your hand"
+],
+"exs": [
+"Carlos will press the red button to start the robot.",
+"Please press the doorbell twice.",
+"Press the flower between two pages of a book."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "project",
+"zh": "專題；計畫",
+"pos": "n",
+"defs": [
+"A big piece of schoolwork you plan and finish over time",
+"A job or task that takes careful planning",
+"Special work, like building a model, done at school"
+],
+"exs": [
+"Carlos built a robot for his science project.",
+"Our class project is about frogs.",
+"She worked hard on her art project."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "quit",
+"zh": "放棄；停止",
+"pos": "v",
+"defs": [
+"To stop doing something and give up",
+"To leave a job or a team for good",
+"To stop trying before you are finished"
+],
+"exs": [
+"Carlos did not quit when the robot fell down.",
+"I will never quit practicing my violin.",
+"He wanted to quit the game because he was tired."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "remove",
+"zh": "移開；拿掉",
+"pos": "v",
+"defs": [
+"To take something away from a place",
+"To lift something off and put it somewhere else",
+"To take off or get rid of something"
+],
+"exs": [
+"Please remove your muddy shoes at the door.",
+"Carlos had to remove the robot's broken arm.",
+"Can you remove the lid from the jar?"
+]
+},
+{
+"lesson": "w2-robot",
+"w": "rosebush",
+"zh": "玫瑰花叢",
+"pos": "n",
+"defs": [
+"A small plant with thorny stems and pretty flowers",
+"A garden plant that grows red or pink blooms",
+"A bush where sweet-smelling flowers grow in the yard"
+],
+"exs": [
+"Mosh hid behind the rosebush in the garden.",
+"A bee buzzed around the red rosebush.",
+"Grandma planted a new rosebush by the gate."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "test",
+"zh": "測試；考試",
+"pos": "n",
+"defs": [
+"A set of questions that shows how much you know",
+"A way to check if something works well",
+"To try out something to see how it works"
+],
+"exs": [
+"We have a spelling test on Friday.",
+"Carlos ran a test to see if the robot could walk.",
+"The doctor did a test on my eyes."
+]
+},
+{
+"lesson": "w2-robot",
+"w": "wire",
+"zh": "電線",
+"pos": "n",
+"defs": [
+"A thin, bendy metal thread that carries electricity",
+"A long metal strand used to connect machines",
+"A thin metal string that you can bend and twist"
+],
+"exs": [
+"Carlos used a wire to join the robot's parts.",
+"Don't touch the loose wire on the lamp.",
+"The bird sat on the wire outside my window."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "believe",
+"zh": "相信",
+"pos": "v",
+"defs": [
+"To think that something is true",
+"To feel sure that someone is telling the truth",
+"To have faith that something is real"
+],
+"exs": [
+"I believe Mosh can learn a new trick.",
+"Do you believe in magic?",
+"Carlos could not believe his eyes when the robot danced."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "chores",
+"zh": "家事；雜務",
+"pos": "n",
+"defs": [
+"Small jobs you do around the house",
+"Daily work like washing dishes or sweeping",
+"Tasks that help keep a home clean"
+],
+"exs": [
+"Carlos finished his chores before playing outside.",
+"Washing dishes is one of my chores.",
+"My brother and I share the chores at home."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "dash",
+"zh": "衝；飛奔",
+"pos": "v",
+"defs": [
+"To run quickly for a short time",
+"To rush somewhere very fast",
+"To hurry off in a quick burst"
+],
+"exs": [
+"Carlos had to dash to catch the bus.",
+"The rabbit will dash across the field.",
+"I saw Mosh dash out of the door."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "demonstrated",
+"zh": "示範；展示",
+"pos": "v",
+"defs": [
+"Showed how to do something so others could learn",
+"Showed how something works",
+"Let people watch how a thing is done"
+],
+"exs": [
+"The robot demonstrated how to sweep the floor.",
+"Our teacher demonstrated the science trick.",
+"Carlos demonstrated his new skateboard move."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "empty",
+"zh": "空的",
+"pos": "adj",
+"defs": [
+"Having nothing inside",
+"Not holding anything at all",
+"With no people or things in it"
+],
+"exs": [
+"The cookie jar was empty this morning.",
+"Carlos held up an empty box.",
+"The playground was empty after the rain."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "land",
+"zh": "降落；著陸",
+"pos": "v",
+"defs": [
+"To come down to the ground after flying",
+"To touch down on the earth or water",
+"To come down safely from the sky"
+],
+"exs": [
+"The helper robot will land on the roof.",
+"Watch the bird land on the branch.",
+"The plane will land in ten minutes."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "luckiest",
+"zh": "最幸運的",
+"pos": "adj",
+"defs": [
+"Having the most good things happen by chance",
+"More fortunate than anyone else",
+"Having better good fortune than all the others"
+],
+"exs": [
+"Carlos felt like the luckiest boy in school.",
+"She is the luckiest girl because she won the prize.",
+"Mosh is the luckiest dog with so many toys."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "pour",
+"zh": "倒；傾倒",
+"pos": "v",
+"defs": [
+"To make liquid flow out of a container",
+"To tip a jug so water runs into a glass",
+"To make rain fall heavily"
+],
+"exs": [
+"Carlos will pour milk into the bowl.",
+"Please pour some juice for your sister.",
+"I watched the rain pour from the dark clouds."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "stuffed",
+"zh": "塞滿的；吃飽的",
+"pos": "adj",
+"defs": [
+"Filled up very full with something",
+"Packed tightly so nothing else fits",
+"Having eaten so much that you cannot eat more"
+],
+"exs": [
+"Carlos's bag was stuffed with snacks.",
+"I am stuffed after that big dinner.",
+"The toy box was stuffed full of teddy bears."
+]
+},
+{
+"lesson": "w2-helper",
+"w": "wastebasket",
+"zh": "字紙簍",
+"pos": "n",
+"defs": [
+"A small bin in a room for throwing away paper",
+"A container where you put rubbish",
+"A basket by the desk for things you do not need"
+],
+"exs": [
+"Carlos threw the torn paper into the wastebasket.",
+"The wastebasket in my room is full.",
+"Mosh tipped over the wastebasket."
+]
+},
+{
+"lesson": "w3-name",
+"w": "bumping",
+"zh": "碰撞",
+"pos": "v",
+"defs": [
+"Hitting against something by accident",
+"Knocking into things again and again",
+"Running into something with a small bang"
+],
+"exs": [
+"The robot kept bumping into the wall.",
+"I heard bumping noises upstairs.",
+"Carlos was bumping along on the rocky road."
+]
+},
+{
+"lesson": "w3-name",
+"w": "feelings",
+"zh": "感覺；情感",
+"pos": "n",
+"defs": [
+"The happy, sad or angry things you feel inside",
+"What you feel in your heart",
+"Emotions that tell how you are doing"
+],
+"exs": [
+"Carlos did not want to hurt his friend's feelings.",
+"Mosh showed his feelings by wagging his tail.",
+"It is okay to talk about your feelings."
+]
+},
+{
+"lesson": "w3-name",
+"w": "machine",
+"zh": "機器",
+"pos": "n",
+"defs": [
+"A tool with moving parts that does work for people",
+"Something built to help do a job faster",
+"A thing with parts that works by power"
+],
+"exs": [
+"The washing machine is making a funny noise.",
+"Carlos built a machine that sorts socks.",
+"This machine makes ice cream."
+]
+},
+{
+"lesson": "w3-name",
+"w": "scatter",
+"zh": "撒開；散落",
+"pos": "v",
+"defs": [
+"To throw or spread things in many directions",
+"To make things fly apart all over",
+"To run away in different directions"
+],
+"exs": [
+"Carlos watched the pigeons scatter across the square.",
+"Please don't scatter your toys on the floor.",
+"The wind will scatter the leaves."
+]
+},
+{
+"lesson": "w3-name",
+"w": "terrific",
+"zh": "極好的",
+"pos": "adj",
+"defs": [
+"Really wonderful and great",
+"Very, very good",
+"Excellent and so much fun"
+],
+"exs": [
+"We had a terrific day at the beach.",
+"Carlos had a terrific idea for the science fair.",
+"That is a terrific song!"
+]
+},
+{
+"lesson": "w3-name",
+"w": "whispered",
+"zh": "低聲說",
+"pos": "v",
+"defs": [
+"Spoke very softly so only one person could hear",
+"Said something in a quiet voice",
+"Talked in a hush so others would not hear"
+],
+"exs": [
+"Carlos whispered a secret to Mosh.",
+"She whispered during the quiet movie.",
+"The girl whispered, \"Be quiet, the baby is sleeping.\""
+]
+},
+{
+"lesson": "w3-name",
+"w": "wink",
+"zh": "眨眼；使眼色",
+"pos": "n",
+"defs": [
+"A quick closing and opening of one eye as a signal",
+"A tiny blink that shares a secret",
+"To close one eye quickly to show a joke"
+],
+"exs": [
+"Dad gave me a wink when he told the joke.",
+"Carlos gave his friend a wink and smiled.",
+"With a wink, the robot said hello."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "behind",
+"zh": "在……後面",
+"pos": "prep",
+"defs": [
+"At the back of something",
+"On the far side of something, out of sight",
+"Following after someone and not in front"
+],
+"exs": [
+"Mosh hid behind the big tree.",
+"Carlos stood behind his mom in line.",
+"The sun went behind the clouds."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "chasing",
+"zh": "追趕",
+"pos": "v",
+"defs": [
+"Running after someone to catch them",
+"Going quickly after something that moves away",
+"Following something fast to try to catch it"
+],
+"exs": [
+"Mosh was chasing a butterfly in the yard.",
+"The children were chasing each other at recess.",
+"Carlos is chasing the ball down the hill."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "guess",
+"zh": "猜",
+"pos": "v",
+"defs": [
+"To say an answer when you are not sure",
+"To try to give the right answer without knowing",
+"To think something might be true"
+],
+"exs": [
+"Can you guess what is in the box?",
+"I guess it will rain today.",
+"Carlos could not guess the riddle."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "intentionally",
+"zh": "故意地",
+"pos": "adv",
+"defs": [
+"Done on purpose and not by accident",
+"Meant to happen, not a mistake",
+"Done with a plan in mind"
+],
+"exs": [
+"Carlos did not break the cup intentionally.",
+"She intentionally left the door open for Mosh.",
+"He intentionally walked slowly to enjoy the view."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "neighborhood",
+"zh": "社區；鄰近地區",
+"pos": "n",
+"defs": [
+"The area around your home with the people who live there",
+"The streets and houses close to where you live",
+"A small part of town where families live"
+],
+"exs": [
+"Carlos rode his bike around the neighborhood.",
+"There is a new park in our neighborhood.",
+"Everyone in the neighborhood knows Mosh."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "nod",
+"zh": "點頭",
+"pos": "v",
+"defs": [
+"To move your head up and down to say yes",
+"To bow your head quickly to show you agree",
+"To dip your head as a hello"
+],
+"exs": [
+"Carlos will nod when he understands.",
+"The teacher saw me nod and smiled.",
+"Mosh seemed to nod at the treat."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "replied",
+"zh": "回答",
+"pos": "v",
+"defs": [
+"Answered someone with words",
+"Said something back after a question",
+"Gave an answer when asked"
+],
+"exs": [
+"Carlos replied, \"I'm fine, thank you.\"",
+"She replied quickly to the teacher's question.",
+"\"No, thanks,\" Mosh's friend replied."
+]
+},
+{
+"lesson": "w3-friend",
+"w": "startle",
+"zh": "嚇一跳",
+"pos": "v",
+"defs": [
+"To make someone jump from sudden surprise",
+"To give someone a quick little fright",
+"To surprise someone so they flinch"
+],
+"exs": [
+"A loud bang can startle the sleeping cat.",
+"I didn't mean to startle you.",
+"The sudden thunder did startle Carlos."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "alarm clock",
+"zh": "鬧鐘",
+"pos": "phr",
+"defs": [
+"A clock that rings to wake you up",
+"A machine by your bed that makes noise in the morning",
+"A clock you set so you won't oversleep"
+],
+"exs": [
+"My alarm clock rings at seven every morning.",
+"Carlos found an old alarm clock in the trash.",
+"The alarm clock fell off the table."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "angrily",
+"zh": "生氣地",
+"pos": "adv",
+"defs": [
+"In a way that shows you are very mad",
+"With a cross, upset voice or face",
+"In a way that shows you feel furious"
+],
+"exs": [
+"Carlos stomped angrily into his room.",
+"The man shouted angrily at the broken car.",
+"She slammed the book down angrily."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "belong",
+"zh": "屬於；應放在",
+"pos": "v",
+"defs": [
+"To be owned by someone",
+"To have the right place to be in",
+"To be a part of a group"
+],
+"exs": [
+"This toy does not belong to me.",
+"Where do these shoes belong?",
+"Mosh feels he can belong in our family."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "curb",
+"zh": "路邊",
+"pos": "n",
+"defs": [
+"The edge of the street where the sidewalk begins",
+"The stone edge along a road",
+"The place by the road where you put trash cans"
+],
+"exs": [
+"Carlos put the trash can by the curb.",
+"Don't step off the curb without looking.",
+"The car parked next to the curb."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "drag",
+"zh": "拖；拉",
+"pos": "v",
+"defs": [
+"To pull something heavy along the ground",
+"To tug something slowly behind you",
+"To haul something that is hard to carry"
+],
+"exs": [
+"Carlos had to drag the heavy bag to the curb.",
+"Mosh will drag his blanket everywhere.",
+"Please don't drag your feet on the floor."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "examined",
+"zh": "仔細檢查",
+"pos": "v",
+"defs": [
+"Looked at something very carefully",
+"Studied something closely to learn about it",
+"Checked each part with great care"
+],
+"exs": [
+"Carlos examined the old clock closely.",
+"The doctor examined my sore knee.",
+"She examined the bug with a magnifying glass."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "fault",
+"zh": "過錯；責任",
+"pos": "n",
+"defs": [
+"The reason something bad happened, who is to blame",
+"A mistake that someone has made",
+"What makes someone responsible for a problem"
+],
+"exs": [
+"It was not Mosh's fault that the vase broke.",
+"Carlos said, \"It's my fault, I'm sorry.\"",
+"Whose fault is the mess?"
+]
+},
+{
+"lesson": "w3-trash",
+"w": "ordinary",
+"zh": "普通的",
+"pos": "adj",
+"defs": [
+"Not special, just like all the others",
+"Normal and not unusual",
+"Common and plain, nothing strange about it"
+],
+"exs": [
+"It looked like an ordinary rock, but it glowed.",
+"Today was an ordinary school day.",
+"Carlos wore an ordinary gray jacket."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "refused",
+"zh": "拒絕",
+"pos": "v",
+"defs": [
+"Said no and would not do it",
+"Would not take or accept something",
+"Did not agree to do what was asked"
+],
+"exs": [
+"Mosh refused to eat his dinner.",
+"Carlos refused the extra cake because he was full.",
+"The little boy refused to go to bed."
+]
+},
+{
+"lesson": "w3-trash",
+"w": "return",
+"zh": "歸還；回來",
+"pos": "v",
+"defs": [
+"To bring something back to the person who owns it",
+"To go back to a place",
+"To come back again"
+],
+"exs": [
+"Carlos must return the book to the library.",
+"We will return home after the trip.",
+"Please return my pencil when you are done."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "blouses",
+"zh": "女襯衫",
+"pos": "n",
+"defs": [
+"Light shirts that girls and women wear",
+"Loose tops with buttons, usually for ladies",
+"Pretty shirts that hang in a closet"
+],
+"exs": [
+"Mom folded the blouses and put them away.",
+"The shop sells blouses in many colors.",
+"She washed two blouses on Sunday."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "bragged",
+"zh": "吹牛；自誇",
+"pos": "v",
+"defs": [
+"Talked proudly about how great you are",
+"Said you were better than others in a showy way",
+"Boasted about something you did"
+],
+"exs": [
+"Carlos never bragged about winning the race.",
+"The boy bragged about his new bike.",
+"She bragged that she could jump the highest."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "drawer",
+"zh": "抽屜",
+"pos": "n",
+"defs": [
+"A box that slides in and out of a desk or dresser",
+"A sliding space for keeping socks or papers",
+"A part of a cabinet that you pull open"
+],
+"exs": [
+"Carlos put his socks in the top drawer.",
+"The pencils are in the desk drawer.",
+"Mosh opened the kitchen drawer with his nose."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "expect",
+"zh": "預期；期待",
+"pos": "v",
+"defs": [
+"To think that something will probably happen",
+"To wait for something because you believe it will come",
+"To look forward to something you think is coming"
+],
+"exs": [
+"We expect rain on Saturday.",
+"Carlos did not expect a gift from the robot.",
+"I expect my friend to arrive soon."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "fancy",
+"zh": "華麗的；高級的",
+"pos": "adj",
+"defs": [
+"Very nice-looking and not plain",
+"Decorated and special, not ordinary",
+"Dressy and full of pretty details"
+],
+"exs": [
+"Carlos wore a fancy hat to the party.",
+"The fancy cake had a sugar flower on top.",
+"She bought fancy shoes for the dance."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "frown",
+"zh": "皺眉",
+"pos": "n",
+"defs": [
+"A look on your face when you are upset or unhappy",
+"A sad or cross look with your brows pulled together",
+"The face you make when you do not like something"
+],
+"exs": [
+"Dad had a frown when he saw the mess.",
+"Carlos turned his frown into a smile.",
+"There was a frown on Mosh's face."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "mixed up",
+"zh": "弄混",
+"pos": "phr",
+"defs": [
+"Confused, with things in the wrong places",
+"Put together the wrong way so they are muddled",
+"Not in the right order because of a mistake"
+],
+"exs": [
+"The socks got mixed up in the laundry.",
+"Carlos was mixed up about which bus to take.",
+"My papers got mixed up on the floor."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "outfit",
+"zh": "服裝；一套衣服",
+"pos": "n",
+"defs": [
+"A set of clothes worn together",
+"What you choose to wear for a special day",
+"Clothes that go well together"
+],
+"exs": [
+"Carlos picked a cool outfit for the party.",
+"Her new outfit was red and yellow.",
+"What outfit will you wear to school?"
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "stomped",
+"zh": "重重地走",
+"pos": "v",
+"defs": [
+"Walked with loud, heavy steps because of being cross",
+"Stepped hard on the floor to show you are upset",
+"Walked noisily with heavy feet"
+],
+"exs": [
+"Carlos stomped up the stairs.",
+"The little girl stomped her foot and said no.",
+"The elephant stomped through the mud."
+]
+},
+{
+"lesson": "w4-shirt",
+"w": "twinkle",
+"zh": "閃爍",
+"pos": "v",
+"defs": [
+"to shine with small, quick flashes of light",
+"what stars seem to do in the night sky",
+"to sparkle on and off like a tiny light"
+],
+"exs": [
+"The stars twinkle high above our tent at night.",
+"Her eyes twinkle when she tells a funny joke.",
+"Lights twinkle on the tree in the living room."
+]
+},
+{
+"lesson": "w4-push",
+"w": "dizzy",
+"zh": "頭暈的",
+"pos": "adj",
+"defs": [
+"feeling like everything is spinning around you",
+"feeling unsteady, as if you might fall over",
+"how you feel after turning in circles many times"
+],
+"exs": [
+"I felt dizzy after spinning on the playground ride.",
+"Carlos got dizzy when he stood up too fast.",
+"The merry-go-round made Mosh feel dizzy and wobbly."
+]
+},
+{
+"lesson": "w4-push",
+"w": "gently",
+"zh": "輕輕地",
+"pos": "adv",
+"defs": [
+"in a soft, careful way",
+"with very little force so nothing gets hurt",
+"in a kind and soft manner"
+],
+"exs": [
+"Carlos gently pushed the swing so Mom could rock slowly.",
+"She gently patted the puppy on the head.",
+"Please close the door gently so the baby can sleep."
+]
+},
+{
+"lesson": "w4-push",
+"w": "instantly",
+"zh": "立刻；馬上",
+"pos": "adv",
+"defs": [
+"right away, with no waiting",
+"at once, in a very short moment",
+"so fast that there is no delay at all"
+],
+"exs": [
+"When the bell rang, the kids instantly ran outside.",
+"The light came on instantly when I pressed the button.",
+"Mosh instantly jumped up when he heard his name."
+]
+},
+{
+"lesson": "w4-push",
+"w": "instead of",
+"zh": "而不是；代替",
+"pos": "phr",
+"defs": [
+"in the place of something else",
+"choosing one thing and not the other",
+"used when one thing takes the place of another"
+],
+"exs": [
+"Let's walk to school instead of taking the bus.",
+"He drank water instead of juice.",
+"I read a book instead of watching TV."
+]
+}
+]
