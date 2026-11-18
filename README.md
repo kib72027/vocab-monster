@@ -7,7 +7,7 @@ Open `index.html` in any modern browser (Chrome / Safari / Edge; desktop, phone,
 
 ## What the game does
 - Student picks a lesson → fights that lesson's monster by answering English vocabulary questions (cloze sentence or "which word matches this meaning"). Right answer = a golden arrow hits the monster; wrong = the monster hits back (hearts are fixed at 5).
-- Correct answers also read the word and its example sentence aloud (Web Speech API). When the mana bar is full, the next correct answer triggers an **ultimate move** (the sentence words orbit the monster, rise, then rain down; deals 2 damage).
+- Correct answers also read the word and its example sentence aloud (Web Speech API). When the mana bar is full (3 for normal monsters, 5 for elites/bosses; a wrong answer costs 1 mana), the next correct answer triggers an **ultimate move** (the sentence words orbit the monster, rise, then rain down; deals 2 damage).
 - Rewards: XP, coins, treasure chest (monster cards), shop (revive potion / hint crystal / word note), dress-up heroes, monster codex.
 
 ## 遊戲規則（完整版）
@@ -16,15 +16,15 @@ Open `index.html` in any modern browser (Chrome / Safari / Edge; desktop, phone,
 - 選一隻怪物開打。每題是英文選擇題，有兩種：**填空題**（句子挖空，選出適合的單字）和**意思題**（看英文解釋，選出對應的單字）。題目全英文，不給中文提示。
 - 每個單字有 3 個英文解釋、3 個例句，每次出題**隨機**挑一個。
 - **答對**：金色箭矢射中怪物，怪物 -1 HP；同時唸出單字，再唸一次例句。每答對一題 +5 XP，單字熟練度 +1（最高 3，達到 3 算「學會」）。
-- **答錯**：怪物反擊，英雄 -1 顆愛心（愛心上限固定 **5**），魔力歸零，熟練度 -1，並唸出例句。這個字會在 2 題後再出現，也會被記進「復仇」清單。
+- **答錯**：怪物反擊，英雄 -1 顆愛心（愛心上限固定 **5**），魔力 -1，熟練度 -1，並唸出例句。這個字會在 2 題後再出現，也會被記進「復仇」清單。
 - 怪物 HP 歸零 → 勝利；愛心歸零 → 失敗（可再挑戰）。沒有隨機爆擊。
-- **魔力**：每答對一題 +1，滿 5 格。魔力滿後，**下一題答對**會發動**大絕招**：整句例句繞著怪物轉一圈、往上飛，再像下雨一樣落下，怪物 **-3 HP**。每位英雄有自己的絕招名稱與特效；牧師「聖光祝福」會再回復 1 顆愛心，龍騎士「冰龍吐息」會冰凍怪物（下一次答錯不扣愛心）。答錯魔力歸零。
+- **魔力**：每答對一題 +1。普通怪滿 **3 格**、精英怪與魔王滿 **5 格**；答錯 -1 格。魔力滿後，**下一題答對**會發動**大絕招**：整句例句繞著怪物轉一圈、往上飛，再像下雨一樣落下，怪物 **-3 HP**。每位英雄有自己的絕招名稱與特效；牧師「聖光祝福」會再回復 1 顆愛心，龍騎士「冰龍吐息」會冰凍怪物（下一次答錯不扣愛心）。答錯魔力歸零。
 - **藥水**：戰鬥中可按「藥水」鈕回復 3 顆愛心（最多回到 5）；愛心歸零時若有藥水也會自動使用（回到 3 顆）。**提示水晶**：答題時去掉 2 個錯誤選項。**單字筆記**（買一次永久）：答錯過的字之後再答對，多得 3 金幣。
 
 ### 2. 三種怪物
 | 種類 | 出現位置 | 單字範圍 | 血量（題數） | 解鎖條件 |
 |---|---|---|---|---|
-| 普通怪 | 每一課一隻（共 40 隻） | 該課單字 | 該課單字數 + 3（每個單字至少出現一次；最後一個單字出現前怪物不會死） | 隨時可打 |
+| 普通怪 | 每一課一隻（共 40 隻） | 該課單字 | 單字數 + 2×⌊單字數÷4⌋ + 1（每個單字至少出現一次；最後一個單字出現前怪物不會死） | 隨時可打 |
 | 精英怪 | 每週一隻（共 18 隻） | 該週全部單字 | 10 | 該週**每一課**都拿到 2★ 以上 |
 | 魔王 | 每兩週一隻（共 9 隻：W1–2、W3–4 … W17–18） | 這兩週全部單字 | 14 | 這兩週的**兩隻精英**都拿到 2★ 以上 |
 - 精英和魔王優先出題熟練度低的單字。復仇戰：用以前答錯的字，6 題。

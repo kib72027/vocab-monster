@@ -36,6 +36,7 @@ function G(){
 const lvlOf=xp=>1+Math.floor(Math.sqrt(xp/25));
 const xpAt=l=>25*(l-1)*(l-1);
 function pmax(){return 5;}
+function mmax(b){return(b&&(b.kind==='elite'||b.kind==='boss'))?5:3;}
 function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function todayStr(){return dstr(new Date());}
 function ydayStr(){const d=new Date();d.setDate(d.getDate()-1);return dstr(d);}
@@ -855,7 +856,7 @@ function startBattle(kind,id){
   const g=G();rollDay();
   let pool,mon,hp,name,k;
   if(kind==='set'){
-    const s=SETS.find(x=>x.id===id);pool=s.words.slice();hp=pool.length+3;mon=SETMON[id];name=monName(mon);k=s.k;
+    const s=SETS.find(x=>x.id===id);pool=s.words.slice();hp=pool.length+2*Math.floor(pool.length/4)+1;mon=SETMON[id];name=monName(mon);k=s.k;
   }else if(kind==='elite'||kind==='boss'){
     const b=BATTLE[id];if(!b)return;
     if(kind==='elite'?!eliteOpen(b):!bossOpen(b))return;
@@ -884,8 +885,8 @@ function answerB(idx){
   const ok=q.choices[idx].correct,w=q.t.w;
   B.sheet=false;B.busy=true;
   if(ok){
-    const crit=false,ult=(B.mana||0)>=5,dmg=ult?3:1;B.ult=ult;
-    if(!ult)B.mana=Math.min(5,(B.mana||0)+1);B.skill=B.mana>=5;
+    const crit=false,ult=(B.mana||0)>=mmax(B),dmg=ult?3:1;B.ult=ult;
+    if(!ult)B.mana=Math.min(mmax(B),(B.mana||0)+1);B.skill=B.mana>=mmax(B);
     B.ultExtra='';if(ult){const hid=g.heroId;if(hid==='h6'&&B.php<B.pm){B.php++;B.ultExtra='heal';}else if(hid==='h5'){B.frozen=true;B.ultExtra='freeze';}}
     B.right++;B.crit=crit;const keep=(B.kind==='set'&&B.asked.size<B.pool.length)?1:0;B.dmg=Math.max(0,Math.min(dmg,B.hp-keep));B.hp=Math.max(keep,B.hp-dmg);B.anim=crit?'crit':'hit';
     g.mast[w]=Math.min(3,(g.mast[w]||0)+1);dropMissed(w);addXp(5);
@@ -895,7 +896,7 @@ function answerB(idx){
     if(g.today===GOAL&&g.goalDay!==g.day){g.streak=(g.goalDay===ydayStr())?g.streak+1:1;g.goalDay=g.day;g.coins+=20;B.goalMsg='今日目標完成！+20 金幣';}
     crit?SFX.crit():SFX.hit();
   }else{
-    B.mana=0;B.skill=false;B.anim='atk';B.noteMsg=false;B.revived=false;B.ultExtra='';if(B.frozen){B.frozen=false;B.iced=true;}else{B.iced=false;B.php--;}B.wrongN++;
+    B.mana=Math.max(0,(B.mana||0)-1);B.skill=B.mana>=mmax(B);B.anim='atk';B.noteMsg=false;B.revived=false;B.ultExtra='';if(B.frozen){B.frozen=false;B.iced=true;}else{B.iced=false;B.php--;}B.wrongN++;
     B.healed=false;if((B.kind==='elite'||B.kind==='boss')&&B.hp<B.maxhp){B.hp++;B.healed=true;}
     if(!B.wrongSet)B.wrongSet=new Set();B.wrongSet.add(w);
     if(B.php<=0&&g.inv.potion>0){g.inv.potion--;B.php=Math.min(3,B.pm);B.revived=true;}
@@ -1013,16 +1014,16 @@ function stageHTML(b,opts){
   if(b.anim==='atk'&&use3)fx+=`<span class="ouch">哎呀！</span>`;
   let hud='';
   if(use3){
-    const g=G(),hero=HEROES.find(h=>h.id===g.heroId)||HEROES[0],ms=monSprite(b.mon),mana=b.mana||0,cr=g.inv.crystal||0;
+    const g=G(),hero=HEROES.find(h=>h.id===g.heroId)||HEROES[0],ms=monSprite(b.mon),mana=b.mana||0,mm=mmax(b),cr=g.inv.crystal||0;
     const canPo=opts.live&&B===b&&b.q&&b.q.pick===null&&!b.busy&&(g.inv.potion||0)>0&&b.php<b.pm;
     const canCr=opts.live&&B===b&&b.q&&b.q.pick===null&&cr>0&&!b.q.gone;
     const log=b.anim==='spell'||b.anim==='hit'||b.anim==='crit'?(b.ult?(()=>{let n='大絕招';try{n=ENG.ultName(G().heroId);}catch(e){}return n+'！整句魔法化成彈藥，全力轟出！怪物 -3 HP'+(b.ultExtra==='heal'?'，還回復 1 顆愛心 💖':b.ultExtra==='freeze'?'，怪物被冰凍，下次答錯不扣愛心 ❄️':'');})():'金色箭矢命中！怪物 -1 HP'):b.anim==='atk'?(b.iced?'怪物被冰凍住了，沒能反擊！愛心沒有減少 ❄️':b.healed?'怪物反擊！牠還回復了 1 HP':'怪物反擊！英雄受到傷害'):b.sheet?'':mana>=5?'魔力全滿！下一題答對，就放大絕招！':'選出正確的單字，用金色箭矢攻擊！';
     hud=`<div class="hud hl"><span class="hport"><img alt="" src="${HSPR[hero.id].u}"></span><div class="hbars"><div class="hn">Lv.${lvlOf(g.xp)} ${hero.zh}</div>
       <div class="bar hp"><i style="width:${Math.round(b.php/b.pm*100)}%"></i><span>❤ ${b.php}/${b.pm}</span></div>
-      <div class="bar mp${mana>=5?' full':''}"><i style="width:${mana*20}%"></i><span>✦ 魔力 ${mana}/5</span></div></div></div>
+      <div class="bar mp${mana>=mm?' full':''}"><i style="width:${Math.round(mana/mm*100)}%"></i><span>✦ 魔力 ${mana}/${mm}</span></div></div></div>
     <div class="hud hr"><div class="hbars r"><div class="hn">${b.kind==='boss'?'魔王・':b.kind==='elite'?'精英・':b.kind==='revenge'?'復仇・':''}${b.name}</div>
       <div class="bar mh"><i id="mhpbar" style="width:${pct}%"></i><span>💀 ${Math.max(0,b.hp)}/${b.maxhp}</span></div></div><span class="hport m"><img alt="" src="${ms?ms.u:''}"></span></div>
-    <div class="skills"><span class="sk${mana>=5?' ready':''}" title="大絕招：連續答對 5 題蓄滿魔力，下一題答對發動"><b>🏹</b><small>${mana>=5?'絕招':'攻擊'}</small></span>
+    <div class="skills"><span class="sk${mana>=mm?' ready':''}" title="大絕招：答對 ${mm} 題蓄滿魔力，下一題答對發動"><b>🏹</b><small>${mana>=mm?'絕招':'攻擊'}</small></span>
       <button class="sk" data-act="crystal" ${canCr?'':'disabled'} aria-label="提示水晶"><b>🔮</b><small>水晶</small><em>${cr}</em></button>
       <button class="sk" data-act="potion" aria-label="復活藥水" ${canPo?'':'disabled'}><b>🧪</b><small>藥水</small><em>${g.inv.potion||0}</em></button></div>
     `;
