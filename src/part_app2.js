@@ -1119,16 +1119,33 @@ function answerB(idx){
   const tk=B;
   if(ok){
     B.anim='spell';saveStore();render();
-    spellAttack(w,q.t.ex,tk,()=>{B.anim='hit';render();setTimeout(()=>{if(B!==tk||S.view!=='battle')return;if(tk.ult){tk.mana=0;tk.skill=false;tk.ult=false;}B.anim='';B.sheet=true;B.busy=false;render();},E3.ok?1100:700);});
+    spellAttack(w,q.t.ex,tk,()=>{B.anim='hit';render();setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const wasUlt=tk.ult;if(tk.ult){tk.mana=0;tk.skill=false;tk.ult=false;}B.anim='';B.sheet=true;B.busy=false;if(!wasUlt)readSentence(tk,q.t.ex);else tk.reading=false;render();},E3.ok?1100:700);});
     return;
   }
   saveStore();render();
-  say(q.t.ex);
   if(E3.ok&&!B.iced){try{ENG.hurt(projOf(B.mon),(MBY[B.mon]||{}).t);}catch(e){}}
-  setTimeout(()=>{if(B!==tk||S.view!=='battle')return;B.anim='';B.sheet=true;B.busy=false;B.lockUntil=Date.now()+LOCK_MS;render();
+  setTimeout(()=>{if(B!==tk||S.view!=='battle')return;B.anim='';B.sheet=true;B.busy=false;B.lockUntil=Date.now()+LOCK_MS;readSentence(tk,q.t.ex);render();
     setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const nx=document.getElementById('nextB');if(nx&&nx.disabled){nx.disabled=false;nx.textContent=B.php<=0?'繼續':'繼續戰鬥';}},LOCK_MS+30);},E3.ok?1500:1000);
 }
 const LNAME={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'eff',g:'jee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'are',s:'ess',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
+// read the example sentence 0.5s after the feedback card appears; the continue button waits until it ends
+function readSentence(tk,ex){
+  tk.reading=true;let over=false;
+  const end=()=>{if(over)return;over=true;tk.reading=false;if(B===tk&&S.view==='battle'&&tk.sheet)render();};
+  setTimeout(()=>{
+    if(B!==tk||S.view!=='battle'){over=true;tk.reading=false;return;}
+    if(!HAS_TTS){setTimeout(end,Math.min(4500,1200+ex.length*45));return;}
+    try{
+      speechSynthesis.cancel();
+      const v=(()=>{try{return speechSynthesis.getVoices().find(v=>/^en[-_]US/i.test(v.lang));}catch(e){}})();
+      const u=new SpeechSynthesisUtterance(ex);u.lang='en-US';u.rate=.85;if(v)u.voice=v;
+      let started=false;u.onstart=()=>{started=true;};u.onend=end;u.onerror=end;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{if(!started)end();},2500);
+      setTimeout(end,Math.max(8000,ex.length*140));
+    }catch(e){end();}
+  },500);
+}
 function spellAttack(word,ex,tk,done){
   const L=word.toLowerCase().replace(/[^a-z]/g,'').split(''),n=L.length;
   const alive=()=>B===tk&&S.view==='battle';
@@ -1149,13 +1166,13 @@ function spellAttack(word,ex,tk,done){
       const v=(()=>{try{return speechSynthesis.getVoices().find(v=>/^en[-_]US/i.test(v.lang));}catch(e){}})();
       const mk=(t,rate,on)=>{const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=rate;if(v)u.voice=v;if(on)u.onstart=on;return u;};
       speechSynthesis.speak(mk(word,.8,finish));
-      speechSynthesis.speak(mk(ex,.85));
+      if(tk.ult)speechSynthesis.speak(mk(ex,.85));
       T(1200,finish); // watchdog if speech never starts
     }catch(e){T(300,finish);}
   }else T(250,finish);
 }
 function nextB(){
-  if(!B||B.busy)return;
+  if(!B||B.busy||B.reading)return;try{if(HAS_TTS)speechSynthesis.cancel();}catch(e){}
   if(Date.now()<B.lockUntil&&!(typeof window!=='undefined'&&window.__noRush))return;
   if(B.hp<=0){
     B.anim='die';B.sheet=false;B.busy=true;render();if(E3.ok){try{ENG.die();}catch(e){}}else burst(['⭐','✨','🌟','💥'],16);SFX.win();
@@ -1267,7 +1284,7 @@ function viewBattle(){
   const extra=(ok&&B.noteMsg?' 📒+3 金幣':'')+(!ok&&B.healed?'　👹 怪物回復了 1 HP':'')+(!ok&&B.revived?'　🧪 復活藥水發動，回復愛心！':'');
   const locked=!ok&&Date.now()<B.lockUntil;
   const sheet=B.sheet?`<div class="sheet ${ok?'ok':'no'}"><div class="sheet-in"><h3>${ok?CHECK:CROSS}${ok?(finalHit?'最後一擊！':'打中了！'):'被反擊了！記住它'}<small class="xtra">${extra}</small></h3>${info(q.t,true)}
-    <button class="btn block ${ok?'good':'bad'}" id="nextB" data-act="nextB" ${locked?'disabled':''}>${locked?'先看清楚正確答案…':finalHit?'打倒牠！':(B.php<=0?'繼續':'繼續戰鬥')}</button></div></div>`:'';
+    ${B.reading?`<div class="soft reading">🔊 聽聽看這個句子…</div>`:`<button class="btn block ${ok?'good':'bad'}" id="nextB" data-act="nextB" ${locked?'disabled':''}>${locked?'先看清楚正確答案…':finalHit?'打倒牠！':(B.php<=0?'繼續':'繼續戰鬥')}</button>`}</div></div>`:'';
   const po=G().inv.potion,pobtn=(!E3.ok&&!done&&po>0&&B.php<B.pm)?`<button class="crystal" data-act="potion">🧪 用復活藥水（剩 ${po} 瓶）<small>回復 3 顆愛心</small></button>`:'';
   const cr=G().inv.crystal,crbtn=(!E3.ok&&!done&&cr>0&&!q.gone)?`<button class="crystal" data-act="crystal">🔮 用提示水晶（剩 ${cr} 顆）<small>去掉 2 個錯誤選項</small></button>`:'';
   return `<div class="btop"><button class="x" data-act="goGame" aria-label="離開戰鬥"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
