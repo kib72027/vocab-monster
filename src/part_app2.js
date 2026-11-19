@@ -157,6 +157,15 @@ function viewResult(){
   <div class="stack"><button class="btn primary block" data-act="again">再考一次（重新亂數）</button>${Q.wrong.length?'<button class="btn block" data-act="retryWrong">練習答錯的字</button>':''}<button class="btn block" data-act="home">回首頁</button></div></div>${wrongs}</div>`;
 }
 
+function isLearned(id){const g=G();return !!(g.learned[id]||g.def[id]||g.stars[id]);}
+function startLearn(id){const s=SETS.find(x=>x.id===id);if(!s)return;S.learn={id,i:0,words:s.words.slice(),k:s.k,title:s.title};S.view='learn';render();top();}
+function viewLearn(){
+  const L=S.learn,n=L.words.length,o=L.words[L.i],last=L.i===n-1,done=isLearned(L.id);
+  const bar=`<div class="qbar"><button class="x" data-act="goGame" aria-label="回到地圖"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="track"><i style="width:${((L.i+1)/n*100).toFixed(0)}%"></i></div><span class="pill">${L.i+1}/${n}</span></div>`;
+  return `<div class="cview learn">${bar}<p class="lhint">📖 先把這課的單字看過一遍，就可以開始打怪囉！</p>
+  <section class="card lcard ${L.k}"><div class="qword">${o.w}${speakBtn(o.w)}</div><span class="pos">${POS[o.pos]||''}</span><div class="zh">${o.zh}</div><div class="wc-def">${o.def}</div><div class="exrow">${speakBtn(o.ex,'聽例句')}<p class="wc-ex">${mark(o.ex,o.w,'<mark>$&</mark>')}</p></div></section>
+  <div class="btnrow">${L.i>0?'<button class="btn" data-act="lprev">上一張</button>':''}${last?`<button class="btn primary" data-act="ldone">${done?'開始打怪':'學完了，開始打怪'}</button>`:'<button class="btn primary" data-act="lnext">下一張</button>'}</div></div>`;
+}
 function viewCards(){
   const D=S.deck;
   const bar=`<div class="qbar"><button class="x" data-act="home" aria-label="離開"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="track"><i style="width:${(D.i/D.cards.length*100).toFixed(0)}%"></i></div><span class="pill">${Math.min(D.i+1,D.cards.length)}/${D.cards.length}</span></div>`;
@@ -173,9 +182,9 @@ function viewCards(){
 }
 
 function render(){
-  const gv=['game','battle','reward','defeat','coll','shop','heroes'].includes(S.view);
+  const gv=['game','battle','reward','defeat','coll','shop','heroes','learn'].includes(S.view);
   app.className='wrap'+(S.view==='home'?' pad-dock':(S.view==='quiz'&&S.quiz.qs[S.quiz.i].pick!==null?' pad-sheet':''))+(gv?' gm':'')+(S.view==='battle'?' bat':'')+(S.view==='battle'&&B&&B.anim==='atk'?' shake':'')+(S.view==='battle'&&E3.ok?' c3on':'');
-  app.innerHTML=S.view==='game'?viewGame():S.view==='battle'?viewBattle():S.view==='reward'?viewReward():S.view==='defeat'?viewDefeat():S.view==='coll'?viewColl():S.view==='shop'?viewShop():S.view==='heroes'?viewHeroes():S.view==='home'?viewHome():S.view==='quiz'?viewQuiz():S.view==='result'?viewResult():viewCards();
+  app.innerHTML=S.view==='game'?viewGame():S.view==='battle'?viewBattle():S.view==='reward'?viewReward():S.view==='defeat'?viewDefeat():S.view==='coll'?viewColl():S.view==='shop'?viewShop():S.view==='heroes'?viewHeroes():S.view==='learn'?viewLearn():S.view==='home'?viewHome():S.view==='quiz'?viewQuiz():S.view==='result'?viewResult():viewCards();
   if(S.view==='quiz'&&S.quiz.qs[S.quiz.i].pick!==null){const nx=document.getElementById('next');if(nx)nx.focus({preventScroll:true});}
   afterGameRender();
 }
@@ -237,7 +246,7 @@ const HEART='<svg class="heart %c" viewBox="0 0 24 24" aria-hidden="true"><path 
 function G(){
   if(!store.g)store.g={};
   const g=store.g;
-  const D0={xp:0,coins:0,mast:{},def:{},boss:0,cards:{},reward:'stats',snd:true,day:'',today:0,streak:0,goalDay:'',heroId:'h1',rcards:{},stars:{}};for(const k in D0)if(g[k]==null)g[k]=D0[k];
+  const D0={xp:0,coins:0,mast:{},def:{},boss:0,cards:{},reward:'stats',snd:true,day:'',today:0,streak:0,goalDay:'',heroId:'h1',rcards:{},stars:{},learned:{}};for(const k in D0)if(g[k]==null)g[k]=D0[k];
   if(!g.own)g.own=[];if(!g.eq)g.eq={hat:'',outfit:'tunic',back:'',weapon:''};if(!g.inv)g.inv={potion:0,crystal:0,note:0};
   if(g.gear){const P={sword:30,shield:40,hat:50,clover:60,crown:120};let sum=0;for(const k in g.gear){const l=Math.min(3,g.gear[k]||0),p=P[k]||0;sum+=[0,1,3,7][l]*p;}g.coins+=sum;g.refunded=sum;delete g.gear;}
   if(!HSPR[g.heroId])g.heroId='h1';
@@ -1561,7 +1570,7 @@ function viewGame(){
   const rtypes=[['stats','成長升級','多拿經驗，快點升級'],['cards','怪物卡片','收集 96 隻怪物'],['coins','金幣','買學習道具']];
   const lcard=s=>{
     const mid=SETMON[s.id],L=learned(s),done=!!g.def[s.id],st=starsOf(s.id);
-    return `<button class="mcard ${s.k}${done?' done':''}" data-act="fight" data-id="${s.id}"><span class="mart">${monSvg(mid)}</span>${done?starsHTML(st,'cs'):''}<span class="mname">${monName(mid)}</span><span class="mles">${s.week.replace("Week ","W")} · ${s.title}</span></button>`;};
+    return `<button class="mcard ${s.k}${done?' done':''}" data-act="fight" data-id="${s.id}"><span class="mart">${monSvg(mid)}</span>${done?starsHTML(st,'cs'):''}<span class="mname">${monName(mid)}</span><span class="mles">${s.week.replace("Week ","W")} · ${s.title}</span>${isLearned(s.id)?`<span class="lbadge" data-act="learn" data-id="${s.id}">📖 複習單字</span>`:'<span class="lbadge new">📖 先學單字</span>'}</button>`;};
   const ecard=e=>{
     const open=eliteOpen(e),done=!!g.def[e.id],ok=e.sets.filter(s=>starsOf(s.id)>=2).length;
     return `<button class="mcard elitecard ${e.k}${open?'':' locked'}${done?' done':''}" data-act="elite" data-id="${e.id}" ${open?'':'disabled'}><span class="mart">${monSvg(e.mon)}</span>${done?starsHTML(starsOf(e.id),'cs'):''}<span class="mtier">精英</span><span class="mname">${monName(e.mon)}</span><span class="mles">${open?`W${e.week} 全週單字 · 10 題`:`W${e.week} 精英怪`}</span><span class="mnum">${open?(done?'再挑戰一次':'本週課文已通過 ✓'):`🔒 本週課文 2★以上 ${ok}/${e.sets.length}`}</span></button>`;};
@@ -1687,7 +1696,11 @@ app.addEventListener('click',e=>{
     case 'hint':if(S.view==='battle')B.q.hint=true;else S.quiz.qs[S.quiz.i].hint=true;render();break;
     case 'goGame':try{speechSynthesis.cancel();}catch(e){}B=null;S.view='game';render();top();break;
     case 'practice':S.view='home';render();top();break;
-    case 'fight':ac();SFX.tap();startBattle('set',b.dataset.id);break;
+    case 'fight':ac();SFX.tap();isLearned(b.dataset.id)?startBattle('set',b.dataset.id):startLearn(b.dataset.id);break;
+    case 'learn':ac();SFX.tap();startLearn(b.dataset.id);break;
+    case 'lnext':ac();SFX.tap();if(S.learn&&S.learn.i<S.learn.words.length-1){S.learn.i++;render();top();}break;
+    case 'lprev':ac();SFX.tap();if(S.learn&&S.learn.i>0){S.learn.i--;render();top();}break;
+    case 'ldone':{ac();SFX.tap();const id=S.learn&&S.learn.id;if(!id)break;const g=G();g.learned[id]=1;saveStore();startBattle('set',id);break;}
     case 'boss':ac();SFX.tap();startBattle('boss',b.dataset.id);break;
     case 'elite':ac();SFX.tap();startBattle('elite',b.dataset.id);break;
     case 'revenge':ac();SFX.tap();startBattle('revenge');break;

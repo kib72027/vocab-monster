@@ -26,7 +26,7 @@ const HEART='<svg class="heart %c" viewBox="0 0 24 24" aria-hidden="true"><path 
 function G(){
   if(!store.g)store.g={};
   const g=store.g;
-  const D0={xp:0,coins:0,mast:{},def:{},boss:0,cards:{},reward:'stats',snd:true,day:'',today:0,streak:0,goalDay:'',heroId:'h1',rcards:{},stars:{}};for(const k in D0)if(g[k]==null)g[k]=D0[k];
+  const D0={xp:0,coins:0,mast:{},def:{},boss:0,cards:{},reward:'stats',snd:true,day:'',today:0,streak:0,goalDay:'',heroId:'h1',rcards:{},stars:{},learned:{}};for(const k in D0)if(g[k]==null)g[k]=D0[k];
   if(!g.own)g.own=[];if(!g.eq)g.eq={hat:'',outfit:'tunic',back:'',weapon:''};if(!g.inv)g.inv={potion:0,crystal:0,note:0};
   if(g.gear){const P={sword:30,shield:40,hat:50,clover:60,crown:120};let sum=0;for(const k in g.gear){const l=Math.min(3,g.gear[k]||0),p=P[k]||0;sum+=[0,1,3,7][l]*p;}g.coins+=sum;g.refunded=sum;delete g.gear;}
   if(!HSPR[g.heroId])g.heroId='h1';
@@ -1350,7 +1350,7 @@ function viewGame(){
   const rtypes=[['stats','成長升級','多拿經驗，快點升級'],['cards','怪物卡片','收集 96 隻怪物'],['coins','金幣','買學習道具']];
   const lcard=s=>{
     const mid=SETMON[s.id],L=learned(s),done=!!g.def[s.id],st=starsOf(s.id);
-    return `<button class="mcard ${s.k}${done?' done':''}" data-act="fight" data-id="${s.id}"><span class="mart">${monSvg(mid)}</span>${done?starsHTML(st,'cs'):''}<span class="mname">${monName(mid)}</span><span class="mles">${s.week.replace("Week ","W")} · ${s.title}</span></button>`;};
+    return `<button class="mcard ${s.k}${done?' done':''}" data-act="fight" data-id="${s.id}"><span class="mart">${monSvg(mid)}</span>${done?starsHTML(st,'cs'):''}<span class="mname">${monName(mid)}</span><span class="mles">${s.week.replace("Week ","W")} · ${s.title}</span>${isLearned(s.id)?`<span class="lbadge" data-act="learn" data-id="${s.id}">📖 複習單字</span>`:'<span class="lbadge new">📖 先學單字</span>'}</button>`;};
   const ecard=e=>{
     const open=eliteOpen(e),done=!!g.def[e.id],ok=e.sets.filter(s=>starsOf(s.id)>=2).length;
     return `<button class="mcard elitecard ${e.k}${open?'':' locked'}${done?' done':''}" data-act="elite" data-id="${e.id}" ${open?'':'disabled'}><span class="mart">${monSvg(e.mon)}</span>${done?starsHTML(starsOf(e.id),'cs'):''}<span class="mtier">精英</span><span class="mname">${monName(e.mon)}</span><span class="mles">${open?`W${e.week} 全週單字 · 10 題`:`W${e.week} 精英怪`}</span><span class="mnum">${open?(done?'再挑戰一次':'本週課文已通過 ✓'):`🔒 本週課文 2★以上 ${ok}/${e.sets.length}`}</span></button>`;};
