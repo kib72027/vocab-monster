@@ -1155,7 +1155,7 @@ function answerB(idx){
   saveStore();render();
   if(E3.ok&&!B.iced){try{ENG.hurt(projOf(B.mon),(MBY[B.mon]||{}).t);}catch(e){}}
   setTimeout(()=>{if(B!==tk||S.view!=='battle')return;B.anim='';B.sheet=true;B.busy=false;B.lockUntil=Date.now()+LOCK_MS;readSentence(tk,q.t.ex);render();
-    setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const nx=document.getElementById('nextB');if(nx&&nx.disabled){nx.disabled=false;nx.textContent=B.php<=0?'繼續':'繼續戰鬥';}},LOCK_MS+30);},E3.ok?1500:1000);
+    setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const nx=document.getElementById('nextB');if(nx&&nx.disabled&&!B.reading){nx.disabled=false;}},LOCK_MS+30);},E3.ok?1500:1000);
 }
 const LNAME={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'eff',g:'jee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'are',s:'ess',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
 // read the example sentence 0.5s after the feedback card appears; the continue button waits until it ends
@@ -1314,7 +1314,7 @@ function viewBattle(){
   const extra=(ok&&B.noteMsg?' 📒+3 金幣':'')+(!ok&&B.healed?'　👹 怪物回復了 1 HP':'')+(!ok&&B.revived?'　🧪 復活藥水發動，回復愛心！':'');
   const locked=!ok&&Date.now()<B.lockUntil;
   const sheet=B.sheet?`<div class="sheet ${ok?'ok':'no'}"><div class="sheet-in"><h3>${ok?CHECK:CROSS}${ok?(finalHit?'最後一擊！':'打中了！'):'被反擊了！記住它'}<small class="xtra">${extra}</small></h3>${info(q.t,true)}
-    ${B.reading?`<div class="soft reading">🔊 聽聽看這個句子…</div>`:`<button class="btn block ${ok?'good':'bad'}" id="nextB" data-act="nextB" ${locked?'disabled':''}>${locked?'先看清楚正確答案…':finalHit?'打倒牠！':(B.php<=0?'繼續':'繼續戰鬥')}</button>`}</div></div>`:'';
+    <button class="btn block ${ok?'good':'bad'}" id="nextB" data-act="nextB" ${(locked||B.reading)?'disabled':''}>${B.reading?'🔊 Listening…':'Continue'}</button></div></div>`:'';
   const po=G().inv.potion,pobtn=(!E3.ok&&!done&&po>0&&B.php<B.pm)?`<button class="crystal" data-act="potion">🧪 用復活藥水（剩 ${po} 瓶）<small>回復 3 顆愛心</small></button>`:'';
   const cr=G().inv.crystal,crbtn=(!E3.ok&&!done&&cr>0&&!q.gone)?`<button class="crystal" data-act="crystal">🔮 用提示水晶（剩 ${cr} 顆）<small>去掉 2 個錯誤選項</small></button>`:'';
   return `<div class="btop"><button class="x" data-act="goGame" aria-label="離開戰鬥"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
