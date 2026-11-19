@@ -477,7 +477,7 @@ function draw(){
   if(E.mon.img){const o=E.mon,c=E.imgs[o.img],S=SPR(o.img);
     if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
     if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=Math.min(E.big?4.3:3.5,3.9/asp);
-      const h=h0*k*sq,w=h0*asp*k*(1+(1-sq)*.6);
+      const h=h0*k*sq,w=-h0*asp*k*(1+(1-sq)*.6);
       sprite(c.tex,[o.base[0]+f.x,o.base[1]+f.y+(o.bob||0)+h/2+.02,o.base[2]+.2],w/2,h/2,-f.rz*.6+f.ry*.0,1,V,Pr,E.flash.mon);}}
   gl.enable(gl.DEPTH_TEST);
   if(E.tex.cglow){const gp=.65+.35*Math.sin(E.time*2.2);[[-4.9,-1.7],[4.9,-1.7]].forEach(p=>sprite(E.tex.cglow,[p[0],4.6,p[1]],1.9*gp+.5,1.9*gp+.5,0,.9,V,Pr));}
