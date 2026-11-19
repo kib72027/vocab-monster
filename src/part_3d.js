@@ -931,9 +931,10 @@ function hurt(emoji,type){
     tween(dur,u=>{const p=path(u);sp.pos=p;const k=(o.sz||1.2)*(o.grow?.7+.5*u:1);sp.w=k*(o.wr||1);sp.h=k*(o.hr||1);sp.rot=o.spin?u*o.spin:0;sp.a=o.fade?Math.min(1,Math.sin(PI*u)*2.2):1;
       if(Math.random()<.85)E.parts.push({x:p[0],y:p[1]-.1,z:p[2]-.1,vx:(Math.random()-.5)*.6,vy:(Math.random()-.3)*.6,vz:0,g:0,life:.35,max:.35,size:o.tr||.36,tex:gl,rot:0,vr:0});},delay);
     at(delay+dur+.02,()=>rm(sp));};
-  const hit=(dt,small)=>at(dt,()=>{const t=hpos();burst(t,small?6:14,star,small?3:4.5,.4);goldBurst(t,small?10:24,4,.5,.36,gl);E.shake=Math.max(E.shake,small?.3:.7);E.flash.hero=[c[0]/255,c[1]/255,c[2]/255,small?.45:.8];
+  let HT=0;
+  const hit=(dt,small)=>{HT=Math.max(HT,dt+.12);at(dt,()=>{const t=hpos();burst(t,small?6:14,star,small?3:4.5,.4);goldBurst(t,small?10:24,4,.5,.36,gl);E.shake=Math.max(E.shake,small?.3:.7);E.flash.hero=[c[0]/255,c[1]/255,c[2]/255,small?.45:.8];
     if(!small)heroPlay('hit',.7);
-    if(!small)tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});});
+    if(!small)tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});});};
   const line=(arc,wob)=>u=>{const e=ease(u);return[lerp(F[0],T[0],e),lerp(F[1],T[1],e)+arc*Math.sin(PI*u)+(wob?wob*Math.sin(u*PI*4):0),lerp(F[2],T[2],e)];};
   if(st==='ball'){fly(.35,.5,line(.7),{spin:H.spin||8,sz:1.35,grow:1});hit(.85);}
   else if(st==='dash'){fly(.35,.32,line(0),{sz:1.5,wr:1.4,spin:-10});hit(.67);}
@@ -945,6 +946,7 @@ function hurt(emoji,type){
   else if(st==='sweep'){fly(.35,.55,u=>[lerp(F[0],T[0],ease(u)),.9+.12*Math.sin(u*PI*5),lerp(F[2],T[2],ease(u))+.3],{sz:1.7,wr:2.0,hr:1.1,grow:1});hit(.9);}
   else if(st==='drift'){fly(.4,.6,line(.2,.6),{sz:1.7,fade:1,spin:0});hit(.95);at(.95,()=>{E.flash.hero=[.7,.6,1,.9];});}
   else if(st==='breath'){tween(.5,u=>{for(let k=0;k<4;k++){const d=.34,r=Math.random();E.parts.push({x:F[0],y:F[1]+.3,z:F[2],vx:(T[0]-F[0])/d*(.9+.3*r),vy:(T[1]-F[1]-.3)/d+(r-.5)*1.4,vz:0,g:0,life:d,max:d,size:.5+.5*r,tex:r<.5?tex:gl,rot:r*6,vr:3});}},.35);hit(.7,true);hit(.9);}
+  return Math.max(HT,.75);
 }
 const DIE_BOOM={mech:1,fire:1,elec:1,poison:1,dragon:1};
 function die(type){

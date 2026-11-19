@@ -161,3 +161,7 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 - 有 `HANIM[hid]`（`src/part_hanim_<id>.js`）的主角，戰鬥中改用逐格圖：待機（循環）、攻擊（`heroAct`／大絕招）、受傷（被怪物重擊）、勝利（打倒怪物）。沒有動畫格的主角維持原本單張圖＋程式動作。
 - 新增一位主角的動畫：照 `docs/hero-animation-spec.md` 請 ChatGPT 產 4 條圖，放到 `assets/heroes/<id>-<name>/source/`（檔名 idle_6f、attack_6f、hit_4f、victory_6f），執行 `python3 tools/mkhanim.py <id> <資料夾名>` 再 `python3 build.py`。
 - 目前已有動畫格：h2 魔法師（粉髮魔女）。
+
+## 血條／魔力條（補充）
+- 玩家愛心與魔力條不再在按下答案的瞬間改變：答錯時，等怪物的攻擊真正打中主角（`ENG.hurt` 回傳命中時間）才扣愛心、扣魔力；答對時，等攻擊打完、怪物受擊時才加魔力、扣怪物血。
+- 三條條都用 CSS 緩動（約 0.85 秒）滑動到新數值，數字文字同時更新。

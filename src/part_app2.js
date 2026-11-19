@@ -1297,9 +1297,10 @@ function hurt(emoji,type){
     tween(dur,u=>{const p=path(u);sp.pos=p;const k=(o.sz||1.2)*(o.grow?.7+.5*u:1);sp.w=k*(o.wr||1);sp.h=k*(o.hr||1);sp.rot=o.spin?u*o.spin:0;sp.a=o.fade?Math.min(1,Math.sin(PI*u)*2.2):1;
       if(Math.random()<.85)E.parts.push({x:p[0],y:p[1]-.1,z:p[2]-.1,vx:(Math.random()-.5)*.6,vy:(Math.random()-.3)*.6,vz:0,g:0,life:.35,max:.35,size:o.tr||.36,tex:gl,rot:0,vr:0});},delay);
     at(delay+dur+.02,()=>rm(sp));};
-  const hit=(dt,small)=>at(dt,()=>{const t=hpos();burst(t,small?6:14,star,small?3:4.5,.4);goldBurst(t,small?10:24,4,.5,.36,gl);E.shake=Math.max(E.shake,small?.3:.7);E.flash.hero=[c[0]/255,c[1]/255,c[2]/255,small?.45:.8];
+  let HT=0;
+  const hit=(dt,small)=>{HT=Math.max(HT,dt+.12);at(dt,()=>{const t=hpos();burst(t,small?6:14,star,small?3:4.5,.4);goldBurst(t,small?10:24,4,.5,.36,gl);E.shake=Math.max(E.shake,small?.3:.7);E.flash.hero=[c[0]/255,c[1]/255,c[2]/255,small?.45:.8];
     if(!small)heroPlay('hit',.7);
-    if(!small)tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});});
+    if(!small)tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});});};
   const line=(arc,wob)=>u=>{const e=ease(u);return[lerp(F[0],T[0],e),lerp(F[1],T[1],e)+arc*Math.sin(PI*u)+(wob?wob*Math.sin(u*PI*4):0),lerp(F[2],T[2],e)];};
   if(st==='ball'){fly(.35,.5,line(.7),{spin:H.spin||8,sz:1.35,grow:1});hit(.85);}
   else if(st==='dash'){fly(.35,.32,line(0),{sz:1.5,wr:1.4,spin:-10});hit(.67);}
@@ -1311,6 +1312,7 @@ function hurt(emoji,type){
   else if(st==='sweep'){fly(.35,.55,u=>[lerp(F[0],T[0],ease(u)),.9+.12*Math.sin(u*PI*5),lerp(F[2],T[2],ease(u))+.3],{sz:1.7,wr:2.0,hr:1.1,grow:1});hit(.9);}
   else if(st==='drift'){fly(.4,.6,line(.2,.6),{sz:1.7,fade:1,spin:0});hit(.95);at(.95,()=>{E.flash.hero=[.7,.6,1,.9];});}
   else if(st==='breath'){tween(.5,u=>{for(let k=0;k<4;k++){const d=.34,r=Math.random();E.parts.push({x:F[0],y:F[1]+.3,z:F[2],vx:(T[0]-F[0])/d*(.9+.3*r),vy:(T[1]-F[1]-.3)/d+(r-.5)*1.4,vz:0,g:0,life:d,max:d,size:.5+.5*r,tex:r<.5?tex:gl,rot:r*6,vr:3});}},.35);hit(.7,true);hit(.9);}
+  return Math.max(HT,.75);
 }
 const DIE_BOOM={mech:1,fire:1,elec:1,poison:1,dragon:1};
 function die(type){
@@ -1359,7 +1361,7 @@ function startBattle(kind,id){
     hp=Math.min(6,pool.length);mon=shuffle(MON_IDS)[0];name='復仇・'+monName(mon);k='k7';
   }
   const queue=((kind==='boss'||kind==='elite')?pool.slice(0,hp):kind==='set'?shuffle(pool):shuffle(pool).slice(0,hp));
-  B={asked:new Set(),kind,id,mon,name,k,pool,queue,hp,maxhp:hp,shown:hp,php:pmax(),pm:pmax(),mana:0,skill:false,q:null,sheet:false,anim:'',dmg:0,crit:false,right:0,wrongN:0,healed:false,lockUntil:0,qStart:0,wrong:[],lvl0:lvlOf(g.xp),qn:0,busy:false,opened:false,res:null,goalMsg:''};
+  B={asked:new Set(),kind,id,mon,name,k,pool,queue,hp,maxhp:hp,shown:hp,php:pmax(),pm:pmax(),mana:0,sp:pmax(),sm:0,skill:false,q:null,sheet:false,anim:'',dmg:0,crit:false,right:0,wrongN:0,healed:false,lockUntil:0,qStart:0,wrong:[],lvl0:lvlOf(g.xp),qn:0,busy:false,opened:false,res:null,goalMsg:''};
   nextQ();
   if(ENG.ensure()){try{ENG.setup(mon,heroEq(),G().heroId,kind==='boss');}catch(e){E3.ok=false;}}
   S.view='battle';render();top();
@@ -1400,11 +1402,12 @@ function answerB(idx){
   const tk=B;
   if(ok){
     B.anim='spell';saveStore();render();
-    spellAttack(w,q.t.ex,tk,()=>{B.anim='hit';render();setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const wasUlt=tk.ult;if(tk.ult){tk.mana=0;tk.skill=false;tk.ult=false;}B.anim='';B.sheet=true;B.busy=false;if(!wasUlt)readSentence(tk,q.t.ex);else tk.reading=false;render();},E3.ok?1100:700);});
+    spellAttack(w,q.t.ex,tk,()=>{B.anim='hit';render();syncBars(tk,E3.ok?300:380);setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const wasUlt=tk.ult;if(tk.ult){tk.mana=0;tk.skill=false;tk.ult=false;syncBars(tk,0);}B.anim='';B.sheet=true;B.busy=false;if(!wasUlt)readSentence(tk,q.t.ex);else tk.reading=false;render();},E3.ok?1100:700);});
     return;
   }
   saveStore();render();
-  if(E3.ok&&!B.iced){try{ENG.hurt(projOf(B.mon),(MBY[B.mon]||{}).t);}catch(e){}}
+  let hT=.25;if(E3.ok&&!B.iced){try{hT=ENG.hurt(projOf(B.mon),(MBY[B.mon]||{}).t)||.9;}catch(e){}}
+  syncBars(tk,Math.round(hT*1000));
   setTimeout(()=>{if(B!==tk||S.view!=='battle')return;B.anim='';B.sheet=true;B.busy=false;B.lockUntil=Date.now()+LOCK_MS;readSentence(tk,q.t.ex);render();
     setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const nx=document.getElementById('nextB');if(nx&&nx.disabled&&!B.reading){nx.disabled=false;}},LOCK_MS+30);},E3.ok?1500:1000);
 }
@@ -1427,6 +1430,11 @@ function readSentence(tk,ex){
     }catch(e){end();}
   },500);
 }
+// player HP / mana bars animate to their new values at the moment the attack lands (they are redrawn with the old values first)
+function syncBars(tk,delay){setTimeout(()=>{if(B!==tk||S.view!=='battle')return;tk.sp=tk.php;tk.sm=tk.mana||0;const mm=mmax(tk);
+  const hp=document.getElementById('phpbar'),ht=document.getElementById('phptxt'),mp=document.getElementById('mpbar'),mt=document.getElementById('mptxt'),mw=document.getElementById('mpwrap');
+  if(hp)hp.style.width=Math.round(tk.sp/tk.pm*100)+'%';if(ht)ht.textContent='❤ '+tk.sp+'/'+tk.pm;
+  if(mp)mp.style.width=Math.round(tk.sm/mm*100)+'%';if(mt)mt.textContent='✦ 魔力 '+tk.sm+'/'+mm;if(mw&&mw.classList&&mw.classList.toggle)mw.classList.toggle('full',tk.sm>=mm);},delay);}
 function spellAttack(word,ex,tk,done){
   const L=word.toLowerCase().replace(/[^a-z]/g,'').split(''),n=L.length;
   const alive=()=>B===tk&&S.view==='battle';
@@ -1528,10 +1536,10 @@ function stageHTML(b,opts){
     const canCr=opts.live&&B===b&&b.q&&b.q.pick===null&&cr>0&&!b.q.gone;
     const log=b.anim==='spell'||b.anim==='hit'||b.anim==='crit'?(b.ult?(()=>{let n='大絕招';try{n=ENG.ultName(G().heroId);}catch(e){}return n+'！整句魔法化成彈藥，全力轟出！怪物 -3 HP'+(b.ultExtra==='heal'?'，還回復 1 顆愛心 💖':b.ultExtra==='freeze'?'，怪物被冰凍，下次答錯不扣愛心 ❄️':'');})():'金色箭矢命中！怪物 -1 HP'):b.anim==='atk'?(b.iced?'怪物被冰凍住了，沒能反擊！愛心沒有減少 ❄️':b.healed?'怪物反擊！牠還回復了 1 HP':'怪物反擊！英雄受到傷害'):b.sheet?'':mana>=5?'魔力全滿！下一題答對，就放大絕招！':'選出正確的單字，用金色箭矢攻擊！';
     hud=`<div class="hud hl"><span class="hport"><img alt="" src="${HSPR[hero.id].u}"></span><div class="hbars"><div class="hn">Lv.${lvlOf(g.xp)} ${hero.zh}</div>
-      <div class="bar hp"><i style="width:${Math.round(b.php/b.pm*100)}%"></i><span>❤ ${b.php}/${b.pm}</span></div>
-      <div class="bar mp${mana>=mm?' full':''}"><i style="width:${Math.round(mana/mm*100)}%"></i><span>✦ 魔力 ${mana}/${mm}</span></div></div></div>
+      <div class="bar hp"><i id="phpbar" style="width:${Math.round(b.sp/b.pm*100)}%"></i><span id="phptxt">❤ ${b.sp}/${b.pm}</span></div>
+      <div class="bar mp${b.sm>=mm?' full':''}" id="mpwrap"><i id="mpbar" style="width:${Math.round(b.sm/mm*100)}%"></i><span id="mptxt">✦ 魔力 ${b.sm}/${mm}</span></div></div></div>
     <div class="hud hr"><div class="hbars r"><div class="hn">${b.kind==='boss'?'魔王・':b.kind==='elite'?'精英・':b.kind==='revenge'?'復仇・':''}${b.name}</div>
-      <div class="bar mh"><i id="mhpbar" style="width:${pct}%"></i><span>💀 ${Math.max(0,b.hp)}/${b.maxhp}</span></div></div><span class="hport m"><img alt="" src="${ms?ms.u:''}"></span></div>
+      <div class="bar mh"><i id="mhpbar" style="width:${pct}%"></i><span id="mhptxt">💀 ${Math.max(0,b.shown)}/${b.maxhp}</span></div></div><span class="hport m"><img alt="" src="${ms?ms.u:''}"></span></div>
     <div class="skills"><span class="sk${mana>=mm?' ready':''}" title="大絕招：答對 ${mm} 題蓄滿魔力，下一題答對發動"><b>🏹</b><small>${mana>=mm?'絕招':'攻擊'}</small></span>
       <button class="sk" data-act="crystal" ${canCr?'':'disabled'} aria-label="提示水晶"><b>🔮</b><small>水晶</small><em>${cr}</em></button>
       <button class="sk" data-act="potion" aria-label="復活藥水" ${canPo?'':'disabled'}><b>🧪</b><small>藥水</small><em>${g.inv.potion||0}</em></button></div>
@@ -1677,7 +1685,7 @@ function afterGameRender(){
     if(E3.ok){const sl=app.querySelector('.c3d');if(sl)ENG.mount(sl);}
     const bar=document.getElementById('mhpbar');
     if(bar){const target=Math.round(Math.max(0,B.hp)/B.maxhp*100);
-      if(B.anim!=='spell'&&B.shown!==B.hp){const tk=B;setTimeout(()=>{if(B===tk&&bar.isConnected)bar.style.width=target+'%';},B.anim==='hit'||B.anim==='crit'?(E3.ok?300:380):40);B.shown=B.hp;}}
+      if(B.anim!=='spell'&&B.shown!==B.hp){const tk=B;setTimeout(()=>{if(B===tk&&bar.isConnected){bar.style.width=target+'%';const tx=document.getElementById('mhptxt');if(tx)tx.textContent='💀 '+Math.max(0,tk.hp)+'/'+tk.maxhp;}},B.anim==='hit'||B.anim==='crit'?(E3.ok?300:380):40);B.shown=B.hp;}}
     if(B.sheet){const nx=document.getElementById('nextB');if(nx)nx.focus({preventScroll:true});}
   }
 }
