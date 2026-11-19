@@ -791,7 +791,8 @@ function update(dt){
   // idle
   [E.mon,E.hero].forEach((o,i)=>{if(!o)return;o.off.sqi=1+.03*Math.sin(t*2.3+i);});
   const m=E.mon,h=E.hero;if(!m)return;
-  m.bob=.05*Math.sin(t*2.3);h.bob=.04*Math.sin(t*2.6+1);
+  m.bob=.05*Math.sin(t*2.3);h.bob=.04*Math.sin(t*2.6+1);m.idz=.016*Math.sin(t*1.7+1);h.idz=.012*Math.sin(t*2.1);
+  [['mon',m],['hero',h]].forEach(([k,o])=>{const fl=E.flash[k];if(fl&&fl[3]>.3&&fl!==o._lf){o._lf=fl;o.jit=Math.min(1,fl[3]+.2);}o.jit=Math.max(0,(o.jit||0)-dt*3.2);o.jx=(o.jit||0)*Math.sin(t*70)*.16;});
   {const cur=E.tl;E.tl=[];cur.forEach(e=>{if(t>=e.t)e.fn();else E.tl.push(e);});}
   {const cur=E.tw,keep=[];E.tw=[];cur.forEach(w=>{const u=(t-w.t0)/w.dur;if(u<0){keep.push(w);return;}w.fn(cl(u));if(u<1)keep.push(w);});E.tw=keep.concat(E.tw);}
   E.parts=E.parts.filter(p=>{p.life-=dt;if(p.life<=0)return false;p.vy-=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.rot+=p.vr*dt;return true;});
@@ -815,7 +816,7 @@ function draw(){
   mi.concat(hi).forEach(it=>(it.n.a<1?tr:op).push(it));
   // shadows
   const sm=[[E.mon,1.15*E.mon.sc*(E.big?1.2:1)],[E.hero,.95]];
-  sm.forEach((q,i)=>{const o=q[0],n=E.shadows[i],jump=Math.max(0,o.off.y);n.p=[o.base[0]+o.off.x,.03,o.base[2]];const r=q[1]*(1-jump*.15);n.s=[r,.01,r*.7];tr.unshift({n,W:local(n),grp:'env'});});
+  sm.forEach((q,i)=>{const o=q[0],n=E.shadows[i],jump=Math.max(0,o.off.y);n.p=[o.base[0]+o.off.x,.03,o.base[2]];const r=q[1]*(1-jump*.15);n.s=[r*(1+(o.off.sq<1?(1-o.off.sq)*.5:0)),.01,r*.7];n.a=Math.max(.14,.4-jump*.12);tr.unshift({n,W:local(n),grp:'env'});});
   gl.disable(gl.BLEND);
   gl.enable(gl.CULL_FACE);
   
@@ -828,20 +829,21 @@ function draw(){
   gl.disable(gl.DEPTH_TEST);
   if(E.hero.himg){const o=E.hero,c=E.imgs['H'+o.himg],S=HSPR[o.himg];
     if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
-    if(c&&c.tex){const f=o.off,sq=f.sq,k=Math.max(.001,f.sc),asp=S.w/S.h,h0=Math.min(3.4,3.7/asp);
-      const h=h0*k*sq,w=h0*asp*k*(1+(1-sq)*.6);
-      sprite(c.tex,[o.base[0]+f.x,o.base[1]+f.y+h/2+.02,o.base[2]+.3],w/2,h/2,-f.rz*.6,1,V,Pr,E.flash.hero);}}
+    if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=Math.min(3.4,3.7/asp);
+      const h=h0*k*sq,w=h0*asp*k*(1+(1-sq)*.6),rot=-f.rz*.6-(o.idz||0);
+      sprite(c.tex,[o.base[0]+f.x+(o.jx||0)+PSG*Math.sin(rot)*h/2,o.base[1]+f.y+Math.cos(rot)*h/2+.02,o.base[2]+.3],w/2,h/2,rot,1,V,Pr,E.flash.hero);}}
   if(E.mon.img){const o=E.mon,c=E.imgs[o.img],S=SPR(o.img);
     if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
     if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=Math.min(E.big?4.3:3.5,3.9/asp);
-      const h=h0*k*sq,w=-h0*asp*k*(1+(1-sq)*.6);
-      sprite(c.tex,[o.base[0]+f.x,o.base[1]+f.y+(o.bob||0)+h/2+.02,o.base[2]+.2],w/2,h/2,-f.rz*.6+f.ry*.0,1,V,Pr,E.flash.mon);}}
+      const h=h0*k*sq,w=-h0*asp*k*(1+(1-sq)*.6),rot=-f.rz*.6-(o.idz||0);
+      sprite(c.tex,[o.base[0]+f.x+(o.jx||0)+PSG*Math.sin(rot)*h/2,o.base[1]+f.y+(o.bob||0)+Math.cos(rot)*h/2+.02,o.base[2]+.2],w/2,h/2,rot,1,V,Pr,E.flash.mon);}}
   gl.enable(gl.DEPTH_TEST);
   if(E.tex.cglow){const gp=.65+.35*Math.sin(E.time*2.2);[[-4.9,-1.7],[4.9,-1.7]].forEach(p=>sprite(E.tex.cglow,[p[0],4.6,p[1]],1.9*gp+.5,1.9*gp+.5,0,.9,V,Pr));}
   E.sprites.forEach(s=>sprite(s.tex,s.pos,s.w,s.h,s.rot,s.a,V,Pr));
   E.parts.forEach(p=>sprite(p.tex,[p.x,p.y,p.z],p.size,p.size,p.rot,Math.min(1,p.life/.4),V,Pr));
   gl.depthMask(true);
 }
+const PSG=1;
 function nodeMatM(o){const f=o.off,k=o.sc*f.sc,sq=f.sq*(o.off.sqi||1),bob=o.bob||0;
   return local({p:[o.base[0]+f.x,o.base[1]+f.y+bob,o.base[2]],r:[0,o.ry+f.ry,f.rz],s:[k*(1+(1-sq)*.5),k*sq,k*(1+(1-sq)*.5)]});}
 function frame(now){
@@ -879,7 +881,7 @@ function heroAct(act,dur){const h=E.hero,hid=hid0(),th=ULT[hid]||ULT.h1,gl=utex(
   const bx=Q[0],fx=Q[1],rb=Q[2],rf=Q[3],yc=Q[4],yf=Q[5];
   at(.02,()=>{const p=hpos();flare([p[0]+.5,p[1]+.3,p[2]+.8],2.2,.35,gl);goldBurst([p[0]+.5,p[1]+.3,p[2]+.8],8,2,.4,.28,gl);});
   tween(dur,u=>{const T=.35,back=u<T?ease(u/T):1-ease(cl((u-T)/.2)),fwd=u<T?0:Math.sin(PI*cl((u-T)/(1-T)));
-    h.off.x=-bx*back+fx*fwd;h.off.rz=rb*back-rf*fwd;h.off.sq=1-.12*back+.06*fwd;
+    h.off.x=-bx*back+fx*fwd;h.off.rz=rb*back-rf*fwd;h.off.sq=1-.12*back+.06*fwd-.07*Math.sin(PI*cl((u-.78)/.22));
     h.off.y=yc*Math.sin(PI*cl(u))+yf*fwd;h.armR.r[0]=-2.2*back+2*fwd;});}
 function projFly(hid,from,to,dur,delay,sz,arc){
   const A=ATK[hid]||ATK.h1,th=ULT[hid]||ULT.h1,gl=utex(hid,th),st=A.st;
@@ -1294,7 +1296,9 @@ function hurt(emoji,type){
 function die(){
   if(!E.mon)return;const m=E.mon,h=E.hero,star=starTex();
   E.flash.mon=[1,1,1,.9];burst(mpos(),26,star,6,.55);
-  tween(1.25,u=>{const e=ease(u);m.off.y=1.4*e;m.off.ry=14*e;m.off.sc=Math.max(.001,1-e);});
+  tween(1.0,u=>{const e=ease(u);m.off.rz=2.4*e+.14*Math.sin(PI*cl((u-.82)/.18));m.off.x=-.15*e;m.off.sq=1-.1*e;m.off.y=.16*Math.sin(PI*cl((u-.8)/.2));});
+  at(.9,()=>{const t=mpos();E.shake=Math.max(E.shake,.5);goldBurst([t[0]-.9,.3,t[2]+.3],14,2.4,.6,.5,E.tex.cglow||E.tex.gold);});
+  tween(.35,u=>{m.off.sc=Math.max(.001,1-ease(u));},1.15);
   at(.55,()=>burst(mpos(),18,star,5,.5));
   tween(1.1,u=>{h.off.y=.7*Math.abs(Math.sin(u*PI*2));h.armR.r[0]=-2.6*Math.sin(PI*cl(u*2));},.3);
 }
