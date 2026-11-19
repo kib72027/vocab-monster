@@ -158,13 +158,29 @@ function viewResult(){
 }
 
 function isLearned(id){const g=G();return !!(g.learned[id]||g.def[id]||g.stars[id]);}
-function startLearn(id){const s=SETS.find(x=>x.id===id);if(!s)return;S.learn={id,i:0,words:s.words.slice(),k:s.k,title:s.title};S.view='learn';render();top();}
+function startLearn(id){const s=SETS.find(x=>x.id===id);if(!s)return;S.learn={id,i:0,words:s.words.slice(),k:s.k,title:s.title,heard:[],tok:0};S.view='learn';render();top();learnSpeak();}
+// learning screen: auto-read the word, pause 0.5s, then the sentence; the next button stays locked until both were heard (not when reviewing)
+function learnSpeak(){
+  const L=S.learn;if(!L)return;const i=L.i,o=L.words[i],tok=L.tok=(L.tok||0)+1;
+  const alive=()=>S.view==='learn'&&S.learn===L&&L.tok===tok&&L.i===i;
+  const mark=(hl,p)=>{const c=document.querySelector('.lcard');if(c){c.dataset.hl=hl;c.dataset.p=p?'1':'';}};
+  const release=()=>{if(!alive())return;mark('',0);L.heard[i]=1;const b=document.getElementById('lnextB');if(b&&b.disabled){b.disabled=false;b.textContent=b.dataset.t;}};
+  const say1=(t,hl,next)=>{if(!alive())return;mark(hl,1);let over=false;const go=()=>{if(over)return;over=true;if(alive())next();};
+    if(!HAS_TTS){setTimeout(go,Math.min(3500,900+t.length*45));return;}
+    try{const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=hl==='word'?.8:.85;
+      try{const v=speechSynthesis.getVoices().find(v=>/^en[-_]US/i.test(v.lang));if(v)u.voice=v;}catch(e){}
+      let st=false;u.onstart=()=>{st=true;};u.onend=go;u.onerror=go;speechSynthesis.speak(u);
+      setTimeout(()=>{if(!st)go();},2500);setTimeout(go,Math.max(6000,t.length*160));}catch(e){go();}};
+  try{if(HAS_TTS)speechSynthesis.cancel();}catch(e){}
+  setTimeout(()=>{if(!alive())return;say1(o.w,'word',()=>setTimeout(()=>say1(o.ex,'sent',release),500));},300);
+}
 function viewLearn(){
-  const L=S.learn,n=L.words.length,o=L.words[L.i],last=L.i===n-1,done=isLearned(L.id);
+  const L=S.learn,n=L.words.length,o=L.words[L.i],last=L.i===n-1,done=isLearned(L.id),lock=!done&&!L.heard[L.i];
   const bar=`<div class="qbar"><button class="x" data-act="goGame" aria-label="回到地圖"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="track"><i style="width:${((L.i+1)/n*100).toFixed(0)}%"></i></div><span class="pill">${L.i+1}/${n}</span></div>`;
   return `<div class="cview learn">${bar}<p class="lhint">📖 先把這課的單字看過一遍，就可以開始打怪囉！</p>
   <section class="card lcard ${L.k}"><div class="qword">${o.w}${speakBtn(o.w)}</div><span class="pos">${POS[o.pos]||''}</span><div class="zh">${o.zh}</div><div class="wc-def">${o.def}</div><div class="exrow">${speakBtn(o.ex,'聽例句')}<p class="wc-ex">${mark(o.ex,o.w,'<mark>$&</mark>')}</p></div></section>
-  <div class="btnrow">${L.i>0?'<button class="btn" data-act="lprev">上一張</button>':''}${last?`<button class="btn primary" data-act="ldone">${done?'開始打怪':'學完了，開始打怪'}</button>`:'<button class="btn primary" data-act="lnext">下一張</button>'}</div></div>`;
+  ${HAS_TTS?'<button class="lreplay" data-act="lreplay">🔁 再聽一次</button>':''}
+  <div class="btnrow">${L.i>0?'<button class="btn" data-act="lprev">上一張</button>':''}${(()=>{const t=last?(done?'開始打怪':'學完了，開始打怪'):'下一張';return `<button class="btn primary" id="lnextB" data-act="${last?'ldone':'lnext'}" data-t="${t}" ${lock?'disabled':''}>${lock?'🔊 聆聽中…':t}</button>`;})()}</div></div>`;
 }
 function viewCards(){
   const D=S.deck;
@@ -1717,9 +1733,10 @@ app.addEventListener('click',e=>{
     case 'practice':S.view='home';render();top();break;
     case 'fight':ac();SFX.tap();isLearned(b.dataset.id)?startBattle('set',b.dataset.id):startLearn(b.dataset.id);break;
     case 'learn':ac();SFX.tap();startLearn(b.dataset.id);break;
-    case 'lnext':ac();SFX.tap();if(S.learn&&S.learn.i<S.learn.words.length-1){S.learn.i++;render();top();}break;
-    case 'lprev':ac();SFX.tap();if(S.learn&&S.learn.i>0){S.learn.i--;render();top();}break;
-    case 'ldone':{ac();SFX.tap();const id=S.learn&&S.learn.id;if(!id)break;const g=G();g.learned[id]=1;saveStore();startBattle('set',id);break;}
+    case 'lnext':ac();SFX.tap();if(S.learn&&S.learn.i<S.learn.words.length-1){S.learn.i++;render();top();learnSpeak();}break;
+    case 'lprev':ac();SFX.tap();if(S.learn&&S.learn.i>0){S.learn.i--;render();top();learnSpeak();}break;
+    case 'lreplay':ac();SFX.tap();learnSpeak();break;
+    case 'ldone':{ac();SFX.tap();const id=S.learn&&S.learn.id;if(!id)break;if(!isLearned(id)&&!S.learn.words.every((_,k)=>S.learn.heard[k]))break;try{if(HAS_TTS)speechSynthesis.cancel();}catch(e){}const g=G();g.learned[id]=1;saveStore();startBattle('set',id);break;}
     case 'boss':ac();SFX.tap();startBattle('boss',b.dataset.id);break;
     case 'elite':ac();SFX.tap();startBattle('elite',b.dataset.id);break;
     case 'revenge':ac();SFX.tap();startBattle('revenge');break;
