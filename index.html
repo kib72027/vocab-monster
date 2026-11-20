@@ -1521,7 +1521,7 @@ function draw(){
   gl.disable(gl.DEPTH_TEST);
   if(E.hero.himg){const o=E.hero,HA=(typeof HANIM!=='undefined')&&HANIM[o.himg];let c=E.imgs['H'+o.himg],S=HSPR[o.himg],fm=null,fm2=null,fa=0;
     if(HA){let pl=o.pl,nm='idle',u=0;if(pl){u=(E.time-pl.t0)/pl.dur;if(u>=1&&pl.n!=='win'){o.pl=null;pl=null;}else{nm=pl.n;u=Math.min(u,.999);}}
-      const L=HA[nm],N=L.length,ph=pl?0:(E.time/3.0%1)*N,ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=L[ix];
+      const L=HA[nm],N=L.length,ph=pl?0:(E.time/6.4%1)*N,ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=L[ix];
       if(!pl){fm2=L[(ix+1)%N];fa=ease(ph-ix);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
       if(fm&&fm.im&&!fm.tex&&fm.im.complete&&fm.im.naturalWidth)fm.tex=mkTex(fm.im);}
     if(fm&&fm.tex){c=fm;S=fm;}
