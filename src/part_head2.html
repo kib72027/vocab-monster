@@ -581,6 +581,23 @@ button.sk{cursor:pointer;pointer-events:auto}button.sk:disabled{filter:grayscale
 @keyframes fadein{from{opacity:0}to{opacity:1}}@keyframes pop{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
 @media (min-width:900px){.sheet .sheet-in{display:flex;align-items:stretch;grid-template-columns:none;max-width:760px;width:min(760px,100%)}}
 @media (max-height:480px){.sheet .sheet-in{gap:6px;padding:10px 16px}.sheet h3{font-size:20px}}
+/* ===== 測試工具 test lab ===== */
+.tlab{display:flex;flex-direction:column;gap:12px;padding-bottom:24px}
+.tlt{font-family:var(--font-display);font-size:18px}.tlt small{font-family:var(--font-body);font-size:12px;color:var(--muted);margin-left:6px}
+.stage.c3.tstage{min-height:260px;height:min(50vh,440px)}
+.tlname{position:absolute;left:10px;bottom:8px;z-index:3;background:rgba(10,20,40,.6);color:#fff;font:700 12px var(--font-body);padding:3px 10px;border-radius:99px}
+.tsec h3{margin:0 0 8px}.tsec h4{margin:14px 0 6px;font-size:14px}
+.trow{display:flex;flex-wrap:wrap;gap:8px}
+.btn.tlb{flex:0 0 auto;width:auto;padding:8px 12px;font-size:14px;min-height:0}
+.tgrid{display:grid;gap:8px}
+.tgrid.heroes{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));margin-bottom:10px}
+.tgrid.mons{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));margin-top:8px}
+.tlh,.tlm{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink);padding:6px;font:700 12px var(--font-body);cursor:pointer;min-width:0}
+.tlh.on,.tlm.on{border-color:var(--k5);box-shadow:0 0 0 3px var(--k5s)}
+.tlh img{height:56px;width:auto;max-width:100%;object-fit:contain}
+.tlm img{width:100%;height:70px;object-fit:contain;background:repeating-conic-gradient(#cfd5e1 0 25%,#fff 0 50%) 0 0/16px 16px;border-radius:8px}
+.tlm span{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tcard{margin-top:18px}.tcard .btn{width:100%}
 </style>
 
 <div class="wrap" id="app"></div>

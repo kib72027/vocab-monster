@@ -65,9 +65,11 @@ Open `index.html` in any modern browser (Chrome / Safari / Edge; desktop, phone,
 - Wrong words are re-queued in the same fight and become "revenge" words.
 - Hearts max is fixed at 5, no random crits, the example sentence is always auto-read, the potion is usable from the HUD (+3 hearts) and also auto-revives at 0 hearts.
 
-## Monsters (80)
-- Codex has **80 monsters** (`RMON`), each `{id:'n001'…'n080', zh, en, t (element type), role}`.
-  Roles: `n` normal lesson monster (40), `e` elite (18), `b` boss (9), `r` rare (chest only, 4), `x` spare (chest only, 9).
+## Monsters (113 + 4 legends)
+- Codex has **113 monsters** (`RMON`), each `{id:'n001'…'n113', zh, en, t (element type), role}`.
+  Roles: `n` normal lesson monster (40), `e` elite (18), `b` boss (9), `r` rare (chest only, 8), `x` spare (chest only, 38).
+- n081–n113 come from `assets/monster-2/sheet-2..6.jpg` (`assets/monster-2/monsters.json` lists which cells; look-alikes of existing monsters were skipped, sheet-1 entirely) via `tools/nmadd.py`.
+- **Legends (傳奇)**: 4 monsters in `LMON`/`LSPR` from `assets/legend/` (`legends.json`), harder to get than bosses. Not used by the game yet — how players earn them is still to be decided.
   Element types: fire, ice, elec, poison, forest, sea, desert, sky, ghost, mech, skel, dragon (`TYPES`).
 - `MPLAN = {normal:[40 ids], elite:[18 ids], boss:[9 ids]}` assigns monsters. Lesson *i* uses `MPLAN.normal[i]`; the *w*-th week uses `MPLAN.elite[w]`; the *j*-th two-week block uses `MPLAN.boss[j]`.
 - Art: full-body transparent WebP cut-outs (`RSPR[id] = {u: dataURI, w, h}`), cut by `tools/nmcut2.py` from 5 redrawn 4×4 sheets (`assets/monsters/monster-sheet-1..5.jpg`, magenta background; sheet *k* = `n{16(k-1)+1}`…`n{16k}`, row by row). The old 96-monster art (6 sheets) was removed. Heroes: `HSPR` (10 heroes). `MON`/`MSPR` are the legacy 11 procedural monsters (no longer used for battles).
@@ -110,6 +112,7 @@ src/              editable sources
   part_app2.js      app shell: storage, practice mode, click handler (+ spliced game block)
 tools/            how the data/art were produced (python/node; paths inside point to the original sandbox -> adjust)
   nmcut2.py         cut the 80 monsters out of assets/monsters/monster-sheet-1..5.jpg and replace their RSPR art in src/part_roster.js
+  nmadd.py          add/update the extra monsters (assets/monster-2/monsters.json -> RMON/RSPR) and legends (assets/legend/legends.json -> LMON/LSPR); removes painted floor shadows
                     (names/roles/MPLAN are edited directly in part_roster.js; cut-outs saved to assets/monsters/cut/)
   cuth4.py, mkroster.py   hero cut-outs from assets/heroes/poster/hero-poster.png / older roster builder
   mkhsheet.py       cut a hero's grid sprite sheets (assets/heroes/<id>/source) into transparent frames + src/part_hanim_<id>.js
@@ -165,6 +168,11 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 - 新增一位主角的動畫：照 `docs/hero-spritesheet-prompt.md` 請圖片 AI 產 4 張格子圖，放到 `assets/heroes/<id>/source/`（檔名 idle.jpg、attack.jpg、hit.jpg、victory.jpg），執行 `python3 tools/mkhsheet.py <id>` 再 `python3 build.py`。
 - 也可以用影片：把 4 段綠底、固定鏡頭的影片放到 `assets/video/<id>/`（`<id>_idle.mp4`、`_attack`、`_hit`、`_victory`），在 `frames.json` 寫要用哪幾格，執行 `python3 tools/mkhvideo.py <id>` 再 `python3 build.py`。**10 位主角現在全部用影片做**（`assets/heroes/<id>/source/` 的格子圖保留但沒用；**不要再跑 mkhsheet.py**，會蓋掉影片版）。`frames.json` 的攻擊格要跳過影片自帶的特效（刀光、魔法光、閃電），遊戲有自己的特效。
 - 目前已有動畫格：h1～h10 全部（影片）。舊的格子圖做法（mkhsheet.py）：待機只用和動作同方向、彼此相似的格；攻擊只用蓄力、出招兩格，受傷只用受擊一格，由程式淡入淡出。
+
+## 測試工具（家長／老師用）
+- 首頁最下面的「🧪 測試工具」：用真正的戰鬥畫面，選任一位主角看攻擊、受傷、勝利、大絕招；觸發 12 種屬性的怪物攻擊（含出招音和命中音）；把 80 隻怪物逐一放上場（或自動輪播）檢查破圖，怪物格子用棋盤格底色方便看出去背問題；單獨播放每個音效和朗讀。
+- 完全不影響進度（不加經驗、金幣，不改主角選擇）。前一個動作還沒播完就按新按鈕，會中斷並重新開始。
+- 程式在 `src/part_game.js` 的 `viewTest()` / `tlAct()`；`tests/gs4.js` 會檢查它不改進度。
 
 ## 血條／魔力條（補充）
 - 玩家愛心與魔力條不再在按下答案的瞬間改變：答錯時，等怪物的攻擊真正打中主角（`ENG.hurt` 回傳命中時間）才扣愛心、扣魔力；答對時，等攻擊打完、怪物受擊時才加魔力、扣怪物血。

@@ -14,10 +14,12 @@ BOX=(360,264)      # max sprite size (old art was 300x220); the engine only uses
 def bgkind(a):
     e=np.concatenate([a[:8].reshape(-1,3),a[-8:].reshape(-1,3),a[:,:8].reshape(-1,3),a[:,-8:].reshape(-1,3)]);r,g,b=np.median(e,0)
     return 'green' if g>r and g>b else 'magenta'
-def key(a,bgc=None):
+def key(a,bgc=None,shadow=False):
     """alpha from 'how much background colour' a pixel has; only background connected to the sheet border is removed,
     so purple/pink/green parts inside a monster stay opaque. Semi-transparent edges are un-mixed from the background (no fringe).
-    bgc: the measured background colour (videos are not pure #00FF00); default = pure key colour."""
+    bgc: the measured background colour (videos are not pure #00FF00); default = pure key colour.
+    shadow: also remove a floor shadow painted in darkened key colour (magenta sheets of assets/monster-2): pixels with
+    almost no green and the background's red/blue ratio, connected to the background. Monster purples carry some green."""
     a=a.astype(np.float32);r,g,b=a[...,0],a[...,1],a[...,2];kind=bgkind(a)
     if kind=='green':d=g-np.maximum(r,b);bg=np.array([0,255,0],np.float32)
     else:d=np.minimum(r,b)-g;bg=np.array([255,0,255],np.float32)
@@ -25,7 +27,9 @@ def key(a,bgc=None):
     dist=np.sqrt(((a-bg)**2).sum(-1))   # distance to the pure key colour; rim light that reflects the key colour stays well above 80
     # background = strongly bg-coloured pixels; enclosed pockets (inside tentacle loops, between legs) count too,
     # since no monster part is that saturated green/magenta (the sheet is chosen so)
-    cand=dist<80;lab,n=nd.label(cand);ids=np.arange(1,n+1)
+    cand=dist<80
+    if shadow and kind=='magenta':cand|=(g<14)&(r>70)&(b>=r*.95)&(b<=r*1.45)
+    lab,n=nd.label(cand);ids=np.arange(1,n+1)
     sz=nd.sum(cand,lab,ids);md=nd.median(dist,lab,ids)
     border=set(np.unique(np.r_[lab[0],lab[-1],lab[:,0],lab[:,-1]]))-{0}
     # border-connected regions are background; an enclosed pocket only if it really is the flat background colour

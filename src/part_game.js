@@ -72,9 +72,21 @@ function noise(d,t0,vol,f0,f1,q,kind){
     s.connect(fl);fl.connect(gn);gn.connect(a.destination);s.start(t,Math.random()*.5);s.stop(t+d+.05);
   }catch(e){}
 }
+// growl: detuned saws through a low-pass whose cutoff wobbles (LFO) -> a throaty roar instead of a plain buzz
+function growl(d,t0,vol,f,cut){
+  if(!G().snd)return;const a=ac();if(!a)return;
+  try{const t=a.currentTime+(t0||0),lp=a.createBiquadFilter(),gn=a.createGain(),lfo=a.createOscillator(),lg=a.createGain();
+    lp.type='lowpass';lp.Q.value=6;lp.frequency.setValueAtTime(cut*.6,t);lp.frequency.linearRampToValueAtTime(cut,t+d*.3);lp.frequency.linearRampToValueAtTime(cut*.4,t+d);
+    lfo.frequency.value=13;lg.gain.value=cut*.35;lfo.connect(lg);lg.connect(lp.frequency);
+    gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(vol,t+.08);gn.gain.setValueAtTime(vol,t+d*.55);gn.gain.exponentialRampToValueAtTime(.0001,t+d);
+    [0,7,-9].forEach(c=>{const o=a.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(f*1.25,t);o.frequency.exponentialRampToValueAtTime(f,t+d*.35);o.frequency.exponentialRampToValueAtTime(f*.8,t+d);o.detune.value=c*8;o.connect(lp);o.start(t);o.stop(t+d+.05);});
+    lp.connect(gn);gn.connect(a.destination);lfo.start(t);lfo.stop(t+d+.05);
+  }catch(e){}
+}
 // monster attacks: one launch sound per element type (played when the projectile leaves the monster)
 const MATK={
-  fire(){noise(.5,0,.22,300,1400,.8);tone(110,.45,'sawtooth',0,.06,-40);},
+  // fire: a soft "fwoosh" that swells (band-pass noise sweeping up), a warm low body, and crackling embers on top
+  fire(){noise(.65,0,.2,180,2200,.7);noise(.5,.05,.12,120,300,.6,'lowpass');for(let i=0;i<7;i++)noise(.025,.08+Math.random()*.45,.09,2500+Math.random()*2500,0,4,'highpass');},
   ice(){[1760,2093,2637].forEach((f,i)=>tone(f,.18,'triangle',i*.12,.07,-200));noise(.35,0,.06,5000,8000,2,'highpass');},
   elec(){for(let i=0;i<7;i++)tone(300+Math.random()*1500,.04,'square',i*.035,.06);noise(.3,0,.12,3000,1500,.7);},
   poison(){[300,420,260,380].forEach((f,i)=>tone(f,.12,'sine',i*.09,.09,160));},
@@ -85,7 +97,8 @@ const MATK={
   ghost(){tone(520,.6,'sine',0,.07,-260);tone(530,.6,'sine',.02,.05,-280);},
   mech(){[880,660,880].forEach((f,i)=>tone(f,.07,'square',i*.08,.06));noise(.35,.2,.12,2000,500,1);},
   skel(){[1,2,3].forEach(i=>{tone(900,.03,'square',i*.09,.07,-500);noise(.04,i*.09,.1,2500,0,3);});},
-  dragon(){tone(90,.6,'sawtooth',0,.12,-30);noise(.6,0,.14,500,200,.6,'lowpass');}
+  // dragon: a growling roar that rises then drops, followed by the rush of its fire breath and a few crackles
+  dragon(){growl(.75,0,.16,95,900);noise(.7,.25,.18,300,2600,.6);noise(.6,.3,.1,150,400,.5,'lowpass');for(let i=0;i<5;i++)noise(.025,.4+Math.random()*.45,.08,3000+Math.random()*2000,0,4,'highpass');}
 };
 const SFX={
   hit(){tone(620,.09,'square',0,.1,-300);tone(330,.14,'square',.07,.1,-150);},
@@ -617,7 +630,7 @@ function update(dt){
   [['mon',m],['hero',h]].forEach(([k,o])=>{const fl=E.flash[k];if(fl&&fl[3]>.3&&fl!==o._lf){o._lf=fl;o.jit=Math.min(1,fl[3]+.2);}o.jit=Math.max(0,(o.jit||0)-dt*3.2);o.jx=(o.jit||0)*Math.sin(t*70)*.16;});
   {const cur=E.tl;E.tl=[];cur.forEach(e=>{if(t>=e.t)e.fn();else E.tl.push(e);});}
   {const cur=E.tw,keep=[];E.tw=[];cur.forEach(w=>{const u=(t-w.t0)/w.dur;if(u<0){keep.push(w);return;}w.fn(cl(u));if(u<1)keep.push(w);});E.tw=keep.concat(E.tw);}
-  E.parts=E.parts.filter(p=>{p.life-=dt;if(p.life<=0)return false;p.vy-=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.rot+=p.vr*dt;return true;});
+  E.parts=E.parts.filter(p=>{p.life-=dt;if(p.life<=0)return false;p.vy-=p.g*dt;if(p.dr){const k=Math.max(0,1-p.dr*dt);p.vx*=k;p.vy*=k;p.vz*=k;}p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.rot+=p.vr*dt;if(p.gs)p.size=Math.max(.02,p.size+p.gs*dt);return true;});   // gs: size change per second, dr: drag
   E.shake=Math.max(0,E.shake-dt*2.2);
   ['mon','hero'].forEach(k=>{const f=E.flash[k];if(f){f[3]=Math.max(0,f[3]-dt*3);if(f[3]<=0)E.flash[k]=null;}});
 }
@@ -652,10 +665,11 @@ function draw(){
   if(E.hero.himg){const o=E.hero,HA=(typeof HANIM!=='undefined')&&HANIM[o.himg];let c=E.imgs['H'+o.himg],S=HSPR[o.himg],fm=null,fm2=null,fa=0;
     if(HA){let pl=o.pl,nm='idle',u=0;if(pl){u=(E.time-pl.t0)/pl.dur;if(u>=1&&pl.n!=='win'){const LL=HA[pl.n];o.pe={f:LL[LL.length-1],t:E.time};o.pl=null;pl=null;}else{nm=pl.n;u=Math.min(u,.999);}}
       // HA.fps (video-made heroes): idle plays at the video's own rate with hard cuts; sheet heroes stretch idle over 6.4 s and cross-fade
-      const L=HA[nm],N=L.length,ph=pl?0:(HA.fps?(E.time*HA.fps)%N:(E.time/6.4%1)*N),ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=L[ix];
-      if(false){if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
+      // HA.pp: idle plays forward then backward (ping-pong) so there is no seam where the video's last frame meets its first
+      const L=HA[nm],N0=L.length,PP=!pl&&HA.pp&&N0>2,N=PP?2*N0-2:N0,at_=j=>L[PP&&j>=N0?2*N0-2-j:j];
+      const ph=pl?0:(HA.fps?(E.time*HA.fps)%N:(E.time/6.4%1)*N),ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=at_(ix);
       // idle: sheet heroes cross-fade in the middle of each (long) frame; video heroes blend linearly between neighbouring frames, which differ very little (smooth, no ghosting)
-      if(!pl){fm2=L[(ix+1)%N];fa=HA.fps?ph-ix:ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
+      if(!pl){fm2=at_((ix+1)%N);fa=HA.fps?ph-ix:ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
       if(fm&&fm.im&&!fm.tex&&fm.im.complete&&fm.im.naturalWidth)fm.tex=mkTex(fm.im);
       // a frame whose image is not decoded yet: keep the last frame shown (falling back to the static portrait looked like a jump)
       if(fm&&!fm.tex&&o.lastFm&&o.lastFm.tex){fm=o.lastFm;fm2=null;}
@@ -678,7 +692,7 @@ function draw(){
   gl.enable(gl.DEPTH_TEST);
   if(E.tex.cglow){const gp=.65+.35*Math.sin(E.time*2.2);[[-4.9,-1.7],[4.9,-1.7]].forEach(p=>sprite(E.tex.cglow,[p[0],4.6,p[1]],1.9*gp+.5,1.9*gp+.5,0,.9,V,Pr));}
   E.sprites.forEach(s=>sprite(s.tex,s.pos,s.w,s.h,s.rot,s.a,V,Pr));
-  E.parts.forEach(p=>sprite(p.tex,[p.x,p.y,p.z],p.size,p.size,p.rot,Math.min(1,p.life/.4),V,Pr));
+  E.parts.forEach(p=>sprite(p.tex,[p.x,p.y,p.z],p.size,p.size,p.rot,Math.min(1,p.life/.4)*(p.al||1),V,Pr));
   gl.depthMask(true);
 }
 const PSG=1;
@@ -1124,7 +1138,75 @@ function hurt(emoji,type){
     if(!small)heroPlay('hit',.7);
     if(!small)tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});});};
   const line=(arc,wob)=>u=>{const e=ease(u);return[lerp(F[0],T[0],e),lerp(F[1],T[1],e)+arc*Math.sin(PI*u)+(wob?wob*Math.sin(u*PI*4):0),lerp(F[2],T[2],e)];};
-  if(st==='ball'){fly(.35,.5,line(.7),{spin:H.spin||8,sz:1.35,grow:1});hit(.85);}
+  // ---- particle attacks: every element is a moving effect (core glow + trail + impact), not one picture sliding over ----
+  const Rn=Math.random,rnd=s=>(Rn()-.5)*2*s,G=gtex,smoke=G([85,75,85]);
+  const pt=(p,o)=>E.parts.push({x:p[0],y:p[1],z:p[2],vx:o.v?o.v[0]:0,vy:o.v?o.v[1]:0,vz:o.v?o.v[2]:0,g:o.g||0,life:o.life||.4,max:o.life||.4,size:o.size||.3,tex:o.tex||gl,rot:o.rot!=null?o.rot:Rn()*6,vr:o.vr||0,gs:o.gs||0,dr:o.dr||0,al:o.al||1});
+  const spray=(p,n,o)=>{for(let i=0;i<n;i++){const a=Rn()*2*PI,s=(o.spd||2)*(.4+Rn()*.8);
+    pt([p[0]+rnd(o.jit||.12),p[1]+rnd(o.jit||.12),p[2]+rnd(.1)],Object.assign({},o,{v:[Math.cos(a)*s+(o.bx||0),Math.abs(Math.sin(a))*s*(o.upk==null?1:o.upk)+(o.by||0),rnd(s*.3)],size:(o.size||.3)*(.6+Rn()*.8),life:(o.life||.5)*(.6+Rn()*.7)}));}};
+  // projectile: optional glowing core + emoji sprite on path(u); o.trail(p,d,u) runs every frame (d = movement since last frame)
+  const proj=(delay,dur,path,o)=>{const core=o.core?{tex:o.core,pos:F.slice(),w:0,h:0,rot:0,a:0}:null,sp=o.tex===null?null:{tex:o.tex||tex,pos:F.slice(),w:0,h:0,rot:0,a:0};let last=path(0);
+    at(delay,()=>{if(core)E.sprites.push(core);if(sp)E.sprites.push(sp);});
+    tween(dur,u=>{const p=path(u),d=[p[0]-last[0],p[1]-last[1]];last=p;const t=E.time,k=(o.sz||1.1)*(o.grow?.75+.45*u:1)*(1+(o.pulse||0)*Math.sin(t*28));
+      if(core){core.pos=[p[0],p[1],p[2]-.02];core.w=core.h=k*(o.coreK||1.5)*(1+.12*Math.sin(t*40));core.a=o.coreA||.9;}
+      if(sp){sp.pos=p;sp.w=k*(o.wr||1);sp.h=k*(o.hr||1);sp.rot=o.aim&&(d[0]||d[1])?Math.atan2(d[1],d[0])+(o.aim0||0):o.spin?u*o.spin:(o.wob||0)*Math.sin(t*14);sp.a=o.fade?Math.min(1,Math.sin(PI*u)*2.2):1;}
+      if(o.trail)o.trail(p,d,u);},delay);
+    at(delay+dur+.01,()=>{if(core)rm(core);if(sp)rm(sp);});};
+  const boom=(p,cc,n,big)=>{flare(p,big?2.8:1.6,big?.38:.26,G(cc));spray(p,n,{tex:G(cc),spd:big?3.6:2.6,g:3,life:.5,size:big?.34:.24,dr:1.5});};
+  const S0=.35;   // projectiles leave after the monster's wind-up
+  if(type==='fire'){   // fireball: flickering core, embers rising off it, smoke behind, explosion
+    proj(S0,.5,line(.6),{core:G([255,150,40]),coreK:1.7,sz:1.0,grow:1,pulse:.07,wob:.3,trail:(p,d)=>{for(let i=0;i<3;i++)pt([p[0]+rnd(.18),p[1]+rnd(.18),p[2]-.05],{tex:G(i?[255,205,70]:[255,95,30]),v:[-d[0]*10+rnd(.5),.7+Rn()*.9,0],life:.32+Rn()*.2,size:.42+Rn()*.25,gs:-.9});
+      if(Rn()<.5)pt(p,{tex:smoke,v:[rnd(.3),.9,0],life:.7,size:.3,gs:1,al:.45});}});
+    at(.85,()=>{boom(T,[255,150,40],20,1);spray(T,6,{tex:smoke,spd:.8,life:.9,size:.45,gs:1.2,al:.5,upk:1.6});});hit(.85);}
+  else if(type==='ice'){   // three spinning shards with frost mist, each shatters
+    for(let k=0;k<3;k++){const a=.9*((k-1)*.9+.5),d0=.42,s=.32+k*.12;
+      proj(s,d0,line(a),{core:G([175,230,255]),coreK:1.15,sz:.8,spin:14,trail:p=>{pt(p,{tex:G([225,245,255]),v:[rnd(.3),rnd(.3),0],life:.45,size:.22+Rn()*.15,gs:-.25,al:.8});if(Rn()<.35)pt(p,{tex:star,v:[rnd(.5),rnd(.5),0],life:.3,size:.16});}});
+      at(s+d0,()=>{flare(T,1.4,.24,G([190,235,255]));spray(T,10,{tex:G([205,240,255]),spd:2.8,g:7,life:.5,size:.17});});hit(s+d0,k<2);}}
+  else if(type==='elec'){   // two real lightning bolts: zig-zag glow segments that re-crackle, sparks on the ground
+    const strike=(k)=>{const t=hpos(),x=t[0]+.1+k*.45,z=t[2]+.6;let segs=[];
+      const zap=()=>{segs.forEach(rm);segs=[];let px=x+rnd(.7),py=t[1]+5.2;for(let i=1;i<=9;i++){const nx=i<9?x+rnd(.42):x,ny=t[1]+5.2-(5.5*i/9),dx=nx-px,dy=ny-py,len=Math.hypot(dx,dy),rot=Math.atan2(-dx,dy);
+        [[G([255,235,110]),.42],[G([255,255,255]),.16]].forEach(([tx,w])=>{const s={tex:tx,pos:[(px+nx)/2,(py+ny)/2,z],w,h:len*.62,rot,a:1};E.sprites.push(s);segs.push(s);});px=nx;py=ny;}};
+      zap();[.06,.12,.18].forEach(dt=>at(dt,zap));at(.26,()=>{segs.forEach(rm);segs=[];});
+      E.flash.hero=[1,1,.7,.95];E.shake=.6;spray([x,t[1]-.3,z],16,{tex:G([255,240,120]),spd:4,g:6,life:.35,size:.14});flare([x,t[1]+.2,z],1.6,.2,G([255,250,180]));};
+    [0,1].forEach(k=>{at(.4+k*.18,()=>strike(k));hit(.4+k*.18,k===0);});}
+  else if(type==='poison'){   // bubbling skull blob on a high arc, dripping; splash + a cloud that lingers
+    proj(S0,.65,line(2.6),{core:G([150,255,110]),coreK:1.35,sz:1.15,wob:.3,pulse:.08,trail:p=>{if(Rn()<.7)pt(p,{tex:G([140,240,90]),v:[rnd(.3),-1-Rn(),0],g:2.5,life:.5,size:.16+Rn()*.1});if(Rn()<.45)pt(p,{tex:G([185,120,255]),v:[rnd(.2),.3,0],life:.55,size:.2,gs:.6,al:.6});}});
+    [-1,1].forEach(j=>proj(S0+.07,.6,u=>{const q=line(2.1)(u);q[2]+=j*.35;q[1]+=.15*Math.sin(u*PI*6);return q;},{tex:null,core:G([150,255,110]),coreK:.6,sz:.6}));
+    at(1.0,()=>{boom(T,[140,240,90],18,1);for(let i=0;i<9;i++)pt([T[0]+rnd(.7),T[1]-.4+rnd(.4),T[2]],{tex:G([120,220,80]),v:[rnd(.3),.25,0],life:1.3,size:.5,gs:.55,al:.35});});hit(1.0);}
+  else if(type==='forest'){   // a gust of leaves that flutter (sway + spin) in a stream
+    for(let k=0;k<6;k++){proj(.3+k*.07,.55,u=>{const q=line(0,.5)(u);q[1]+=.28*Math.sin(u*PI*3+k);q[2]+=.4*Math.sin(u*PI*2+k);return q;},{sz:.78,spin:7+k,trail:p=>{if(Rn()<.5)pt(p,{tex:G([150,235,110]),v:[rnd(.4),rnd(.3),0],life:.4,size:.15});}});
+      hit(.85+k*.07,k<5);}
+    at(1.2,()=>spray(T,12,{tex:G([140,230,100]),spd:2.2,g:2,life:.6,size:.2}));}
+  else if(type==='sea'){   // a real wave: water thrown up along a moving front that rises, curls and crashes onto the hero
+    const wd=.62,X0=F[0],X1=T[0]+.2,base=.35,hgt=u=>.35+1.7*Math.sin(PI*Math.min(1,u*1.08)),sp=(X1-X0)/wd;
+    tween(wd,u=>{const x=lerp(X0,X1,ease(u)),hh=hgt(u);
+      for(let i=0;i<7;i++){const y=base+Rn()*hh;pt([x+rnd(.28),y,F[2]+rnd(.35)],{tex:Rn()<.72?G([60,150,255]):G([200,235,255]),v:[sp*.35+rnd(.6),1+Rn()*1.7,0],g:6.5,life:.45+Rn()*.25,size:.28+Rn()*.3,gs:-.15});}
+      pt([x+rnd(.15),base+hh,F[2]],{tex:G([235,250,255]),v:[sp*.55,.6,0],g:3,life:.35,size:.42});
+      if(Rn()<.5)pt([x-rnd(.5),base,F[2]+rnd(.3)],{tex:G([120,190,255]),v:[sp*.1,.2,0],life:.6,size:.5,gs:.4,al:.5});},S0);
+    proj(S0,wd,u=>[lerp(X0,X1,ease(u)),base+hgt(u)*.85+.2,F[2]+.3],{core:G([90,180,255]),coreK:1.4,coreA:.7,sz:1.25,grow:1,wob:.18});
+    at(S0+wd,()=>{boom(T,[90,180,255],10,1);spray(T,28,{tex:G([70,165,255]),spd:3.6,g:8,life:.6,size:.3,upk:1.5});spray(T,10,{tex:G([230,245,255]),spd:2.5,g:6,life:.5,size:.22,upk:1.6});});hit(S0+wd);}
+  else if(type==='desert'){   // three tumbling rocks with dust trails; dust cloud and pebbles on impact
+    for(let k=0;k<3;k++){const a=1.8*((k-1)*.9+.5),d0=.42,s=.32+k*.12;
+      proj(s,d0,line(a),{sz:1.0,spin:9,trail:p=>{pt(p,{tex:G([205,175,125]),v:[rnd(.2),.2,0],life:.55,size:.28,gs:.8,al:.5});}});
+      at(s+d0,()=>{spray(T,7,{tex:G([200,170,120]),spd:1,life:.8,size:.45,gs:1,al:.5,upk:1.4});spray(T,6,{tex,spd:2.4,g:9,life:.5,size:.14});});hit(s+d0,k<2);}}
+  else if(type==='sky'){   // a spinning tornado with wind streaks orbiting it
+    proj(S0,.45,line(0,.15),{sz:1.4,wr:1.15,wob:.35,trail:p=>{for(let i=0;i<4;i++){const a=E.time*18+i*PI/2;pt([p[0]+Math.cos(a)*.35,p[1]-.5+i*.3,p[2]+Math.sin(a)*.6],{tex:G([225,240,255]),v:[-Math.sin(a)*2.2,.7,Math.cos(a)*1.5],life:.3,size:.18,al:.8});}}});
+    at(.8,()=>{boom(T,[210,230,255],14,1);});hit(.8);}
+  else if(type==='ghost'){   // a ghost that wobbles over, fading in and out, leaving purple wisps
+    proj(.4,.65,u=>{const q=line(.25,.5)(u);q[2]+=.3*Math.sin(u*PI*2);return q;},{sz:1.55,fade:1,wob:.25,core:G([190,160,255]),coreK:1.2,coreA:.5,trail:p=>{pt([p[0]+rnd(.3),p[1]+rnd(.3),p[2]-.1],{tex:G([190,160,255]),v:[rnd(.2),.4,0],life:.7,size:.3,gs:.7,al:.45});}});
+    at(1.05,()=>{E.flash.hero=[.7,.6,1,.9];boom(T,[190,160,255],16,1);});hit(1.05);}
+  else if(type==='mech'){   // three missiles that point where they fly, flame + smoke exhaust, each explodes
+    for(let k=0;k<3;k++){const a=.9*((k-1)*.9+.5),d0=.32,s=.32+k*.12;
+      proj(s,d0,line(a),{sz:.85,aim:1,aim0:-PI/4,trail:(p,d)=>{const b=[p[0]-d[0]*1.5,p[1]-d[1]*1.5,p[2]];pt(b,{tex:G([255,190,80]),v:[rnd(.2),rnd(.2),0],life:.16,size:.3,gs:-1.2});pt(b,{tex:smoke,v:[rnd(.2),.35,0],life:.6,size:.22,gs:.9,al:.45});}});
+      at(s+d0,()=>{boom(T,[255,170,60],10,k===2);spray(T,4,{tex:smoke,spd:.6,life:.8,size:.4,gs:1,al:.5,upk:1.5});});hit(s+d0,k<2);}}
+  else if(type==='skel'){   // bones thrown in a spinning arc, a puff of bone dust on impact
+    [0,1].forEach(k=>{const s=S0+k*.14,d0=.48;proj(s,d0,line(.9+k*.5),{sz:1.0,spin:18,trail:p=>{if(Rn()<.4)pt(p,{tex:G([235,225,205]),v:[rnd(.2),rnd(.2),0],life:.3,size:.14});}});
+      at(s+d0,()=>{spray(T,8,{tex:G([240,230,210]),spd:2.5,g:7,life:.45,size:.16});flare(T,1.3,.22,G([240,230,210]));});hit(s+d0,k===0);});}
+  else if(type==='dragon'){   // dragon breath: a widening cone of fire, yellow core to red edges, scorching the hero
+    tween(.55,u=>{for(let i=0;i<7;i++){const r=Rn(),d=.3+Rn()*.1,cx=(T[0]-F[0])/d,cy=(T[1]-F[1]-.2)/d;
+      pt([F[0],F[1]+.25,F[2]],{tex:G(r<.35?[255,230,120]:r<.75?[255,140,40]:[220,60,30]),v:[cx*(.85+.3*Rn()),cy+rnd(1.6),rnd(.8)],life:d,size:.25+.3*Rn(),gs:1.6,vr:3});}
+      if(Rn()<.3)pt([F[0],F[1]+.3,F[2]],{tex,v:[(T[0]-F[0])/.35,(T[1]-F[1])/.35+rnd(.8),0],life:.35,size:.5,gs:.8});},.35);
+    at(.9,()=>{boom(T,[255,120,40],22,1);spray(T,6,{tex:smoke,spd:.8,life:.9,size:.45,gs:1.2,al:.5,upk:1.6});});hit(.7,true);hit(.9);}
+  else if(st==='ball'){fly(.35,.5,line(.7),{spin:H.spin||8,sz:1.35,grow:1});hit(.85);}
   else if(st==='dash'){fly(.35,.32,line(0),{sz:1.5,wr:1.4,spin:-10});hit(.67);}
   else if(st==='volley'){const n=H.n||3,d=H.fast?.3:.42;for(let k=0;k<n;k++){const a=(H.arc||.9)*((k-(n-1)/2)*.9+.5);fly(.32+k*.12,d,line(a),{spin:6,sz:1.0});hit(.32+k*.12+d,k<n-1);}}
   else if(st==='bolt'){[0,1].forEach(k=>at(.4+k*.18,()=>{const t=hpos(),bs={tex,pos:[t[0]+.1+k*.5,t[1]+1.2,t[2]+.6],w:1.9,h:4.6,rot:0,a:1};E.sprites.push(bs);E.flash.hero=[1,1,.7,.95];E.shake=.6;
@@ -1439,7 +1521,8 @@ function viewGame(){
     <div class="daily"><div class="xprow"><b>🎯 今日目標：答對 ${GOAL} 題</b><span>${Math.min(g.today,GOAL)}/${GOAL}${g.today>=GOAL?' ✓':''}</span></div><div class="gtrack d"><i style="width:${gp}%"></i></div></div>
     <div class="rsel"><div class="xprow"><b>🎁 額外寶箱獎勵</b></div><div class="seg s3">${rtypes.map(r=>`<button data-act="setReward" data-r="${r[0]}" aria-pressed="${g.reward===r[0]}">${r[1]}<small>${r[2]}</small></button>`).join('')}</div></div>
     <div class="btnrow"><button class="btn" data-act="coll">📖 怪物圖鑑</button><button class="btn" data-act="heroes">🦸 更換主角</button><button class="btn" data-act="shop">🛒 道具商店</button></div></section>
-  <section class="mapsec"><div class="sec-h"><h2>選一隻怪物開打</h2></div>${rev?`<div class="mgrid">${rev}</div>`:''}<p class="soft">每週：打完全部課文（2★以上）→ 挑戰精英怪；每兩週：兩位精英都通過 → 挑戰魔王。</p>${cards}</section>`;
+  <section class="mapsec"><div class="sec-h"><h2>選一隻怪物開打</h2></div>${rev?`<div class="mgrid">${rev}</div>`:''}<p class="soft">每週：打完全部課文（2★以上）→ 挑戰精英怪；每兩週：兩位精英都通過 → 挑戰魔王。</p>${cards}</section>
+  <section class="tcard"><button class="btn" data-act="test">🧪 測試工具（家長／老師用：主角動作、音效、怪物圖）</button></section>`;
 }
 function viewReward(){
   const r=B.res,bn=r.bonus;let rv='';
@@ -1508,7 +1591,55 @@ function viewShop(){
   ${note}<div class="shopgrid"><div class="preview"><div class="pvhero">${heroImg()}</div><p class="soft">答對題目、打倒怪物都能賺金幣！<br>目前學會 <b>${n}</b> / ${ALL.length} 字</p><button class="btn" data-act="heroes">🦸 更換主角</button></div>
   <div class="shopright"><section class="cs"><h3>學習道具</h3><div class="gears">${tools}</div></section></div></div></div>`;
 }
+/* ---------- 測試工具 test lab: every hero action, every monster attack/sound, every monster sprite.
+   Uses the real battle stage; never touches progress (no XP, coins, stars, hero choice). ---------- */
+const TL={hid:null,mon:null,auto:null,timers:[]};
+const TL_WORD='magic',TL_SENT='The brave hero saves the happy little town.';
+function tlTimer(ms,f){TL.timers.push(setTimeout(()=>{if(S.view==='test')f();},ms));}
+function tlStop(){TL.timers.forEach(clearTimeout);TL.timers=[];if(TL.auto){clearInterval(TL.auto);TL.auto=null;}}
+function tlSetup(){if(!TL.hid)TL.hid=G().heroId;if(!TL.mon)TL.mon=RMON[0].id;if(ENG.ensure()){try{ENG.setup(TL.mon,heroEq(),TL.hid,false);}catch(e){}}}
+function tlType(){return (MBY[TL.mon]||{}).t||'fire';}
+function tlName(){const h=HEROES.find(x=>x.id===TL.hid)||HEROES[0],m=MBY[TL.mon]||RMON[0];return h.zh+' ('+h.id+') vs '+m.zh+' ('+m.id+' · '+((TYPES.find(t=>t[0]===m.t)||[])[1]||m.t)+')';}
+function viewTest(){
+  if(!TL.hid||!TL.mon)tlSetup();
+  const b=(k,label,extra)=>`<button class="btn tlb" data-act="tl" data-k="${k}" ${extra||''}>${label}</button>`;
+  const SND=[['hit','命中（主角）'],['crit','收尾／大絕招'],['wrong','答錯提示'],['impact','怪物打中'],['impact1','怪物打中（小）'],['hurt','答錯（平面版）'],['win','勝利'],['lose','失敗'],['coin','金幣'],['open','寶箱／升級'],['tap','按鈕']];
+  return `<div class="tlab"><div class="qbar"><button class="x" data-act="goGame" aria-label="回到地圖"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><b class="tlt">🧪 測試工具 <small>不會影響遊戲進度</small></b></div>
+  <section class="stage c3 tstage">${E3.ok?'<div class="c3d"></div>':'<p class="soft">這台裝置不支援 3D 畫面（WebGL），無法測試動畫。</p>'}<div class="tlname" id="tlname">${tlName()}</div></section>
+  <section class="card tsec"><h3>主角動作</h3><div class="tgrid heroes">${HEROES.map(h=>`<button class="tlh${h.id===TL.hid?' on':''}" data-act="tl" data-k="hero" data-id="${h.id}"><img alt="" src="${(HSPR[h.id]||HSPR.h1).u}"><span>${h.zh}</span></button>`).join('')}</div>
+    <div class="trow">${b('attack','⚔️ 攻擊')}${b('hit','💥 受傷')}${b('win','🏆 勝利')}${b('ult','🌟 大絕招')}</div><p class="soft">待機動作會一直播放；攻擊會丟出單字字母，最後收尾一擊。</p></section>
+  <section class="card tsec"><h3>怪物攻擊（12 種屬性，含音效）</h3><div class="trow">${TYPES.map(t=>b('matk',t[2]+' '+t[1],`data-t="${t[0]}"`)).join('')}</div>
+    <div class="trow">${b('die','💀 怪物倒下')}</div></section>
+  <section class="card tsec"><h3>怪物圖（${RMON.length} 隻）</h3><div class="trow">${b('prev','◀ 上一隻')}${b('next','下一隻 ▶')}${b('auto',TL.auto?'⏸ 停止輪播':'▶ 自動輪播')}</div>
+    <p class="soft">點一隻放到場上。格子底色是棋盤格，方便看出去背沒去乾淨（破圖、色邊、破洞）。</p>
+    <div class="tgrid mons">${RMON.map(m=>`<button class="tlm${m.id===TL.mon?' on':''}" data-act="tl" data-k="mon" data-id="${m.id}" title="${m.zh}"><img alt="" src="${RSPR[m.id].u}"><span>${m.id.slice(1)} ${m.zh}</span></button>`).join('')}</div></section>
+  <section class="card tsec"><h3>音效</h3><div class="trow">${SND.map(s=>b('snd',s[1],`data-t="${s[0]}"`)).join('')}</div>
+    <h4>怪物出招音（只有聲音）</h4><div class="trow">${TYPES.map(t=>b('sndm',t[2]+' '+t[1],`data-t="${t[0]}"`)).join('')}</div>
+    <h4>朗讀</h4><div class="trow">${b('say','🔊 單字 '+TL_WORD)}${b('say2','🔊 例句')}</div><p class="soft">聽不到聲音：先確認首頁的「音效」開著，以及裝置沒有靜音。</p></section></div>`;
+}
+function tlAct(k,ds){
+  if(k==='hero'){tlStop();TL.hid=ds.id;tlSetup();render();return;}
+  if(k==='mon'){if(TL.auto){clearInterval(TL.auto);TL.auto=null;}TL.mon=ds.id;tlSetup();render();return;}
+  if(k==='prev'||k==='next'){const i=RMON.findIndex(m=>m.id===TL.mon),n=RMON.length;TL.mon=RMON[(i+(k==='next'?1:n-1))%n].id;tlSetup();render();return;}
+  if(k==='auto'){if(TL.auto){clearInterval(TL.auto);TL.auto=null;render();return;}
+    TL.auto=setInterval(()=>{if(S.view!=='test'){tlStop();return;}const i=RMON.findIndex(m=>m.id===TL.mon);TL.mon=RMON[(i+1)%RMON.length].id;tlSetup();
+      const nm=document.getElementById('tlname');if(nm)nm.textContent=tlName();document.querySelectorAll('.tlm').forEach(e=>e.classList.toggle('on',e.dataset.id===TL.mon));},1400);render();return;}
+  if(k==='snd'){if(ds.t==='impact1')SFX.impact(true);else if(SFX[ds.t])SFX[ds.t]();return;}
+  if(k==='sndm'){SFX.matk(ds.t);return;}
+  if(k==='say'||k==='say2'){try{if(HAS_TTS){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(k==='say'?TL_WORD:TL_SENT);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u);}}catch(e){}return;}
+  // a new button while the previous action is still playing: cut it short and start fresh (ignoring the tap looked broken)
+  if(E3.ok&&!ENG.idle()){tlStop();tlSetup();}
+  if(!E3.ok)return;
+  try{
+    if(k==='attack'){const L=TL_WORD.toUpperCase().split('');L.forEach((ch,i)=>tlTimer(i*380,()=>{SFX.hit();ENG.letter(ch,i);}));tlTimer(L.length*380+200,()=>{ENG.finale(TL_WORD,false);SFX.crit();});}
+    else if(k==='hit'){SFX.wrong();ENG.hurt(projOf(TL.mon),tlType());}
+    else if(k==='matk'){SFX.wrong();ENG.hurt((TYPES.find(t=>t[0]===ds.t)||[])[2]||'💥',ds.t);}
+    else if(k==='ult'){SFX.crit();ENG.ultimate(TL_SENT,TL.hid);}
+    else if(k==='win'||k==='die'){ENG.die(tlType());SFX.win();tlTimer(3200,()=>{tlSetup();});}
+  }catch(e){}
+}
 function afterGameRender(){
+  if(S.view==='test'){if(E3.ok){const sl=app.querySelector('.c3d');if(sl)ENG.mount(sl);}return;}
   if(S.view==='battle'&&B){
     if(E3.ok){const sl=app.querySelector('.c3d');if(sl)ENG.mount(sl);}
     const bar=document.getElementById('mhpbar');

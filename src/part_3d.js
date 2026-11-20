@@ -439,7 +439,7 @@ function update(dt){
   [['mon',m],['hero',h]].forEach(([k,o])=>{const fl=E.flash[k];if(fl&&fl[3]>.3&&fl!==o._lf){o._lf=fl;o.jit=Math.min(1,fl[3]+.2);}o.jit=Math.max(0,(o.jit||0)-dt*3.2);o.jx=(o.jit||0)*Math.sin(t*70)*.16;});
   {const cur=E.tl;E.tl=[];cur.forEach(e=>{if(t>=e.t)e.fn();else E.tl.push(e);});}
   {const cur=E.tw,keep=[];E.tw=[];cur.forEach(w=>{const u=(t-w.t0)/w.dur;if(u<0){keep.push(w);return;}w.fn(cl(u));if(u<1)keep.push(w);});E.tw=keep.concat(E.tw);}
-  E.parts=E.parts.filter(p=>{p.life-=dt;if(p.life<=0)return false;p.vy-=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.rot+=p.vr*dt;return true;});
+  E.parts=E.parts.filter(p=>{p.life-=dt;if(p.life<=0)return false;p.vy-=p.g*dt;if(p.dr){const k=Math.max(0,1-p.dr*dt);p.vx*=k;p.vy*=k;p.vz*=k;}p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.rot+=p.vr*dt;if(p.gs)p.size=Math.max(.02,p.size+p.gs*dt);return true;});   // gs: size change per second, dr: drag
   E.shake=Math.max(0,E.shake-dt*2.2);
   ['mon','hero'].forEach(k=>{const f=E.flash[k];if(f){f[3]=Math.max(0,f[3]-dt*3);if(f[3]<=0)E.flash[k]=null;}});
 }
@@ -474,10 +474,11 @@ function draw(){
   if(E.hero.himg){const o=E.hero,HA=(typeof HANIM!=='undefined')&&HANIM[o.himg];let c=E.imgs['H'+o.himg],S=HSPR[o.himg],fm=null,fm2=null,fa=0;
     if(HA){let pl=o.pl,nm='idle',u=0;if(pl){u=(E.time-pl.t0)/pl.dur;if(u>=1&&pl.n!=='win'){const LL=HA[pl.n];o.pe={f:LL[LL.length-1],t:E.time};o.pl=null;pl=null;}else{nm=pl.n;u=Math.min(u,.999);}}
       // HA.fps (video-made heroes): idle plays at the video's own rate with hard cuts; sheet heroes stretch idle over 6.4 s and cross-fade
-      const L=HA[nm],N=L.length,ph=pl?0:(HA.fps?(E.time*HA.fps)%N:(E.time/6.4%1)*N),ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=L[ix];
-      if(false){if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
+      // HA.pp: idle plays forward then backward (ping-pong) so there is no seam where the video's last frame meets its first
+      const L=HA[nm],N0=L.length,PP=!pl&&HA.pp&&N0>2,N=PP?2*N0-2:N0,at_=j=>L[PP&&j>=N0?2*N0-2-j:j];
+      const ph=pl?0:(HA.fps?(E.time*HA.fps)%N:(E.time/6.4%1)*N),ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=at_(ix);
       // idle: sheet heroes cross-fade in the middle of each (long) frame; video heroes blend linearly between neighbouring frames, which differ very little (smooth, no ghosting)
-      if(!pl){fm2=L[(ix+1)%N];fa=HA.fps?ph-ix:ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
+      if(!pl){fm2=at_((ix+1)%N);fa=HA.fps?ph-ix:ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
       if(fm&&fm.im&&!fm.tex&&fm.im.complete&&fm.im.naturalWidth)fm.tex=mkTex(fm.im);
       // a frame whose image is not decoded yet: keep the last frame shown (falling back to the static portrait looked like a jump)
       if(fm&&!fm.tex&&o.lastFm&&o.lastFm.tex){fm=o.lastFm;fm2=null;}
@@ -500,7 +501,7 @@ function draw(){
   gl.enable(gl.DEPTH_TEST);
   if(E.tex.cglow){const gp=.65+.35*Math.sin(E.time*2.2);[[-4.9,-1.7],[4.9,-1.7]].forEach(p=>sprite(E.tex.cglow,[p[0],4.6,p[1]],1.9*gp+.5,1.9*gp+.5,0,.9,V,Pr));}
   E.sprites.forEach(s=>sprite(s.tex,s.pos,s.w,s.h,s.rot,s.a,V,Pr));
-  E.parts.forEach(p=>sprite(p.tex,[p.x,p.y,p.z],p.size,p.size,p.rot,Math.min(1,p.life/.4),V,Pr));
+  E.parts.forEach(p=>sprite(p.tex,[p.x,p.y,p.z],p.size,p.size,p.rot,Math.min(1,p.life/.4)*(p.al||1),V,Pr));
   gl.depthMask(true);
 }
 const PSG=1;
@@ -946,7 +947,75 @@ function hurt(emoji,type){
     if(!small)heroPlay('hit',.7);
     if(!small)tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});});};
   const line=(arc,wob)=>u=>{const e=ease(u);return[lerp(F[0],T[0],e),lerp(F[1],T[1],e)+arc*Math.sin(PI*u)+(wob?wob*Math.sin(u*PI*4):0),lerp(F[2],T[2],e)];};
-  if(st==='ball'){fly(.35,.5,line(.7),{spin:H.spin||8,sz:1.35,grow:1});hit(.85);}
+  // ---- particle attacks: every element is a moving effect (core glow + trail + impact), not one picture sliding over ----
+  const Rn=Math.random,rnd=s=>(Rn()-.5)*2*s,G=gtex,smoke=G([85,75,85]);
+  const pt=(p,o)=>E.parts.push({x:p[0],y:p[1],z:p[2],vx:o.v?o.v[0]:0,vy:o.v?o.v[1]:0,vz:o.v?o.v[2]:0,g:o.g||0,life:o.life||.4,max:o.life||.4,size:o.size||.3,tex:o.tex||gl,rot:o.rot!=null?o.rot:Rn()*6,vr:o.vr||0,gs:o.gs||0,dr:o.dr||0,al:o.al||1});
+  const spray=(p,n,o)=>{for(let i=0;i<n;i++){const a=Rn()*2*PI,s=(o.spd||2)*(.4+Rn()*.8);
+    pt([p[0]+rnd(o.jit||.12),p[1]+rnd(o.jit||.12),p[2]+rnd(.1)],Object.assign({},o,{v:[Math.cos(a)*s+(o.bx||0),Math.abs(Math.sin(a))*s*(o.upk==null?1:o.upk)+(o.by||0),rnd(s*.3)],size:(o.size||.3)*(.6+Rn()*.8),life:(o.life||.5)*(.6+Rn()*.7)}));}};
+  // projectile: optional glowing core + emoji sprite on path(u); o.trail(p,d,u) runs every frame (d = movement since last frame)
+  const proj=(delay,dur,path,o)=>{const core=o.core?{tex:o.core,pos:F.slice(),w:0,h:0,rot:0,a:0}:null,sp=o.tex===null?null:{tex:o.tex||tex,pos:F.slice(),w:0,h:0,rot:0,a:0};let last=path(0);
+    at(delay,()=>{if(core)E.sprites.push(core);if(sp)E.sprites.push(sp);});
+    tween(dur,u=>{const p=path(u),d=[p[0]-last[0],p[1]-last[1]];last=p;const t=E.time,k=(o.sz||1.1)*(o.grow?.75+.45*u:1)*(1+(o.pulse||0)*Math.sin(t*28));
+      if(core){core.pos=[p[0],p[1],p[2]-.02];core.w=core.h=k*(o.coreK||1.5)*(1+.12*Math.sin(t*40));core.a=o.coreA||.9;}
+      if(sp){sp.pos=p;sp.w=k*(o.wr||1);sp.h=k*(o.hr||1);sp.rot=o.aim&&(d[0]||d[1])?Math.atan2(d[1],d[0])+(o.aim0||0):o.spin?u*o.spin:(o.wob||0)*Math.sin(t*14);sp.a=o.fade?Math.min(1,Math.sin(PI*u)*2.2):1;}
+      if(o.trail)o.trail(p,d,u);},delay);
+    at(delay+dur+.01,()=>{if(core)rm(core);if(sp)rm(sp);});};
+  const boom=(p,cc,n,big)=>{flare(p,big?2.8:1.6,big?.38:.26,G(cc));spray(p,n,{tex:G(cc),spd:big?3.6:2.6,g:3,life:.5,size:big?.34:.24,dr:1.5});};
+  const S0=.35;   // projectiles leave after the monster's wind-up
+  if(type==='fire'){   // fireball: flickering core, embers rising off it, smoke behind, explosion
+    proj(S0,.5,line(.6),{core:G([255,150,40]),coreK:1.7,sz:1.0,grow:1,pulse:.07,wob:.3,trail:(p,d)=>{for(let i=0;i<3;i++)pt([p[0]+rnd(.18),p[1]+rnd(.18),p[2]-.05],{tex:G(i?[255,205,70]:[255,95,30]),v:[-d[0]*10+rnd(.5),.7+Rn()*.9,0],life:.32+Rn()*.2,size:.42+Rn()*.25,gs:-.9});
+      if(Rn()<.5)pt(p,{tex:smoke,v:[rnd(.3),.9,0],life:.7,size:.3,gs:1,al:.45});}});
+    at(.85,()=>{boom(T,[255,150,40],20,1);spray(T,6,{tex:smoke,spd:.8,life:.9,size:.45,gs:1.2,al:.5,upk:1.6});});hit(.85);}
+  else if(type==='ice'){   // three spinning shards with frost mist, each shatters
+    for(let k=0;k<3;k++){const a=.9*((k-1)*.9+.5),d0=.42,s=.32+k*.12;
+      proj(s,d0,line(a),{core:G([175,230,255]),coreK:1.15,sz:.8,spin:14,trail:p=>{pt(p,{tex:G([225,245,255]),v:[rnd(.3),rnd(.3),0],life:.45,size:.22+Rn()*.15,gs:-.25,al:.8});if(Rn()<.35)pt(p,{tex:star,v:[rnd(.5),rnd(.5),0],life:.3,size:.16});}});
+      at(s+d0,()=>{flare(T,1.4,.24,G([190,235,255]));spray(T,10,{tex:G([205,240,255]),spd:2.8,g:7,life:.5,size:.17});});hit(s+d0,k<2);}}
+  else if(type==='elec'){   // two real lightning bolts: zig-zag glow segments that re-crackle, sparks on the ground
+    const strike=(k)=>{const t=hpos(),x=t[0]+.1+k*.45,z=t[2]+.6;let segs=[];
+      const zap=()=>{segs.forEach(rm);segs=[];let px=x+rnd(.7),py=t[1]+5.2;for(let i=1;i<=9;i++){const nx=i<9?x+rnd(.42):x,ny=t[1]+5.2-(5.5*i/9),dx=nx-px,dy=ny-py,len=Math.hypot(dx,dy),rot=Math.atan2(-dx,dy);
+        [[G([255,235,110]),.42],[G([255,255,255]),.16]].forEach(([tx,w])=>{const s={tex:tx,pos:[(px+nx)/2,(py+ny)/2,z],w,h:len*.62,rot,a:1};E.sprites.push(s);segs.push(s);});px=nx;py=ny;}};
+      zap();[.06,.12,.18].forEach(dt=>at(dt,zap));at(.26,()=>{segs.forEach(rm);segs=[];});
+      E.flash.hero=[1,1,.7,.95];E.shake=.6;spray([x,t[1]-.3,z],16,{tex:G([255,240,120]),spd:4,g:6,life:.35,size:.14});flare([x,t[1]+.2,z],1.6,.2,G([255,250,180]));};
+    [0,1].forEach(k=>{at(.4+k*.18,()=>strike(k));hit(.4+k*.18,k===0);});}
+  else if(type==='poison'){   // bubbling skull blob on a high arc, dripping; splash + a cloud that lingers
+    proj(S0,.65,line(2.6),{core:G([150,255,110]),coreK:1.35,sz:1.15,wob:.3,pulse:.08,trail:p=>{if(Rn()<.7)pt(p,{tex:G([140,240,90]),v:[rnd(.3),-1-Rn(),0],g:2.5,life:.5,size:.16+Rn()*.1});if(Rn()<.45)pt(p,{tex:G([185,120,255]),v:[rnd(.2),.3,0],life:.55,size:.2,gs:.6,al:.6});}});
+    [-1,1].forEach(j=>proj(S0+.07,.6,u=>{const q=line(2.1)(u);q[2]+=j*.35;q[1]+=.15*Math.sin(u*PI*6);return q;},{tex:null,core:G([150,255,110]),coreK:.6,sz:.6}));
+    at(1.0,()=>{boom(T,[140,240,90],18,1);for(let i=0;i<9;i++)pt([T[0]+rnd(.7),T[1]-.4+rnd(.4),T[2]],{tex:G([120,220,80]),v:[rnd(.3),.25,0],life:1.3,size:.5,gs:.55,al:.35});});hit(1.0);}
+  else if(type==='forest'){   // a gust of leaves that flutter (sway + spin) in a stream
+    for(let k=0;k<6;k++){proj(.3+k*.07,.55,u=>{const q=line(0,.5)(u);q[1]+=.28*Math.sin(u*PI*3+k);q[2]+=.4*Math.sin(u*PI*2+k);return q;},{sz:.78,spin:7+k,trail:p=>{if(Rn()<.5)pt(p,{tex:G([150,235,110]),v:[rnd(.4),rnd(.3),0],life:.4,size:.15});}});
+      hit(.85+k*.07,k<5);}
+    at(1.2,()=>spray(T,12,{tex:G([140,230,100]),spd:2.2,g:2,life:.6,size:.2}));}
+  else if(type==='sea'){   // a real wave: water thrown up along a moving front that rises, curls and crashes onto the hero
+    const wd=.62,X0=F[0],X1=T[0]+.2,base=.35,hgt=u=>.35+1.7*Math.sin(PI*Math.min(1,u*1.08)),sp=(X1-X0)/wd;
+    tween(wd,u=>{const x=lerp(X0,X1,ease(u)),hh=hgt(u);
+      for(let i=0;i<7;i++){const y=base+Rn()*hh;pt([x+rnd(.28),y,F[2]+rnd(.35)],{tex:Rn()<.72?G([60,150,255]):G([200,235,255]),v:[sp*.35+rnd(.6),1+Rn()*1.7,0],g:6.5,life:.45+Rn()*.25,size:.28+Rn()*.3,gs:-.15});}
+      pt([x+rnd(.15),base+hh,F[2]],{tex:G([235,250,255]),v:[sp*.55,.6,0],g:3,life:.35,size:.42});
+      if(Rn()<.5)pt([x-rnd(.5),base,F[2]+rnd(.3)],{tex:G([120,190,255]),v:[sp*.1,.2,0],life:.6,size:.5,gs:.4,al:.5});},S0);
+    proj(S0,wd,u=>[lerp(X0,X1,ease(u)),base+hgt(u)*.85+.2,F[2]+.3],{core:G([90,180,255]),coreK:1.4,coreA:.7,sz:1.25,grow:1,wob:.18});
+    at(S0+wd,()=>{boom(T,[90,180,255],10,1);spray(T,28,{tex:G([70,165,255]),spd:3.6,g:8,life:.6,size:.3,upk:1.5});spray(T,10,{tex:G([230,245,255]),spd:2.5,g:6,life:.5,size:.22,upk:1.6});});hit(S0+wd);}
+  else if(type==='desert'){   // three tumbling rocks with dust trails; dust cloud and pebbles on impact
+    for(let k=0;k<3;k++){const a=1.8*((k-1)*.9+.5),d0=.42,s=.32+k*.12;
+      proj(s,d0,line(a),{sz:1.0,spin:9,trail:p=>{pt(p,{tex:G([205,175,125]),v:[rnd(.2),.2,0],life:.55,size:.28,gs:.8,al:.5});}});
+      at(s+d0,()=>{spray(T,7,{tex:G([200,170,120]),spd:1,life:.8,size:.45,gs:1,al:.5,upk:1.4});spray(T,6,{tex,spd:2.4,g:9,life:.5,size:.14});});hit(s+d0,k<2);}}
+  else if(type==='sky'){   // a spinning tornado with wind streaks orbiting it
+    proj(S0,.45,line(0,.15),{sz:1.4,wr:1.15,wob:.35,trail:p=>{for(let i=0;i<4;i++){const a=E.time*18+i*PI/2;pt([p[0]+Math.cos(a)*.35,p[1]-.5+i*.3,p[2]+Math.sin(a)*.6],{tex:G([225,240,255]),v:[-Math.sin(a)*2.2,.7,Math.cos(a)*1.5],life:.3,size:.18,al:.8});}}});
+    at(.8,()=>{boom(T,[210,230,255],14,1);});hit(.8);}
+  else if(type==='ghost'){   // a ghost that wobbles over, fading in and out, leaving purple wisps
+    proj(.4,.65,u=>{const q=line(.25,.5)(u);q[2]+=.3*Math.sin(u*PI*2);return q;},{sz:1.55,fade:1,wob:.25,core:G([190,160,255]),coreK:1.2,coreA:.5,trail:p=>{pt([p[0]+rnd(.3),p[1]+rnd(.3),p[2]-.1],{tex:G([190,160,255]),v:[rnd(.2),.4,0],life:.7,size:.3,gs:.7,al:.45});}});
+    at(1.05,()=>{E.flash.hero=[.7,.6,1,.9];boom(T,[190,160,255],16,1);});hit(1.05);}
+  else if(type==='mech'){   // three missiles that point where they fly, flame + smoke exhaust, each explodes
+    for(let k=0;k<3;k++){const a=.9*((k-1)*.9+.5),d0=.32,s=.32+k*.12;
+      proj(s,d0,line(a),{sz:.85,aim:1,aim0:-PI/4,trail:(p,d)=>{const b=[p[0]-d[0]*1.5,p[1]-d[1]*1.5,p[2]];pt(b,{tex:G([255,190,80]),v:[rnd(.2),rnd(.2),0],life:.16,size:.3,gs:-1.2});pt(b,{tex:smoke,v:[rnd(.2),.35,0],life:.6,size:.22,gs:.9,al:.45});}});
+      at(s+d0,()=>{boom(T,[255,170,60],10,k===2);spray(T,4,{tex:smoke,spd:.6,life:.8,size:.4,gs:1,al:.5,upk:1.5});});hit(s+d0,k<2);}}
+  else if(type==='skel'){   // bones thrown in a spinning arc, a puff of bone dust on impact
+    [0,1].forEach(k=>{const s=S0+k*.14,d0=.48;proj(s,d0,line(.9+k*.5),{sz:1.0,spin:18,trail:p=>{if(Rn()<.4)pt(p,{tex:G([235,225,205]),v:[rnd(.2),rnd(.2),0],life:.3,size:.14});}});
+      at(s+d0,()=>{spray(T,8,{tex:G([240,230,210]),spd:2.5,g:7,life:.45,size:.16});flare(T,1.3,.22,G([240,230,210]));});hit(s+d0,k===0);});}
+  else if(type==='dragon'){   // dragon breath: a widening cone of fire, yellow core to red edges, scorching the hero
+    tween(.55,u=>{for(let i=0;i<7;i++){const r=Rn(),d=.3+Rn()*.1,cx=(T[0]-F[0])/d,cy=(T[1]-F[1]-.2)/d;
+      pt([F[0],F[1]+.25,F[2]],{tex:G(r<.35?[255,230,120]:r<.75?[255,140,40]:[220,60,30]),v:[cx*(.85+.3*Rn()),cy+rnd(1.6),rnd(.8)],life:d,size:.25+.3*Rn(),gs:1.6,vr:3});}
+      if(Rn()<.3)pt([F[0],F[1]+.3,F[2]],{tex,v:[(T[0]-F[0])/.35,(T[1]-F[1])/.35+rnd(.8),0],life:.35,size:.5,gs:.8});},.35);
+    at(.9,()=>{boom(T,[255,120,40],22,1);spray(T,6,{tex:smoke,spd:.8,life:.9,size:.45,gs:1.2,al:.5,upk:1.6});});hit(.7,true);hit(.9);}
+  else if(st==='ball'){fly(.35,.5,line(.7),{spin:H.spin||8,sz:1.35,grow:1});hit(.85);}
   else if(st==='dash'){fly(.35,.32,line(0),{sz:1.5,wr:1.4,spin:-10});hit(.67);}
   else if(st==='volley'){const n=H.n||3,d=H.fast?.3:.42;for(let k=0;k<n;k++){const a=(H.arc||.9)*((k-(n-1)/2)*.9+.5);fly(.32+k*.12,d,line(a),{spin:6,sz:1.0});hit(.32+k*.12+d,k<n-1);}}
   else if(st==='bolt'){[0,1].forEach(k=>at(.4+k*.18,()=>{const t=hpos(),bs={tex,pos:[t[0]+.1+k*.5,t[1]+1.2,t[2]+.6],w:1.9,h:4.6,rot:0,a:1};E.sprites.push(bs);E.flash.hero=[1,1,.7,.95];E.shake=.6;

@@ -1,0 +1,9 @@
+{
+  "_note": "Legendary monsters (傳奇): harder to get than bosses; how players earn them is not decided yet. Stored as LMON/LSPR in src/part_roster.js, not used in the game yet. legend-1.jpg is a 2x2 grid (cell = row*2+col).",
+  "monsters": [
+    {"sheet": "legend-1.jpg", "cell": 0, "id": "L01", "zh": "黃金史萊姆皇", "en": "Golden Slime Emperor", "t": "forest"},
+    {"sheet": "legend-1.jpg", "cell": 1, "id": "L02", "zh": "水晶冰霜龍",   "en": "Crystal Frost Dragon", "t": "ice"},
+    {"sheet": "legend-1.jpg", "cell": 2, "id": "L03", "zh": "暗黑鳳凰",     "en": "Shadow Phoenix",       "t": "fire"},
+    {"sheet": "legend-1.jpg", "cell": 3, "id": "L04", "zh": "星空龍",       "en": "Cosmic Dragon",        "t": "dragon"}
+  ]
+}
