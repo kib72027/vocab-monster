@@ -352,7 +352,7 @@ function setup(monId,eq,hid,big){
   const m=(typeof RSPR!=='undefined'&&RSPR[monId])?{root:Gp(),sc:1}:monModel(monId),h=heroModel(eq);
   const SP=SPR(monId);if(SP&&!E.imgs[monId]){const im=new Image();im.src=SP.u;E.imgs[monId]={im,tex:null};}
   const mon={img:SP?monId:null,root:SP?Gp():m.root,base:[E.big?3.4:3.0,0,.1],ry:-.8,sc:m.sc,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},id:monId};
-  const HA0=(typeof HANIM!=='undefined')&&hid&&HANIM[hid];if(HA0&&!HA0._ld){HA0._ld=1;['idle','attack','hit','win'].forEach(k=>HA0[k].forEach(f=>{const im=new Image();im.src=f.u;f.im=im;f.tex=null;}));}
+  const HA0=(typeof HANIM!=='undefined')&&hid&&HANIM[hid];if(HA0&&!HA0._ld){HA0._ld=1;['idle','attack','hit','win'].forEach(k=>HA0[k].forEach(f=>{const im=new Image();im.src=f.u;f.im=im;f.tex=null;if(im.decode)im.decode().catch(()=>{});}));}
   const HS=(typeof HSPR!=='undefined')&&hid&&HSPR[hid];if(HS&&!E.imgs['H'+hid]){const im=new Image();im.src=HS.u;E.imgs['H'+hid]={im,tex:null};}
   const hero={himg:HS?hid:null,root:HS?Gp():h.root,base:[-2.75,0,.4],ry:.8,sc:1,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},armR:HS?{r:[0,0,0]}:h.armR,hand:h.hand,head:h.head};
   E.mon=mon;E.hero=hero;E.parts=[];E.tw=[];E.tl=[];E.sprites=[];E.flash={mon:null,hero:null};E.shake=0;
@@ -473,14 +473,20 @@ function draw(){
   gl.disable(gl.DEPTH_TEST);
   if(E.hero.himg){const o=E.hero,HA=(typeof HANIM!=='undefined')&&HANIM[o.himg];let c=E.imgs['H'+o.himg],S=HSPR[o.himg],fm=null,fm2=null,fa=0;
     if(HA){let pl=o.pl,nm='idle',u=0;if(pl){u=(E.time-pl.t0)/pl.dur;if(u>=1&&pl.n!=='win'){const LL=HA[pl.n];o.pe={f:LL[LL.length-1],t:E.time};o.pl=null;pl=null;}else{nm=pl.n;u=Math.min(u,.999);}}
-      const L=HA[nm],N=L.length,ph=pl?0:(E.time/6.4%1)*N,ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=L[ix];
+      // HA.fps (video-made heroes): idle plays at the video's own rate with hard cuts; sheet heroes stretch idle over 6.4 s and cross-fade
+      const L=HA[nm],N=L.length,ph=pl?0:(HA.fps?(E.time*HA.fps)%N:(E.time/6.4%1)*N),ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=L[ix];
       if(false){if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
-      if(!pl){fm2=L[(ix+1)%N];fa=ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
-      if(fm&&fm.im&&!fm.tex&&fm.im.complete&&fm.im.naturalWidth)fm.tex=mkTex(fm.im);}
+      // idle: sheet heroes cross-fade in the middle of each (long) frame; video heroes blend linearly between neighbouring frames, which differ very little (smooth, no ghosting)
+      if(!pl){fm2=L[(ix+1)%N];fa=HA.fps?ph-ix:ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
+      if(fm&&fm.im&&!fm.tex&&fm.im.complete&&fm.im.naturalWidth)fm.tex=mkTex(fm.im);
+      // a frame whose image is not decoded yet: keep the last frame shown (falling back to the static portrait looked like a jump)
+      if(fm&&!fm.tex&&o.lastFm&&o.lastFm.tex){fm=o.lastFm;fm2=null;}
+      if(fm&&fm.tex)o.lastFm=fm;}
     if(fm&&fm.tex){c=fm;S=fm;o.cur=(fm2&&fa>.5&&fm2.tex)?fm2:fm;}
     else if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
-    if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=(fm&&fm.tex)?HA.k:Math.min(3.4,3.7/asp);
-      const br=(fm&&fm.tex&&!o.pl&&HA.idle.length<3)?.014*Math.sin(E.time*2.3):0;const h=h0*k*sq*(1+br),w=h0*asp*k*(1+(1-sq)*.6)*(1-br*.4),rot=-f.rz*.6-(o.idz||0);
+    // video-made heroes (HA.fps) already move their body in the frames: no extra tilt, squash or idle sway (looked like the whole picture rotating); lunge/jump offsets stay
+    if(c&&c.tex){const vid=!!(fm&&fm.tex&&HA.fps),f=o.off,sq=vid?1:f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=(fm&&fm.tex)?HA.k:Math.min(3.4,3.7/asp);
+      const br=(fm&&fm.tex&&!o.pl&&HA.idle.length<3)?.014*Math.sin(E.time*2.3):0;const h=h0*k*sq*(1+br),w=h0*asp*k*(1+(1-sq)*.6)*(1-br*.4),rot=vid?0:-f.rz*.6-(o.idz||0);
       const hp=[o.base[0]+f.x+(o.jx||0)+PSG*Math.sin(rot)*h/2,o.base[1]+f.y+Math.cos(rot)*h/2+.02,o.base[2]+.3];
       sprite(c.tex,hp,w/2,h/2,rot,1,V,Pr,E.flash.hero);
       if(fm2&&fm2.tex&&fa>.01)sprite(fm2.tex,hp,w/2,h/2,rot,fa,V,Pr,E.flash.hero);

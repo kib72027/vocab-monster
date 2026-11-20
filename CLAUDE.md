@@ -9,6 +9,7 @@ Kid-friendly English vocabulary battle game (Reading Plus workbook, Weeks 1–18
 ```
 python3 build.py                 # regenerate index.html from src/ (only needs Python 3)
 python3 tools/mkhsheet.py <id>   # cut assets/heroes/<id>/source/*.jpg into frames + src/part_hanim_<id>.js, then rebuild
+python3 tools/mkhvideo.py h7       # hero frames from videos in assets/video/<id>/ (frames.json picks the frames); h7 uses this, don't run mkhsheet on h7
 python3 tools/nmcut2.py          # re-cut assets/monsters/monster-sheet-1..5.jpg into RSPR (add --dry to only write assets/monsters/cut/)
 node tools/merge_vocab.js        # merge data/vocab/*_out*.json into src/part_data.js
 ```
