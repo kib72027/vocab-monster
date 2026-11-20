@@ -45,7 +45,7 @@ def main(hid):
             pic=rgba.copy();pic[...,3]=np.where(mk,pic[...,3],0)
             ys,xs=np.where(mk&(pic[...,3]>20));bb=(xs.min(),ys.min(),xs.max()+1,ys.max()+1)
             # canvas coords: x rel. to cell centre, y rel. to cell top
-            fr.append([pic,ox,oy,bb,row,xs.mean()])
+            lo=ys>=bb[3]-0.12*(bb[3]-bb[1]);fr.append([pic,ox,oy,bb,row,xs[lo].mean()])  # feet-x: boots stay planted, so alignment on them keeps the body steady
         # rows are drawn at different heights by the AI: align each row's feet to the sheet's lowest feet;
         # idle is a standing loop, so align every frame's feet and body centre to frame 0
         mb=max(f[3][3]-f[2] for f in fr)
