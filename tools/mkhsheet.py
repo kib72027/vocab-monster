@@ -69,14 +69,21 @@ def main(hid):
     top=max(0,int(ext[0])-12);bot=int(ext[1])+12;CWs=1000;CH=bot-top
     data={};portrait=None
     for act,fr in raw.items():
-        out=[]
+        out=[];sm=[]
         for k,(pic,ox,oy,bb,_r,_c) in enumerate(fr):
             cv=Image.new('RGBA',(CWs,CH),(0,0,0,0));reg=Image.fromarray(pic).crop(bb)
             cv.alpha_composite(reg,(int(round(bb[0]-ox+CWs//2)),int(round(bb[1]-oy-top))))
             cv=cv.resize((int(CWs*SC),int(CH*SC)),Image.LANCZOS);cv.save(f'{base}/frames/{act}_{k}.png')
-            out.append({'u':webp(cv),'w':cv.width,'h':cv.height})
+            out.append({'u':webp(cv),'w':cv.width,'h':cv.height});sm.append(np.asarray(cv.resize((125,int(125*cv.height/cv.width)))).astype(float))
             if act=='idle' and k==0:
                 bbx=cv.getbbox();portrait=cv.crop((bbx[0]-4,bbx[1]-4,bbx[2]+4,bbx[3]+4));ch=bbx[3]-bbx[1]
+        if act=='idle':
+            # AI idle sheets often turn the head or change pose between frames; cross-fading those looks choppy.
+            # Keep only frames that look like frame 0, chained into a loop; if none do, use frame 0 alone (engine adds breathing).
+            d=lambda i,j:np.abs(sm[i]-sm[j]).mean();keep=[0];rest=[i for i in range(1,len(out)) if d(0,i)<3.6]
+            while rest:
+                j=min(rest,key=lambda i:d(keep[-1],i));keep.append(j);rest.remove(j)
+            out=[out[i] for i in keep];print(' idle loop frames',keep)
         data[act]=out
     portrait.save(f'{base}/frames/portrait.png')
     kk=round(3.4*(CH*SC)/ch/1.12,2)
