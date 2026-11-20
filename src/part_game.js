@@ -620,7 +620,7 @@ function draw(){
   if(E.hero.himg){const o=E.hero,HA=(typeof HANIM!=='undefined')&&HANIM[o.himg];let c=E.imgs['H'+o.himg],S=HSPR[o.himg],fm=null,fm2=null,fa=0;
     if(HA){let pl=o.pl,nm='idle',u=0;if(pl){u=(E.time-pl.t0)/pl.dur;if(u>=1&&pl.n!=='win'){const LL=HA[pl.n];o.pe={f:LL[LL.length-1],t:E.time};o.pl=null;pl=null;}else{nm=pl.n;u=Math.min(u,.999);}}
       const L=HA[nm],N=L.length,ph=pl?0:(E.time/6.4%1)*N,ix=pl?Math.min(N-1,Math.floor(u*N)):Math.floor(ph);fm=L[ix];
-      if(pl&&ix<N-1){fm2=L[ix+1];fa=ease(u*N-ix);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
+      if(false){if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
       if(!pl){fm2=L[(ix+1)%N];fa=ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
       if(fm&&fm.im&&!fm.tex&&fm.im.complete&&fm.im.naturalWidth)fm.tex=mkTex(fm.im);}
     if(fm&&fm.tex){c=fm;S=fm;o.cur=(fm2&&fa>.5&&fm2.tex)?fm2:fm;}
@@ -630,8 +630,8 @@ function draw(){
       const hp=[o.base[0]+f.x+(o.jx||0)+PSG*Math.sin(rot)*h/2,o.base[1]+f.y+Math.cos(rot)*h/2+.02,o.base[2]+.3];
       sprite(c.tex,hp,w/2,h/2,rot,1,V,Pr,E.flash.hero);
       if(fm2&&fm2.tex&&fa>.01)sprite(fm2.tex,hp,w/2,h/2,rot,fa,V,Pr,E.flash.hero);
-      if(o.ps&&o.pl){const q=(E.time-o.ps.t)/.16;if(q<1&&o.ps.f.tex&&o.ps.f!==c)sprite(o.ps.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else if(q>=1)o.ps=null;}
-      if(o.pe&&!o.pl){const q=(E.time-o.pe.t)/.25;if(q<1&&o.pe.f.tex)sprite(o.pe.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else o.pe=null;}}}
+      if(false){const q=(E.time-o.ps.t)/.16;if(q<1&&o.ps.f.tex&&o.ps.f!==c)sprite(o.ps.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else if(q>=1)o.ps=null;}
+      if(false){const q=(E.time-o.pe.t)/.25;if(q<1&&o.pe.f.tex)sprite(o.pe.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else o.pe=null;}}}
   if(E.mon.img){const o=E.mon,c=E.imgs[o.img],S=SPR(o.img);
     if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
     if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=Math.min(E.big?4.3:3.5,3.9/asp);
