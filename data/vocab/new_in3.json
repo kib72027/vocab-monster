@@ -39,7 +39,7 @@
 "defs": [
 "Word meaning \"if not\"",
 "Used to say something happens only if another thing does not",
-"Except in the case that something happens"
+"Except if something happens"
 ],
 "exs": [
 "We will go camping unless it rains.",
@@ -598,7 +598,7 @@
 "pos": "v",
 "defs": [
 "To say you are sure something will happen",
-"To promise a prize that you will win or be right",
+"To risk something on what you think will happen",
 "To feel very sure about a guess"
 ],
 "exs": [
@@ -923,7 +923,7 @@
 ],
 "exs": [
 "The white powder spilled on the table.",
-"Mom put chocolate powder in the milk.",
+"Mom put cocoa powder in the milk.",
 "The baby powder smelled sweet."
 ]
 },
@@ -1109,7 +1109,7 @@
 "zh": "大自然",
 "pos": "n",
 "defs": [
-"Plants, animals, and everything outdoors not made by people",
+"Plants, animals, and the natural world around us",
 "The trees, rivers, and wild places around us",
 "The wild world of forests and mountains"
 ],

@@ -37,7 +37,7 @@
 "zh": "裝置；機器",
 "pos": "n",
 "defs": [
-"a small machine made to do a special job",
+"A machine made to do a special job",
 "a tool that uses electricity, like a phone",
 "something people invent to help with work"
 ],
@@ -69,7 +69,7 @@
 "zh": "金屬",
 "pos": "n",
 "defs": [
-"a hard, shiny material like iron or steel",
+"A material such as iron or steel",
 "the strong stuff that robots are often made of",
 "something that feels cold and can be heated and bent"
 ],
@@ -85,9 +85,9 @@
 "zh": "分鐘",
 "pos": "n",
 "defs": [
-"short parts of time, sixty make an hour",
+"A unit of time; sixty make one hour",
 "units used to measure a short time",
-"how long it takes to do a quick job"
+"A unit for measuring how long something takes"
 ],
 "exs": [
 "The bus will come in five minutes.",
@@ -134,7 +134,7 @@
 "pos": "n",
 "defs": [
 "a machine that can move and do jobs by itself",
-"a metal helper controlled by a computer",
+"A machine that follows computer instructions to do a job",
 "a machine that looks and acts a bit like a person"
 ],
 "exs": [
@@ -151,7 +151,7 @@
 "defs": [
 "having a shiny gray-white color like a coin",
 "the color of a shiny spoon",
-"made of a bright, light-colored metal"
+"Made of silver, a shiny gray-white metal"
 ],
 "exs": [
 "The robot had a silver face.",
@@ -183,7 +183,7 @@
 "defs": [
 "to walk around slowly with no plan",
 "to go from place to place without a goal",
-"to move away from where you should be"
+"To walk away from a place without a clear plan"
 ],
 "exs": [
 "Mosh likes to wander around the garden.",
@@ -231,7 +231,7 @@
 "defs": [
 "very happy and full of energy about something",
 "eager and thrilled because something fun will happen",
-"having a lot of joy and can't wait"
+"Feeling very happy and eager about something"
 ],
 "exs": [
 "Carlos was excited about the trip.",
@@ -247,7 +247,7 @@
 "defs": [
 "to take something quickly with your hand",
 "to hold onto something suddenly",
-"to snatch up something in a hurry"
+"To pick something up quickly with your hand"
 ],
 "exs": [
 "Grab your coat and let's go!",
@@ -262,8 +262,8 @@
 "pos": "v",
 "defs": [
 "complained in a low, unhappy voice",
-"said something in a cross way under your breath",
-"spoke in a not-so-happy tone"
+"Said something quietly in an unhappy way",
+"Spoke in a low voice to show he was unhappy"
 ],
 "exs": [
 "Carlos grumbled about his homework.",
@@ -279,7 +279,7 @@
 "defs": [
 "a part that is cut or broken from something",
 "one bit of a larger thing",
-"a single part such as of a puzzle or cake"
+"One part of something, like a puzzle piece or a piece of cake"
 ],
 "exs": [
 "I ate a piece of cake.",
@@ -326,8 +326,8 @@
 "pos": "n",
 "defs": [
 "a short road that leads from the street to a house",
-"the place beside a house where cars park",
-"a paved path next to the garage"
+"A path beside a house where cars can drive",
+"A path leading from a house to the street"
 ],
 "exs": [
 "Dad parked the car in the driveway.",
@@ -342,7 +342,7 @@
 "pos": "adj",
 "defs": [
 "Very worried and rushing about because you are scared",
-"Wild with fear or worry, unable to stay calm",
+"So worried or scared that you cannot stay calm",
 "Hurrying around in a nervous, upset way"
 ],
 "exs": [
@@ -359,7 +359,7 @@
 "defs": [
 "To stop moving or stop what you are doing",
 "To come to a stop right now",
-"A word you shout so someone will stand still"
+"A command that means “Stop!”"
 ],
 "exs": [
 "The robot had to halt when its battery ran out.",
@@ -375,7 +375,7 @@
 "defs": [
 "A light inside a case that you can carry by a handle",
 "A lamp with a glass cover, used when camping",
-"A glowing paper light often hung up at festivals"
+"A light made of paper, often used at festivals"
 ],
 "exs": [
 "Carlos hung a lantern outside the tent at night.",
@@ -407,7 +407,7 @@
 "defs": [
 "A slippery liquid used to help machine parts move smoothly",
 "A thick liquid used for cooking or for engines",
-"To put this slippery liquid on a squeaky part"
+"A liquid used to fry food in a pan"
 ],
 "exs": [
 "The robot's arm needed a drop of oil.",
@@ -470,8 +470,8 @@
 "pos": "v",
 "defs": [
 "To take something away from a place",
-"To lift something off and put it somewhere else",
-"To take off or get rid of something"
+"To take something off or move it away",
+"To get rid of something you do not want"
 ],
 "exs": [
 "Please remove your muddy shoes at the door.",
@@ -503,12 +503,12 @@
 "defs": [
 "A set of questions that shows how much you know",
 "A way to check if something works well",
-"To try out something to see how it works"
+"A way to try something and see if it works"
 ],
 "exs": [
 "We have a spelling test on Friday.",
 "Carlos ran a test to see if the robot could walk.",
-"The doctor did a test on my eyes."
+"The doctor gave me an eye test."
 ]
 },
 {
@@ -519,7 +519,7 @@
 "defs": [
 "A thin, bendy metal thread that carries electricity",
 "A long metal strand used to connect machines",
-"A thin metal string that you can bend and twist"
+"A thin metal line that can be bent"
 ],
 "exs": [
 "Carlos used a wire to join the robot's parts.",
@@ -535,7 +535,7 @@
 "defs": [
 "To think that something is true",
 "To feel sure that someone is telling the truth",
-"To have faith that something is real"
+"To think that someone or something is real or true"
 ],
 "exs": [
 "I believe Mosh can learn a new trick.",
@@ -587,7 +587,7 @@
 ],
 "exs": [
 "The robot demonstrated how to sweep the floor.",
-"Our teacher demonstrated the science trick.",
+"Our teacher demonstrated the science experiment.",
 "Carlos demonstrated his new skateboard move."
 ]
 },
@@ -614,7 +614,7 @@
 "pos": "v",
 "defs": [
 "To come down to the ground after flying",
-"To touch down on the earth or water",
+"To come down onto the ground or water",
 "To come down safely from the sky"
 ],
 "exs": [
@@ -629,9 +629,9 @@
 "zh": "最幸運的",
 "pos": "adj",
 "defs": [
-"Having the most good things happen by chance",
+"Having the best things happen to you by chance",
 "More fortunate than anyone else",
-"Having better good fortune than all the others"
+"Having more good things happen than anyone else"
 ],
 "exs": [
 "Carlos felt like the luckiest boy in school.",
@@ -647,12 +647,12 @@
 "defs": [
 "To make liquid flow out of a container",
 "To tip a jug so water runs into a glass",
-"To make rain fall heavily"
+"For rain to fall very heavily"
 ],
 "exs": [
 "Carlos will pour milk into the bowl.",
 "Please pour some juice for your sister.",
-"I watched the rain pour from the dark clouds."
+"Rain can pour down during a storm."
 ]
 },
 {
@@ -661,7 +661,7 @@
 "zh": "塞滿的；吃飽的",
 "pos": "adj",
 "defs": [
-"Filled up very full with something",
+"Filled until there is little or no room left",
 "Packed tightly so nothing else fits",
 "Having eaten so much that you cannot eat more"
 ],
@@ -678,7 +678,7 @@
 "pos": "n",
 "defs": [
 "A small bin in a room for throwing away paper",
-"A container where you put rubbish",
+"A container where you put trash",
 "A basket by the desk for things you do not need"
 ],
 "exs": [
@@ -709,9 +709,9 @@
 "zh": "感覺；情感",
 "pos": "n",
 "defs": [
-"The happy, sad or angry things you feel inside",
+"Things you feel, such as happiness, sadness, or anger",
 "What you feel in your heart",
-"Emotions that tell how you are doing"
+"Feelings such as joy, fear, or anger"
 ],
 "exs": [
 "Carlos did not want to hurt his friend's feelings.",
@@ -742,7 +742,7 @@
 "pos": "v",
 "defs": [
 "To throw or spread things in many directions",
-"To make things fly apart all over",
+"To spread things over a wide area",
 "To run away in different directions"
 ],
 "exs": [
@@ -773,7 +773,7 @@
 "zh": "低聲說",
 "pos": "v",
 "defs": [
-"Spoke very softly so only one person could hear",
+"Spoke in a very soft voice",
 "Said something in a quiet voice",
 "Talked in a hush so others would not hear"
 ],
@@ -790,8 +790,8 @@
 "pos": "n",
 "defs": [
 "A quick closing and opening of one eye as a signal",
-"A tiny blink that shares a secret",
-"To close one eye quickly to show a joke"
+"A quick close of one eye to share a secret",
+"A quick close of one eye as a signal"
 ],
 "exs": [
 "Dad gave me a wink when he told the joke.",
@@ -838,7 +838,7 @@
 "pos": "v",
 "defs": [
 "To say an answer when you are not sure",
-"To try to give the right answer without knowing",
+"To try to answer without knowing for sure",
 "To think something might be true"
 ],
 "exs": [
@@ -854,7 +854,7 @@
 "pos": "adv",
 "defs": [
 "Done on purpose and not by accident",
-"Meant to happen, not a mistake",
+"Done on purpose, not by mistake",
 "Done with a plan in mind"
 ],
 "exs": [
@@ -886,7 +886,7 @@
 "pos": "v",
 "defs": [
 "To move your head up and down to say yes",
-"To bow your head quickly to show you agree",
+"To move your head to show you agree",
 "To dip your head as a hello"
 ],
 "exs": [
@@ -918,13 +918,13 @@
 "pos": "v",
 "defs": [
 "To make someone jump from sudden surprise",
-"To give someone a quick little fright",
+"To surprise someone suddenly and make them jump",
 "To surprise someone so they flinch"
 ],
 "exs": [
 "A loud bang can startle the sleeping cat.",
 "I didn't mean to startle you.",
-"The sudden thunder did startle Carlos."
+"Thunder can startle Carlos when he is asleep."
 ]
 },
 {
@@ -950,8 +950,8 @@
 "pos": "adv",
 "defs": [
 "In a way that shows you are very mad",
-"With a cross, upset voice or face",
-"In a way that shows you feel furious"
+"With an angry voice or face",
+"In a way that shows you are very mad"
 ],
 "exs": [
 "Carlos stomped angrily into his room.",
@@ -972,7 +972,7 @@
 "exs": [
 "This toy does not belong to me.",
 "Where do these shoes belong?",
-"Mosh feels he can belong in our family."
+"Mosh wants to belong to our family."
 ]
 },
 {
@@ -983,7 +983,7 @@
 "defs": [
 "The edge of the street where the sidewalk begins",
 "The stone edge along a road",
-"The place by the road where you put trash cans"
+"The raised edge between a road and a sidewalk"
 ],
 "exs": [
 "Carlos put the trash can by the curb.",
@@ -1029,13 +1029,13 @@
 "zh": "過錯；責任",
 "pos": "n",
 "defs": [
-"The reason something bad happened, who is to blame",
+"The cause of a problem or the person responsible",
 "A mistake that someone has made",
 "What makes someone responsible for a problem"
 ],
 "exs": [
 "It was not Mosh's fault that the vase broke.",
-"Carlos said, \"It's my fault, I'm sorry.\"",
+"Carlos said, “It’s my fault. I’m sorry.”",
 "Whose fault is the mess?"
 ]
 },
@@ -1093,9 +1093,9 @@
 "zh": "女襯衫",
 "pos": "n",
 "defs": [
-"Light shirts that girls and women wear",
-"Loose tops with buttons, usually for ladies",
-"Pretty shirts that hang in a closet"
+"Light shirts often worn by women",
+"A shirt, often with buttons, worn on the upper body",
+"A light shirt with a collar or buttons"
 ],
 "exs": [
 "Mom folded the blouses and put them away.",
@@ -1116,7 +1116,7 @@
 "exs": [
 "Carlos never bragged about winning the race.",
 "The boy bragged about his new bike.",
-"She bragged that she could jump the highest."
+"She bragged that she could jump higher than anyone else."
 ]
 },
 {
@@ -1142,8 +1142,8 @@
 "pos": "v",
 "defs": [
 "To think that something will probably happen",
-"To wait for something because you believe it will come",
-"To look forward to something you think is coming"
+"To think something is likely to happen",
+"To believe someone or something will arrive or happen"
 ],
 "exs": [
 "We expect rain on Saturday.",
@@ -1190,7 +1190,7 @@
 "pos": "phr",
 "defs": [
 "Confused, with things in the wrong places",
-"Put together the wrong way so they are muddled",
+"Put in the wrong order by mistake",
 "Not in the right order because of a mistake"
 ],
 "exs": [
@@ -1221,7 +1221,7 @@
 "zh": "重重地走",
 "pos": "v",
 "defs": [
-"Walked with loud, heavy steps because of being cross",
+"Walked with loud, heavy steps because he was upset",
 "Stepped hard on the floor to show you are upset",
 "Walked noisily with heavy feet"
 ],
@@ -1238,7 +1238,7 @@
 "pos": "v",
 "defs": [
 "to shine with small, quick flashes of light",
-"what stars seem to do in the night sky",
+"To shine with small, changing points of light",
 "to sparkle on and off like a tiny light"
 ],
 "exs": [
@@ -1255,7 +1255,7 @@
 "defs": [
 "feeling like everything is spinning around you",
 "feeling unsteady, as if you might fall over",
-"how you feel after turning in circles many times"
+"Feeling unsteady after turning around many times"
 ],
 "exs": [
 "I felt dizzy after spinning on the playground ride.",
@@ -1274,7 +1274,7 @@
 "in a kind and soft manner"
 ],
 "exs": [
-"Carlos gently pushed the swing so Mom could rock slowly.",
+"Carlos gently pushed his sister on the swing.",
 "She gently patted the puppy on the head.",
 "Please close the door gently so the baby can sleep."
 ]
