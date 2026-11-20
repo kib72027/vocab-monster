@@ -39,15 +39,34 @@ def main(hid):
             pic=rgba.copy();pic[...,3]=np.where(mk,pic[...,3],0)
             ys,xs=np.where(mk&(pic[...,3]>20));bb=(xs.min(),ys.min(),xs.max()+1,ys.max()+1)
             # canvas coords: x rel. to cell centre, y rel. to cell top
-            fr.append((pic,ox,oy,bb));ext[0]=min(ext[0],bb[1]-oy);ext[1]=max(ext[1],bb[3]-oy)
+            fr.append([pic,ox,oy,bb,row,xs.mean()])
+        # rows are drawn at different heights by the AI: align each row's feet to the sheet's lowest feet;
+        # idle is a standing loop, so align every frame's feet and body centre to frame 0
+        mb=max(f[3][3]-f[2] for f in fr)
+        for r_ in (0,1):
+            rb=[f[3][3]-f[2] for f in fr if f[4]==r_]
+            if rb:
+                for f in fr:
+                    if f[4]==r_:f[2]-=mb-max(rb)
+        if act=='idle':
+            f0=fr[0]
+            for f in fr:
+                f[2]=f[2]+(f[3][3]-f[2])-(f0[3][3]-f0[2])-(f[3][3]-f[2])+(f[3][3]-f[2])  # placeholder, replaced below
+                f[2]=f[3][3]-(f0[3][3]-f0[2]);f[1]=f[5]-(f0[5]-f0[1])
+        if act=='idle':REF=(fr[0][3][3]-fr[0][2],fr[0][5]-fr[0][1])
+        else:   # start pose of every action sits exactly where the idle pose is, so actions join without a jump
+            f=fr[0];db=(f[3][3]-f[2])-REF[0];dx=(f[5]-f[1])-REF[1]
+            for g in fr:g[2]+=db;g[1]+=dx
+        for f in fr:
+            ext[0]=min(ext[0],f[3][1]-f[2]);ext[1]=max(ext[1],f[3][3]-f[2])
         raw[act]=fr
     top=max(0,int(ext[0])-12);bot=int(ext[1])+12;CWs=1000;CH=bot-top
     data={};portrait=None
     for act,fr in raw.items():
         out=[]
-        for k,(pic,ox,oy,bb) in enumerate(fr):
+        for k,(pic,ox,oy,bb,_r,_c) in enumerate(fr):
             cv=Image.new('RGBA',(CWs,CH),(0,0,0,0));reg=Image.fromarray(pic).crop(bb)
-            cv.alpha_composite(reg,(bb[0]-ox+CWs//2,bb[1]-oy-top))
+            cv.alpha_composite(reg,(int(round(bb[0]-ox+CWs//2)),int(round(bb[1]-oy-top))))
             cv=cv.resize((int(CWs*SC),int(CH*SC)),Image.LANCZOS);cv.save(f'{base}/frames/{act}_{k}.png')
             out.append({'u':webp(cv),'w':cv.width,'h':cv.height})
             if act=='idle' and k==0:
