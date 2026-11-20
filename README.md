@@ -124,7 +124,7 @@ assets/           source images, sorted by kind
     avatar.jpg      character reference image (give this to the image AI)
     source/         idle / attack / hit / victory .jpg  (grid sprite sheets, green background; idle/attack/victory 8 frames 4x2, hit 6 frames 3x2) -- only heroes with animation
     frames/         generated transparent PNG frames + portrait.png
-docs/             hero-spritesheet-prompt.md = the prompt to give an image AI when generating a new hero's sprite sheets
+docs/             animation-lessons.md = rules learned the hard way (read before touching hero animation); hero-spritesheet-prompt.md = the prompt to give an image AI when generating a new hero's sprite sheets
 ```
 **Rebuild:** `python3 build.py` (needs only Python 3). `build.py` rewrites `src/part_game.js` and `src/part_app2.js` in place (it splices part_3d.js into part_game.js, then the game block into part_app2.js), so make game-logic edits in `src/part_game.js` (inside the game block) or `src/part_3d.js`, and everything outside the game block in `src/part_app2.js`.
 The photos of the workbook story pages (used to match Weeks 7-10) are **not** in this repo.
