@@ -88,7 +88,10 @@ def main(hid):
     print(' idle ref',ref,'loop',keep)
     data={}
     for act in imgs:
-        L=[imgs['idle'][i] for i in keep] if act=='idle' else imgs[act]
+        # Attack/hit: AI frames jump between poses and facings, which looks choppy however it is blended.
+        # Use only key poses (wind-up, strike / flinch); the engine fades idle -> pose -> idle and adds the motion.
+        KEY={'attack':[3,5,5],'hit':[1,1]}
+        L=[imgs['idle'][i] for i in keep] if act=='idle' else [imgs[act][i] for i in KEY[act]] if act in KEY else imgs[act]
         data[act]=[{'u':webp(cv),'w':cv.width,'h':cv.height} for cv in L]
     pc=imgs['idle'][ref];bbx=pc.getbbox();portrait=pc.crop((bbx[0]-4,bbx[1]-4,bbx[2]+4,bbx[3]+4));ch=bbx[3]-bbx[1]
     portrait.save(f'{base}/frames/portrait.png')

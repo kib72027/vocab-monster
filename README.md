@@ -162,7 +162,7 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 ## 主角動畫格（補充）
 - 有 `HANIM[hid]`（`src/part_hanim_<id>.js`）的主角，戰鬥中改用逐格圖：待機（循環）、攻擊（`heroAct`／大絕招）、受傷（被怪物重擊）、勝利（打倒怪物）。沒有動畫格的主角維持原本單張圖＋程式動作。
 - 新增一位主角的動畫：照 `docs/hero-spritesheet-prompt.md` 請圖片 AI 產 4 張格子圖，放到 `assets/heroes/<id>/source/`（檔名 idle.jpg、attack.jpg、hit.jpg、victory.jpg），執行 `python3 tools/mkhsheet.py <id>` 再 `python3 build.py`。
-- 目前已有動畫格：h2 粉髮魔法師、h7 紫斗篷雙刀、h10 粉髮魔女。
+- 目前已有動畫格：h2 粉髮魔法師、h7 紫斗篷雙刀、h10 粉髮魔女。待機只用和動作同方向、彼此相似的格；攻擊只用蓄力、出招兩格，受傷只用受擊一格，由程式淡入淡出（AI 格子圖動作間跳動太大，全部播會卡）。
 
 ## 血條／魔力條（補充）
 - 玩家愛心與魔力條不再在按下答案的瞬間改變：答錯時，等怪物的攻擊真正打中主角（`ENG.hurt` 回傳命中時間）才扣愛心、扣魔力；答對時，等攻擊打完、怪物受擊時才加魔力、扣怪物血。
