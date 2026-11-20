@@ -17,8 +17,14 @@ def key(im):
     d=g-np.maximum(r,b);al=np.clip((70-d)/50,0,1)
     g2=np.where(d>0,np.maximum(r,b),g)
     return np.dstack([r,g2,b,al*255]).astype(np.uint8),d
+def bleed(im):
+    # colour of fully transparent pixels = nearest opaque pixel, so bilinear filtering never mixes in white/green halos
+    a=np.asarray(im).copy();m=a[...,3]>8
+    if m.any():
+        i=nd.distance_transform_edt(~m,return_distances=False,return_indices=True);a[...,:3]=a[i[0],i[1],:3]
+    return Image.fromarray(a,'RGBA')
 def webp(im,q=88):
-    b=io.BytesIO();im.save(b,'WEBP',quality=q,method=2);return 'data:image/webp;base64,'+base64.b64encode(b.getvalue()).decode()
+    im=bleed(im);b=io.BytesIO();im.save(b,'WEBP',quality=q,method=2,exact=True);return 'data:image/webp;base64,'+base64.b64encode(b.getvalue()).decode()
 def blobs(d,n):
     m=nd.binary_opening(d[::2,::2]<60,iterations=1);l,k=nd.label(nd.binary_dilation(m,iterations=3));l=np.kron(l,np.ones((2,2),int))[:d.shape[0],:d.shape[1]];m=np.kron(m,np.ones((2,2),bool))[:d.shape[0],:d.shape[1]]
     sz=nd.sum(m,l,range(1,k+1));ids=[i+1 for i,s in enumerate(sz) if s>3000]
