@@ -1380,7 +1380,7 @@ function viewGame(){
   const g=G();rollDay();
   const lv=lvlOf(g.xp),a=xpAt(lv),b=xpAt(lv+1),pct=Math.round((g.xp-a)/(b-a)*100);
   const sn=streakNow(),gp=Math.min(100,Math.round(g.today/GOAL*100));
-  const rtypes=[['stats','成長升級','多拿經驗，快點升級'],['cards','怪物卡片','收集 96 隻怪物'],['coins','金幣','買學習道具']];
+  const rtypes=[['stats','成長升級','多拿經驗，快點升級'],['cards','怪物卡片','收集 '+RMON.length+' 隻怪物'],['coins','金幣','買學習道具']];
   const lcard=s=>{
     const mid=SETMON[s.id],L=learned(s),done=!!g.def[s.id],st=starsOf(s.id);
     return `<button class="mcard ${s.k}${done?' done':''}" data-act="fight" data-id="${s.id}"><span class="mart">${monSvg(mid)}</span>${done?starsHTML(st,'cs'):''}<span class="mname">${monName(mid)}</span><span class="mles">${s.week.replace("Week ","W")} · ${s.title}</span>${isLearned(s.id)?`<span class="lbadge" data-act="learn" data-id="${s.id}">📖 複習單字</span>`:'<span class="lbadge new">📖 先學單字</span>'}</button>`;};

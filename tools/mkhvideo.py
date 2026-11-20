@@ -2,7 +2,8 @@
 """Hero animation frames from videos (instead of grid sprite sheets) -> src/part_hanim_<id>.js
 Input : assets/video/<id>/<id>_{idle,attack,hit,victory}.mp4  (solid green background, fixed camera)
         assets/video/<id>/frames.json  which video frames to use, e.g.
-          {"idle":"auto", "attack":[14,20,...], "hit":[...], "win":[...]}
+          {"idle":"auto", "attack":[14,20,...], "hit":[...], "win":[...], "flip":["idle"]}
+        "flip" (optional) mirrors clips that the video AI drew facing left; every action must face right like the others.
         "auto" = every IDLE_STEP-th frame from 0 up to the frame that best matches frame 0 (seamless loop).
 Output: assets/heroes/<id>/frames/<action>_<n>.png, src/part_hanim_<id>.js (HANIM + HSPR portrait)
 Why pick frames by hand: AI video smears fast strikes (motion blur, baked-in slash arcs, a dagger through the face);
@@ -17,11 +18,13 @@ import cv2
 from PIL import Image
 from scipy import ndimage as nd
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
-from mkhsheet import key,webp
+from mkhsheet import webp
+from nmcut2 import key as dkey   # colour-distance matting: keeps green clothes (h3) that a hue key would cut away
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ACT=[('idle','idle'),('attack','attack'),('hit','hit'),('win','victory')]
-CHAR_H=300      # character height in output pixels (on screen the engine scales by k, so this only sets texture detail)
-IDLE_STEP=2     # idle plays at video_fps/IDLE_STEP with hard cuts (HANIM.fps), like the video itself
+CHAR_H=260      # character height in output pixels (on screen the engine scales by k, so this only sets texture detail; keeps 10 heroes ~1.5 MB each)
+DESPILL=False   # set per hero by frames.json "despill": true
+IDLE_STEP=3     # idle plays at video_fps/IDLE_STEP (HANIM.fps); the engine blends neighbouring frames, so 8 fps still looks smooth
 def read(path,want=None):
     cap=cv2.VideoCapture(path);fr={};i=0;read.fps=cap.get(cv2.CAP_PROP_FPS) or 24
     while True:
@@ -31,7 +34,14 @@ def read(path,want=None):
         i+=1
     return fr,i
 def cutout(rgb):
-    rgba,d=key(Image.fromarray(rgb))
+    # work on the character's region only (matting a whole 1080p frame is slow)
+    g=rgb.astype(int);bg=np.median(np.concatenate([g[:8,:8].reshape(-1,3),g[:8,-8:].reshape(-1,3)]),0)
+    ys,xs=np.nonzero(np.abs(g-bg).sum(-1)>90);P=40
+    y0,y1,x0,x1=max(0,ys.min()-P),min(rgb.shape[0],ys.max()+P),max(0,xs.min()-P),min(rgb.shape[1],xs.max()+P)
+    sub,_=dkey(rgb[y0:y1,x0:x1],bg)
+    if DESPILL:   # heroes with no green in their design: glows that mixed with the green screen turn back to blue/cyan
+        c=sub[...,:3].astype(int);mx=np.maximum(c[...,0],c[...,2]);c[...,1]=np.minimum(c[...,1],mx);sub[...,:3]=c
+    rgba=np.zeros(rgb.shape[:2]+(4,),np.uint8);rgba[y0:y1,x0:x1]=sub
     m=rgba[...,3]>128;lab,n=nd.label(nd.binary_dilation(m[::4,::4],iterations=4))
     if n>1:   # keep the character, drop compression specks
         sz=nd.sum(m[::4,::4],lab,range(1,n+1));big=max(sz)
@@ -43,7 +53,8 @@ def feet(a):
     ys,xs=np.nonzero(a[...,3]>128);lo=ys>=ys.max()-0.08*(ys.max()-ys.min())
     return xs[lo].mean(),ys.max(),(xs.min(),ys.min(),xs.max()+1,ys.max()+1)
 def main(hid):
-    vd=os.path.join(R,'assets','video',hid);cfg=json.load(open(f'{vd}/frames.json',encoding='utf-8'))
+    global DESPILL
+    vd=os.path.join(R,'assets','video',hid);cfg=json.load(open(f'{vd}/frames.json',encoding='utf-8'));DESPILL=bool(cfg.get('despill'))
     out=os.path.join(R,'assets','heroes',hid,'frames');os.makedirs(out,exist_ok=True)
     for f in os.listdir(out):
         if f.endswith('.png'):os.remove(os.path.join(out,f))
@@ -59,6 +70,7 @@ def main(hid):
         missing=[i for i in pick if i not in fr]
         if missing:raise SystemExit(f'{act}: frames {missing} not in video ({n} frames)')
         raw[act]=[cutout(fr[i]) for i in pick]
+        if act in cfg.get('flip',[]):raw[act]=[np.ascontiguousarray(a[:,::-1]) for a in raw[act]]   # clip drawn facing the other way (h6 idle faces left)
     # fixed camera: keep every clip as drawn, but put each clip's first frame (the shared start pose) where idle's first frame is
     fx0,fy0,_=feet(raw['idle'][0]);place={}
     for act,L in raw.items():
@@ -77,7 +89,7 @@ def main(hid):
         for k,a in enumerate(L):
             cv=Image.new('RGBA',(W,H),(0,0,0,0));cv.alpha_composite(Image.fromarray(a),(int(round(half-fx0+dx)),int(round(-top+dy))))
             cv=cv.resize((OW,OH),Image.LANCZOS);cv.save(f'{out}/{act}_{k}.png');imgs[act].append(cv)
-    data={act:[{'u':webp(cv,78),'w':cv.width,'h':cv.height} for cv in L] for act,L in imgs.items()}
+    data={act:[{'u':webp(cv,76),'w':cv.width,'h':cv.height} for cv in L] for act,L in imgs.items()}
     pc=imgs['idle'][0];bx=pc.getbbox();portrait=pc.crop((bx[0]-4,bx[1]-4,bx[2]+4,bx[3]+4));portrait.save(f'{out}/portrait.png')
     kk=round(3.4*OH/(bx[3]-bx[1])/1.12,2)
     js='/* generated by tools/mkhvideo.py from assets/video/'+hid+'/ */\nif(typeof HANIM==="undefined")var HANIM={};\n'

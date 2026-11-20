@@ -9,13 +9,13 @@ Kid-friendly English vocabulary battle game (Reading Plus workbook, Weeks 1–18
 ```
 python3 build.py                 # regenerate index.html from src/ (only needs Python 3)
 python3 tools/mkhsheet.py <id>   # cut assets/heroes/<id>/source/*.jpg into frames + src/part_hanim_<id>.js, then rebuild
-python3 tools/mkhvideo.py h7       # hero frames from videos in assets/video/<id>/ (frames.json picks the frames); h7 uses this, don't run mkhsheet on h7
+python3 tools/mkhvideo.py <id>   # hero frames from videos in assets/video/<id>/ (frames.json picks the frames); ALL heroes use this now — don't run mkhsheet (it would overwrite)
 python3 tools/nmcut2.py          # re-cut assets/monsters/monster-sheet-1..5.jpg into RSPR (add --dry to only write assets/monsters/cut/)
 node tools/merge_vocab.js        # merge data/vocab/*_out*.json into src/part_data.js
 ```
 
 Play/test: open `index.html` directly in a browser (the in-app browser pane needs `.claude/launch.json`, a local http server on port 8765). Python is not installed system-wide on this machine; run the tools with `uv run --no-project --with pillow --with numpy --with scipy python …`. There is no lint and no test runner.
-- `tests/gsmoke.js`, `tests/gs3.js`: Node smoke tests that `eval` the app JS against a stubbed DOM. They read `app2.js` from the current directory, so copy/point that at the app script first. Fail by printing `FAIL ...` and exiting 1.
+- `tests/gsmoke.js` (learn flow, all 40 lessons, elites/bosses, defeat, anti-guess, stars/chest, revenge, shop, practice), `tests/gs3.js` (shop, heroes, codex, crystal/potion), `tests/gs4.js` (80-monster roster/MPLAN, video hero data, revenge rules): Node smoke tests that `eval` the game script against a stubbed DOM. They read `app2.js` from the current directory = the `<script>` content of `index.html`. Node isn't installed; run them like this (from a scratch folder holding app2.js and the test): `uv run --no-project --with nodejs-bin python -m nodejs gsmoke.js` — each prints `…_OK` or `FAIL …`.
 - `tests/*.py`: Playwright screenshot scripts. Paths (`P=...`) point to an old sandbox — adjust before running. WebGL needs Chromium flags `--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist`.
 - Set `window.__noRush = true` in tests to skip the anti-guess delays (`RUSH_MS` 1.2 s, `LOCK_MS` 2 s).
 

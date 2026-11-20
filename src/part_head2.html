@@ -340,7 +340,7 @@ mark{background:var(--sun);color:var(--on-sun);border-radius:6px;padding:0 .2em}
 .lcard{display:flex;flex-direction:column;gap:10px;padding:26px 22px;align-items:flex-start}.lcard .zh{font-size:clamp(26px,7vw,36px);font-weight:800}.lcard .exrow{margin-top:8px}.lcard .qword,.lcard .exrow{transition:background .25s,color .25s,transform .25s;transform-origin:left center}.lcard[data-hl="word"] .qword{color:var(--hl-word);transform:scale(1.05)}.lcard[data-hl="sent"] .exrow{background:var(--hl-bg);border-radius:12px;box-shadow:0 0 0 6px var(--hl-bg)}.lcard[data-p="1"] .speak{pointer-events:none;opacity:.45}
 .lreplay{align-self:center;margin:10px auto 0;background:none;border:2px solid var(--line-strong,#cbd5e1);border-radius:999px;padding:6px 16px;font:800 13px var(--font-body);color:var(--muted,#64748b);cursor:pointer}
 .lhint{margin:0;text-align:center;color:var(--muted);font-weight:800}
-.mtier{position:absolute;left:8px;top:14px;background:#E8A93B;color:#fff;font:800 11px var(--font-body);border-radius:999px;padding:2px 9px}.mtier.boss{background:#8E6BE8}
+.mtier{position:absolute;left:8px;top:14px;background:#E8A93B;color:#3A2400;font:800 11px var(--font-body);border-radius:999px;padding:2px 9px}.mtier.boss{background:#8E6BE8;color:#fff}
 .bossrow .bosscard{grid-column:1/-1}.bosscard.done .mnum,.elitecard.done .mnum{color:var(--good-solid,#2E9E5B)}
 .rtb.e{background:#E8A93B}.rtb.b{background:#8E6BE8}.rtb.r{background:#18B79A}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .elitecard{background:linear-gradient(#3A2D12,var(--paper))}}
@@ -508,7 +508,7 @@ mark{background:var(--sun);color:var(--on-sun);border-radius:6px;padding:0 .2em}
 .hcard.on{border-color:var(--good-solid);background:var(--good-bg)}
 .himgw{width:100%;aspect-ratio:1;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(ellipse at 50% 85%,#CFE6FF 0,transparent 70%)}.himgw img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 4px 3px rgba(27,42,74,.25))}
 .hcard b{font:700 18px var(--font-display)}.hcard small{color:var(--muted);font-weight:700}.job{background:var(--k5s);color:var(--k5d);font:800 12px var(--font-body);border-radius:999px;padding:2px 10px}
-.hdesc{font-size:13px;color:var(--muted);line-height:1.35}.hon,.hpick{margin-top:4px;font:800 13px var(--font-body);border-radius:999px;padding:5px 14px}.hon{background:var(--good-solid);color:#fff}.hpick{background:var(--sun);color:var(--on-sun)}
+.hdesc{font-size:13px;color:var(--muted);line-height:1.35}.hon,.hpick{margin-top:4px;font:800 13px var(--font-body);border-radius:999px;padding:5px 14px}.hon{background:var(--good-solid);color:var(--on-good,#fff)}.hpick{background:var(--sun);color:var(--on-sun)}
 .refnote{background:var(--good-bg);border-radius:14px;padding:10px 14px}
 @media (min-width:520px){.rgrid2{grid-template-columns:repeat(4,minmax(0,1fr))}.hgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (min-width:760px){.rgrid2{grid-template-columns:repeat(5,minmax(0,1fr))}.hgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.ctabs{flex-wrap:wrap;overflow:visible}}
@@ -543,7 +543,7 @@ button.sk{cursor:pointer;pointer-events:auto}button.sk:disabled{filter:grayscale
   padding:max(10px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
 .wrap.bat .btop{flex:none;width:100%;max-width:1800px;margin:0 auto}
 .wrap.bat .btop .x{width:40px;height:40px}
-.wrap.bat .bgrid{flex:1 1 auto;min-height:0;width:100%;max-width:1800px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.wrap.bat .bgrid{flex:1 1 auto;min-height:0;width:100%;max-width:1800px;margin:0 auto;display:flex;flex-direction:column;align-items:stretch;gap:10px}   /* stretch: the desktop .bgrid rule (min-width:900px) sets align-items:start, which squeezed the question area in portrait */
 .wrap.bat .stage.c3{flex:3 1 auto;width:100%;height:auto;min-height:150px;max-height:min(96vw,620px)}
 .wrap.bat .bq{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:10px}
 .wrap.bat .qcard{flex:1 1 auto;min-height:clamp(90px,16dvh,200px);overflow:auto;padding:16px 16px 12px;gap:8px;justify-content:center}

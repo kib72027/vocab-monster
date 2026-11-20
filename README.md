@@ -113,7 +113,7 @@ tools/            how the data/art were produced (python/node; paths inside poin
                     (names/roles/MPLAN are edited directly in part_roster.js; cut-outs saved to assets/monsters/cut/)
   cuth4.py, mkroster.py   hero cut-outs from assets/heroes/poster/hero-poster.png / older roster builder
   mkhsheet.py       cut a hero's grid sprite sheets (assets/heroes/<id>/source) into transparent frames + src/part_hanim_<id>.js
-  mkhvideo.py       same output from videos (assets/video/<id>/<id>_<action>.mp4 + frames.json listing the frames to use); used for h7
+  mkhvideo.py       same output from videos (assets/video/<id>/<id>_<action>.mp4 + frames.json listing the frames to use); used for all 10 heroes
   patch_roles*.py   the patches that introduced elite/boss/stars/anti-guess (documentation of the change)
   merge_vocab.js    merges data/vocab/*_out*.json into src/part_data.js
 tests/            Node smoke tests (gsmoke.js, gs3.js: run against a stubbed DOM) and Playwright screenshot tests (*.py; need Chromium with swiftshader flags for WebGL)
@@ -163,8 +163,8 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 ## 主角動畫格（補充）
 - 有 `HANIM[hid]`（`src/part_hanim_<id>.js`）的主角，戰鬥中改用逐格圖：待機（循環）、攻擊（`heroAct`／大絕招）、受傷（被怪物重擊）、勝利（打倒怪物）。沒有動畫格的主角維持原本單張圖＋程式動作。
 - 新增一位主角的動畫：照 `docs/hero-spritesheet-prompt.md` 請圖片 AI 產 4 張格子圖，放到 `assets/heroes/<id>/source/`（檔名 idle.jpg、attack.jpg、hit.jpg、victory.jpg），執行 `python3 tools/mkhsheet.py <id>` 再 `python3 build.py`。
-- 也可以用影片：把 4 段綠底、固定鏡頭的影片放到 `assets/video/<id>/`（`<id>_idle.mp4`、`_attack`、`_hit`、`_victory`），在 `frames.json` 寫要用哪幾格，執行 `python3 tools/mkhvideo.py <id>` 再 `python3 build.py`。h7 是用影片做的（`assets/heroes/h7/source/` 的格子圖保留但沒用；**不要再對 h7 跑 mkhsheet.py**，會蓋掉影片版）。
-- 目前已有動畫格：h1、h2、h3、h4、h5、h6、h7（影片）、h8、h9（h10 等新圖）。待機只用和動作同方向、彼此相似的格；攻擊只用蓄力、出招兩格，受傷只用受擊一格，由程式淡入淡出（AI 格子圖動作間跳動太大，全部播會卡）。
+- 也可以用影片：把 4 段綠底、固定鏡頭的影片放到 `assets/video/<id>/`（`<id>_idle.mp4`、`_attack`、`_hit`、`_victory`），在 `frames.json` 寫要用哪幾格，執行 `python3 tools/mkhvideo.py <id>` 再 `python3 build.py`。**10 位主角現在全部用影片做**（`assets/heroes/<id>/source/` 的格子圖保留但沒用；**不要再跑 mkhsheet.py**，會蓋掉影片版）。`frames.json` 的攻擊格要跳過影片自帶的特效（刀光、魔法光、閃電），遊戲有自己的特效。
+- 目前已有動畫格：h1～h10 全部（影片）。舊的格子圖做法（mkhsheet.py）：待機只用和動作同方向、彼此相似的格；攻擊只用蓄力、出招兩格，受傷只用受擊一格，由程式淡入淡出。
 
 ## 血條／魔力條（補充）
 - 玩家愛心與魔力條不再在按下答案的瞬間改變：答錯時，等怪物的攻擊真正打中主角（`ENG.hurt` 回傳命中時間）才扣愛心、扣魔力；答對時，等攻擊打完、怪物受擊時才加魔力、扣怪物血。

@@ -14,12 +14,14 @@ BOX=(360,264)      # max sprite size (old art was 300x220); the engine only uses
 def bgkind(a):
     e=np.concatenate([a[:8].reshape(-1,3),a[-8:].reshape(-1,3),a[:,:8].reshape(-1,3),a[:,-8:].reshape(-1,3)]);r,g,b=np.median(e,0)
     return 'green' if g>r and g>b else 'magenta'
-def key(a):
+def key(a,bgc=None):
     """alpha from 'how much background colour' a pixel has; only background connected to the sheet border is removed,
-    so purple/pink/green parts inside a monster stay opaque. Semi-transparent edges are un-mixed from the background (no fringe)."""
+    so purple/pink/green parts inside a monster stay opaque. Semi-transparent edges are un-mixed from the background (no fringe).
+    bgc: the measured background colour (videos are not pure #00FF00); default = pure key colour."""
     a=a.astype(np.float32);r,g,b=a[...,0],a[...,1],a[...,2];kind=bgkind(a)
     if kind=='green':d=g-np.maximum(r,b);bg=np.array([0,255,0],np.float32)
     else:d=np.minimum(r,b)-g;bg=np.array([255,0,255],np.float32)
+    if bgc is not None:bg=np.asarray(bgc,np.float32)
     dist=np.sqrt(((a-bg)**2).sum(-1))   # distance to the pure key colour; rim light that reflects the key colour stays well above 80
     # background = strongly bg-coloured pixels; enclosed pockets (inside tentacle loops, between legs) count too,
     # since no monster part is that saturated green/magenta (the sheet is chosen so)

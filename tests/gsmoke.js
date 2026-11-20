@@ -1,6 +1,6 @@
 const fs=require('fs');let click=null,keydown=null;
 const app={className:'',innerHTML:'',addEventListener(t,f){if(t==='click')click=f;}};
-const stubEl=()=>({classList:{add(){}},hidden:false,focus(){},style:{setProperty(){}},isConnected:true,appendChild(){}});
+const stubEl=()=>({classList:{add(){},remove(){},toggle(){}},dataset:{},hidden:false,focus(){},style:{setProperty(){}},isConnected:true,appendChild(){}});
 global.window={scrollTo(){},__noRush:true};
 global.document={getElementById(id){return id==='app'?app:stubEl()},querySelector(){return stubEl()},createElement(){return stubEl()},addEventListener(t,f){if(t==='keydown')keydown=f;}};
 global.localStorage={_d:{},getItem(k){return this._d[k]||null},setItem(k,v){this._d[k]=v}};
@@ -15,8 +15,12 @@ function check(label){assert(app.innerHTML.replace(/data:image[^"]*/g,'').length
 check('game home');assert(app.innerHTML.includes('單字打怪王'),'home title');
 assert((app.innerHTML.match(/data-act="fight"/g)||[]).length===40,'40 monsters');
 assert(app.innerHTML.includes('disabled'),'boss locked');
+// a lesson never fought opens the word cards first; ldone only works once every card was heard (timers stand in for speech)
+function learnThrough(){let g=0;while(D.S.view==='learn'&&g++<60){flush();const L=D.S.learn;act(L.i===L.words.length-1?'ldone':'lnext');}flush();}
+{act('fight',{id:'w9-mosh'});assert(D.S.view==='learn','unlearned lesson opens learn view, got '+D.S.view);check('learn');
+ for(let i=0;i<D.S.learn.words.length-1;i++)act('lnext');act('ldone');assert(D.S.view==='learn','ldone blocked until all cards heard');act('goGame');}
 function fightSet(id,wrongFirst){
-  act('fight',{id});check('battle');let n=0,wrongDone=0;
+  act('fight',{id});learnThrough();assert(D.S.view==='battle',id+' battle after learning, got '+D.S.view);check('battle');let n=0,wrongDone=0;
   while(D.S.view==='battle'&&n<80){
     const B=D.B;const q=B.q;
     let idx=q.choices.findIndex(c=>c.correct);
@@ -32,7 +36,7 @@ assert(D.S.view==='reward','reward view after win, got '+D.S.view+' n='+n);check
 assert(app.innerHTML.includes('chest'),'chest');act('openChest');check('opened');assert(!app.innerHTML.includes('class="chest"'),'opened');
 console.log('mosh battle questions:',n,'xp',D.G().xp,'coins',D.G().coins);
 // defeat path
-act('goGame');act('fight',{id:'w7-sara'});
+act('goGame');act('fight',{id:'w7-sara'});learnThrough();
 let guard=0;while(D.S.view==='battle'&&guard++<30){const q=D.B.q;act('pick',{i:String(q.choices.findIndex(c=>!c.correct))});flush();act('nextB');flush();}
 assert(D.S.view==='defeat','defeat view, got '+D.S.view);check('defeat');assert(D.G().xp>=0);
 // locked elite/boss
@@ -41,7 +45,7 @@ assert(/elitecard[^"]*locked/.test(app.innerHTML),'elite locked at start');
 act('elite',{id:'e1'});assert(D.S.view!=='battle','locked elite must not start');
 act('boss',{id:'b0'});assert(D.S.view!=='battle','locked boss must not start');
 // anti-guess: rush guard (click right after question shows is ignored)
-{window.__noRush=false;act('goGame');act('fight',{id:'w1-office'});const q0=D.B.q;act('pick',{i:'0'});assert(D.B.q.pick===null,'rush click ignored');
+{window.__noRush=false;act('goGame');act('fight',{id:'w1-office'});learnThrough();const q0=D.B.q;act('pick',{i:'0'});assert(D.B.q.pick===null,'rush click ignored');
  D.B.qStart=Date.now()-2000;act('pick',{i:String(D.B.q.choices.findIndex(c=>!c.correct))});assert(D.B.q.pick!==null,'normal click works');flush();
  assert(D.B.sheet&&D.B.lockUntil>Date.now()&&/disabled/.test(app.innerHTML.match(/<button[^>]*id="nextB"[^>]*>/)[0]),'wrong -> next locked');
  act('nextB');assert(D.B.sheet,'nextB blocked during lock');window.__noRush=true;D.B.lockUntil=0;act('nextB');assert(!D.B.sheet,'nextB after lock');
@@ -63,7 +67,7 @@ act('boss',{id:'b0'});check('boss battle');assert(D.B.maxhp===14,'boss hp');
 k=0;while(D.S.view==='battle'&&k++<80){const q=D.B.q;act('pick',{i:String(q.choices.findIndex(c=>c.correct))});flush();act('nextB');flush();}
 assert(D.S.view==='reward','boss win');check('boss reward');
 // 1-star case: lots of wrong answers then win -> no chest, no monster
-act('goGame');act('fight',{id:'w10-stage'});{let w=0,t=0;while(D.S.view==='battle'&&t++<80){const q=D.B.q;const bad=w<4&&D.B.php>2;if(bad)w++;act('pick',{i:String(bad?q.choices.findIndex(c=>!c.correct):q.choices.findIndex(c=>c.correct))});flush();act('nextB');flush();}}
+act('goGame');act('fight',{id:'w10-stage'});learnThrough();{let w=0,t=0;while(D.S.view==='battle'&&t++<80){const q=D.B.q;const bad=w<4&&D.B.php>2;if(bad)w++;act('pick',{i:String(bad?q.choices.findIndex(c=>!c.correct):q.choices.findIndex(c=>c.correct))});flush();act('nextB');flush();}}
 if(D.S.view==='reward'){assert(D.B.res.stars<=2,'few stars');if(D.B.res.stars===1){assert(!D.B.res.bonus,'1 star -> no chest');}}
 act('goGame');assert(app.innerHTML.includes('復仇怪')||D.G().xp>0,'ok');
 for(const v of ['revenge']){act('revenge');}
