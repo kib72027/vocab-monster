@@ -418,10 +418,10 @@ function drawItem(it,pass,VP,eye){
   gl.uniform1f(u.uPass,pass);gl.uniform1f(u.uOut,.0125*n.th);gl.uniform3fv(u.uCol,n.col||[1,1,1]);gl.uniform1f(u.uAlpha,n.a);gl.uniform1f(u.uMode,n.mode||0);gl.uniform1f(u.uTime,E.time);
   if(n.mode===2){const W=it.W;gl.uniform3f(u.uRC,W[12],W[14],Math.hypot(W[0],W[1],W[2]));gl.uniform1f(u.uRot2,(n.rot||0)+(n.spin||0)*E.time);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,E.tex[n.tex]);gl.uniform1i(u.uTex2,1);gl.activeTexture(gl.TEXTURE0);}
-  if(n.add)gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+  if(n.add)gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE,gl.ZERO,gl.ONE);
   const fl=E.flash[it.grp];gl.uniform4fv(u.uFlash,fl||[0,0,0,0]);
   gl.drawElements(gl.TRIANGLES,g.n,gl.UNSIGNED_SHORT,0);
-  if(n.add)gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  if(n.add)gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ZERO,gl.ONE);
 }
 function sprite(tex,pos,w,h,rot,a,V,Pr,F){
   const gl=E.gl,s=E.us;gl.useProgram(E.ps);gl.bindBuffer(gl.ARRAY_BUFFER,E.qb);gl.enableVertexAttribArray(0);gl.disableVertexAttribArray(1);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
@@ -465,7 +465,7 @@ function draw(){
   gl.enable(gl.CULL_FACE);
   
   gl.cullFace(gl.BACK);op.forEach(it=>drawItem(it,0,VP,eye));
-  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ZERO,gl.ONE);
   gl.depthMask(false);tr.forEach(it=>drawItem(it,0,VP,eye));
   // sprites
   gl.disable(gl.CULL_FACE);
