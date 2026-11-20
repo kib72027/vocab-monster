@@ -9,10 +9,11 @@ Kid-friendly English vocabulary battle game (Reading Plus workbook, Weeks 1–18
 ```
 python3 build.py                 # regenerate index.html from src/ (only needs Python 3)
 python3 tools/mkhsheet.py <id>   # cut assets/heroes/<id>/source/*.jpg into frames + src/part_hanim_<id>.js, then rebuild
+python3 tools/nmcut2.py          # re-cut assets/monsters/monster-sheet-1..5.jpg into RSPR (add --dry to only write assets/monsters/cut/)
 node tools/merge_vocab.js        # merge data/vocab/*_out*.json into src/part_data.js
 ```
 
-Play/test: open `index.html` directly in a browser. There is no lint and no test runner.
+Play/test: open `index.html` directly in a browser (the in-app browser pane needs `.claude/launch.json`, a local http server on port 8765). Python is not installed system-wide on this machine; run the tools with `uv run --no-project --with pillow --with numpy --with scipy python …`. There is no lint and no test runner.
 - `tests/gsmoke.js`, `tests/gs3.js`: Node smoke tests that `eval` the app JS against a stubbed DOM. They read `app2.js` from the current directory, so copy/point that at the app script first. Fail by printing `FAIL ...` and exiting 1.
 - `tests/*.py`: Playwright screenshot scripts. Paths (`P=...`) point to an old sandbox — adjust before running. WebGL needs Chromium flags `--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist`.
 - Set `window.__noRush = true` in tests to skip the anti-guess delays (`RUSH_MS` 1.2 s, `LOCK_MS` 2 s).
@@ -33,7 +34,7 @@ Play/test: open `index.html` directly in a browser. There is no lint and no test
 - **Battle flow** (`part_game.js`): `startBattle(kind,id)` → `nextQ()` → `answerB(idx)` → `nextB()` → `finish(win)` (star thresholds 0.85 / 0.65) → `rollBonus()`. Elite/boss heal on wrong answer is in `answerB()`. Hearts/mana/HP bars update only when the attack animation actually lands (`ENG.hurt` returns hit time), not on click.
 - **Rendering** (`part_3d.js`): custom WebGL toon engine `ENG` (`setup`, `hurt`, `finale`, `ultimate`, billboards with depth test off, particles). Per-hero ultimates in the `SIGF` table. Falls back to 2D `stageHTML` without WebGL.
 - **Data**: `RAW` = 40 lessons `{id, week, title, words:[[word, zh, defText, example, pos] | "ref"]}`; `VX[word] = {d:[3 defs], e:[3 examples]}`, `variant(t)` picks one at random per question. Data rules: definitions 4–10 words, examples 5–11 words, A1–A2 vocabulary, headword appears exactly in each example and never in definitions. Duplicate words across lessons keep the first lesson's data.
-- **Monsters**: `RMON` (96, ids `n001`–`n096`, roles n/e/b/r/x, element `t` from `TYPES`), art in `RSPR[id]`. `MPLAN.normal[i]` / `.elite[w]` / `.boss[j]` assign monsters to lessons / weeks / two-week blocks. `MON`/`MSPR` are legacy and unused in battles.
+- **Monsters**: `RMON` (80, ids `n001`–`n080`, roles n/e/b/r/x, element `t` from `TYPES`), art in `RSPR[id]`. `MPLAN.normal[i]` / `.elite[w]` / `.boss[j]` assign monsters to lessons / weeks / two-week blocks. `MON`/`MSPR` are legacy and unused in battles.
 - **Heroes**: `HSPR` (10 heroes). Heroes with `HANIM[hid]` (from `part_hanim_<id>.js`) use frame animation (idle loop, attack, hit, win); others use a static sprite + programmatic motion.
 
 ## Hero animation rules
