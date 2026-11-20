@@ -993,8 +993,40 @@ function tone(f,d,type,t0,vol,slide){
     o.connect(gn);gn.connect(a.destination);o.start(t);o.stop(t+d+.02);
   }catch(e){}
 }
+// filtered white noise: whooshes, crackles, splashes, thumps (f0 -> f1 = filter sweep)
+let NBUF=null;
+function noise(d,t0,vol,f0,f1,q,kind){
+  if(!G().snd)return;const a=ac();if(!a)return;
+  try{
+    if(!NBUF){NBUF=a.createBuffer(1,a.sampleRate,a.sampleRate);const c=NBUF.getChannelData(0);for(let i=0;i<c.length;i++)c[i]=Math.random()*2-1;}
+    const s=a.createBufferSource(),fl=a.createBiquadFilter(),gn=a.createGain(),t=a.currentTime+(t0||0);
+    s.buffer=NBUF;s.loop=true;fl.type=kind||'bandpass';fl.Q.value=q||1;fl.frequency.setValueAtTime(f0,t);if(f1)fl.frequency.exponentialRampToValueAtTime(f1,t+d);
+    gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(vol||.15,t+Math.min(.06,d/3));gn.gain.exponentialRampToValueAtTime(.0001,t+d);
+    s.connect(fl);fl.connect(gn);gn.connect(a.destination);s.start(t,Math.random()*.5);s.stop(t+d+.05);
+  }catch(e){}
+}
+// monster attacks: one launch sound per element type (played when the projectile leaves the monster)
+const MATK={
+  fire(){noise(.5,0,.22,300,1400,.8);tone(110,.45,'sawtooth',0,.06,-40);},
+  ice(){[1760,2093,2637].forEach((f,i)=>tone(f,.18,'triangle',i*.12,.07,-200));noise(.35,0,.06,5000,8000,2,'highpass');},
+  elec(){for(let i=0;i<7;i++)tone(300+Math.random()*1500,.04,'square',i*.035,.06);noise(.3,0,.12,3000,1500,.7);},
+  poison(){[300,420,260,380].forEach((f,i)=>tone(f,.12,'sine',i*.09,.09,160));},
+  forest(){noise(.55,0,.12,1200,2600,1.5);tone(220,.3,'triangle',.05,.05,60);},
+  sea(){noise(.7,0,.2,400,1800,.7,'lowpass');tone(140,.5,'sine',0,.06,-40);},
+  desert(){noise(.55,0,.2,250,120,.9,'lowpass');tone(70,.5,'sine',0,.1,-20);},
+  sky(){noise(.5,0,.16,800,3200,1.2);},
+  ghost(){tone(520,.6,'sine',0,.07,-260);tone(530,.6,'sine',.02,.05,-280);},
+  mech(){[880,660,880].forEach((f,i)=>tone(f,.07,'square',i*.08,.06));noise(.35,.2,.12,2000,500,1);},
+  skel(){[1,2,3].forEach(i=>{tone(900,.03,'square',i*.09,.07,-500);noise(.04,i*.09,.1,2500,0,3);});},
+  dragon(){tone(90,.6,'sawtooth',0,.12,-30);noise(.6,0,.14,500,200,.6,'lowpass');}
+};
 const SFX={
   hit(){tone(620,.09,'square',0,.1,-300);tone(330,.14,'square',.07,.1,-150);},
+  matk(t){(MATK[t]||MATK.fire)();},
+  // the monster's attack lands on the hero (small = one of several projectiles)
+  impact(small){tone(small?160:130,small?.12:.22,'sine',0,small?.12:.2,-80);noise(small?.1:.18,0,small?.1:.18,small?1400:900,300,.8,'lowpass');},
+  // answer was wrong: short "uh-oh" right on the tap; the hit sound comes when the attack lands
+  wrong(){tone(330,.11,'triangle',0,.09);tone(247,.18,'triangle',.11,.09);},
   crit(){tone(880,.08,'square',0,.1,-400);tone(660,.1,'square',.06,.1);tone(990,.18,'triangle',.12,.12,-300);},
   hurt(){tone(200,.28,'sawtooth',0,.12,-120);tone(120,.3,'square',.1,.09,-50);},
   win(){[523,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',i*.12,.14));},
@@ -2020,7 +2052,8 @@ function hurt(emoji,type){
       if(Math.random()<.85)E.parts.push({x:p[0],y:p[1]-.1,z:p[2]-.1,vx:(Math.random()-.5)*.6,vy:(Math.random()-.3)*.6,vz:0,g:0,life:.35,max:.35,size:o.tr||.36,tex:gl,rot:0,vr:0});},delay);
     at(delay+dur+.02,()=>rm(sp));};
   let HT=0;
-  const hit=(dt,small)=>{HT=Math.max(HT,dt+.12);at(dt,()=>{const t=hpos();burst(t,small?6:14,star,small?3:4.5,.4);goldBurst(t,small?10:24,4,.5,.36,gl);E.shake=Math.max(E.shake,small?.3:.7);E.flash.hero=[c[0]/255,c[1]/255,c[2]/255,small?.45:.8];
+  at(.3,()=>{try{SFX.matk(type)}catch(e){}});   // launch sound, per element
+  const hit=(dt,small)=>{HT=Math.max(HT,dt+.12);at(dt,()=>{try{SFX.impact(small)}catch(e){}const t=hpos();burst(t,small?6:14,star,small?3:4.5,.4);goldBurst(t,small?10:24,4,.5,.36,gl);E.shake=Math.max(E.shake,small?.3:.7);E.flash.hero=[c[0]/255,c[1]/255,c[2]/255,small?.45:.8];
     if(!small)heroPlay('hit',.7);
     if(!small)tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});});};
   const line=(arc,wob)=>u=>{const e=ease(u);return[lerp(F[0],T[0],e),lerp(F[1],T[1],e)+arc*Math.sin(PI*u)+(wob?wob*Math.sin(u*PI*4):0),lerp(F[2],T[2],e)];};
@@ -2124,7 +2157,7 @@ function answerB(idx){
     if(!B.wrong.some(x=>x.w===q.t.w))B.wrong.push(q.t.__b||q.t);
     addMissed(w);g.mast[w]=Math.max(0,(g.mast[w]||0)-1);
     B.queue.splice(Math.min(2,B.queue.length),0,q.t.__b||q.t);
-    SFX.hurt();
+    if(E3.ok)SFX.wrong();else SFX.hurt();   // 3D: attack + impact sounds are played by ENG.hurt in time with the animation
   }
   const tk=B;
   if(ok){
