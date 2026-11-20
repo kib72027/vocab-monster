@@ -859,13 +859,14 @@ function draw(){
       if(pl&&ix<N-1){fm2=L[ix+1];fa=ease(u*N-ix);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
       if(!pl){fm2=L[(ix+1)%N];fa=ease((ph-ix-.3)/.4);if(fm2&&fm2.im&&!fm2.tex&&fm2.im.complete&&fm2.im.naturalWidth)fm2.tex=mkTex(fm2.im);}
       if(fm&&fm.im&&!fm.tex&&fm.im.complete&&fm.im.naturalWidth)fm.tex=mkTex(fm.im);}
-    if(fm&&fm.tex){c=fm;S=fm;}
+    if(fm&&fm.tex){c=fm;S=fm;o.cur=(fm2&&fa>.5&&fm2.tex)?fm2:fm;}
     else if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
     if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=(fm&&fm.tex)?HA.k:Math.min(3.4,3.7/asp);
       const br=(fm&&fm.tex&&!o.pl&&HA.idle.length<3)?.014*Math.sin(E.time*2.3):0;const h=h0*k*sq*(1+br),w=h0*asp*k*(1+(1-sq)*.6)*(1-br*.4),rot=-f.rz*.6-(o.idz||0);
       const hp=[o.base[0]+f.x+(o.jx||0)+PSG*Math.sin(rot)*h/2,o.base[1]+f.y+Math.cos(rot)*h/2+.02,o.base[2]+.3];
       sprite(c.tex,hp,w/2,h/2,rot,1,V,Pr,E.flash.hero);
       if(fm2&&fm2.tex&&fa>.01)sprite(fm2.tex,hp,w/2,h/2,rot,fa,V,Pr,E.flash.hero);
+      if(o.ps&&o.pl){const q=(E.time-o.ps.t)/.16;if(q<1&&o.ps.f.tex&&o.ps.f!==c)sprite(o.ps.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else if(q>=1)o.ps=null;}
       if(o.pe&&!o.pl){const q=(E.time-o.pe.t)/.25;if(q<1&&o.pe.f.tex)sprite(o.pe.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else o.pe=null;}}}
   if(E.mon.img){const o=E.mon,c=E.imgs[o.img],S=SPR(o.img);
     if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
@@ -911,7 +912,7 @@ h1:{st:'slash',act:'lunge'},h2:{st:'orb',act:'cast'},h3:{st:'arrow',act:'draw'},
 h5:{st:'spin',e:'🔱',act:'lunge'},h6:{st:'drop',e:'✨',act:'cast'},h7:{st:'spin',e:'🗡️',act:'throw',sp:22},
 h8:{st:'pet',e:'🐱',act:'cast'},h9:{st:'spin',e:'🔧',act:'throw',sp:12},h10:{st:'spin',e:'🔮',act:'cast',sp:5}};
 function hid0(){return(E.hero&&E.hero.himg)||'h1';}
-function heroPlay(n,dur,delay){const f=()=>{if(E.hero)E.hero.pl={n,t0:E.time,dur};};delay?at(delay,f):f();}
+function heroPlay(n,dur,delay){const f=()=>{if(E.hero){const o=E.hero;if(o.cur)o.ps={f:o.cur,t:E.time};o.pe=null;o.pl={n,t0:E.time,dur};}};delay?at(delay,f):f();}
 function heroAct(act,dur){const h=E.hero,hid=hid0(),th=ULT[hid]||ULT.h1,gl=utex(hid,th);heroPlay('attack',dur);
   const Q={lunge:[.45,1.7,.28,.3,0,.25],dash:[.6,2.6,.3,.35,0,.3],throw:[.5,.5,.4,.32,0,.3],draw:[.7,.2,.3,.1,0,.12],cast:[.1,.25,.08,.15,.55,.1]}[act]||[.4,1,.25,.25,0,.2];
   const bx=Q[0],fx=Q[1],rb=Q[2],rf=Q[3],yc=Q[4],yf=Q[5];
