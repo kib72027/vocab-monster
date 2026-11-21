@@ -694,7 +694,7 @@ function setup(monId,eq,hid,big){
   const HA0=(typeof HANIM!=='undefined')&&hid&&HANIM[hid];if(HA0&&!HA0._ld){HA0._ld=1;['idle','attack','hit','win'].forEach(k=>HA0[k].forEach(f=>{const im=new Image();im.src=f.u;f.im=im;f.tex=null;if(im.decode)im.decode().catch(()=>{});}));}
   const HS=(typeof HSPR!=='undefined')&&hid&&HSPR[hid];if(HS&&!E.imgs['H'+hid]){const im=new Image();im.src=HS.u;E.imgs['H'+hid]={im,tex:null};}
   const hero={himg:HS?hid:null,root:HS?Gp():h.root,base:[-2.75,0,.4],ry:.8,sc:1,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},armR:HS?{r:[0,0,0]}:h.armR,hand:h.hand,head:h.head};
-  E.mon=mon;E.hero=hero;E.parts=[];E.tw=[];E.tl=[];E.sprites=[];E.legAura=null;E.flash={mon:null,hero:null};E.shake=0;
+  E.mon=mon;E.hero=hero;E.parts=[];E.tw=[];E.tl=[];E.sprites=[];E.backs=[];E.legAura=null;E.flash={mon:null,hero:null};E.shake=0;
   const R=5.2,mk=[];
   // soft painted scenery (warm pastoral fantasy): painted backdrop billboard + grassy ground + painted bushes/trees/flowers
   scenery();
@@ -818,6 +818,7 @@ function draw(){
   if(!BGOK&&E.decor)E.decor.forEach(d=>{const t=E.tex['d_'+d.t],A=DECOR_ASP[d.t];if(t){const hh=d.s*A[1];sprite(t,[d.x,hh*.96,d.z],hh*A[0],hh,0,1,V,Pr);}});
   if(!BGOK&&E.tex.cloud)E.clouds.forEach(c=>{const x=((c.x+E.time*c.sp+60)%120)-60;sprite(E.tex.cloud,[x,c.y,c.z],c.s,c.s*.5,0,c.a,V,Pr);});
   gl.disable(gl.DEPTH_TEST);
+  if(E.backs)E.backs.forEach(s=>drawQ(s.tex,s.pos,s.w,s.h,s.rot,s.a,E.time,V,Pr));   // things that belong behind the characters (wings)
   if(E.hero.himg){const o=E.hero,HA=(typeof HANIM!=='undefined')&&HANIM[o.himg];let c=E.imgs['H'+o.himg],S=HSPR[o.himg],fm=null,fm2=null,fa=0;
     if(HA){let pl=o.pl,nm='idle',u=0;if(pl){u=(E.time-pl.t0)/pl.dur;if(u>=1&&pl.n!=='win'){const LL=HA[pl.n];o.pe={f:LL[LL.length-1],t:E.time};o.pl=null;pl=null;}else{nm=pl.n;u=Math.min(u,.999);}}
       // HA.fps (video-made heroes): idle plays at the video's own rate with hard cuts; sheet heroes stretch idle over 6.4 s and cross-fade
@@ -1086,6 +1087,8 @@ function uslash(hid,th){const k='ul'+hid;if(E.tex[k])return E.tex[k];const c=cv(
   g=x.createLinearGradient(0,0,256,0);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.5,'rgba(255,255,255,1)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.beginPath();x.moveTo(20,20);x.quadraticCurveTo(128,11,236,20);x.quadraticCurveTo(128,29,20,20);x.fill();return E.tex[k]=mkTex(c);}
 // ===== signature ultimates (unique look per hero) =====
 function prT(name,t){if(t&&!t.pr)t.pr=name;return t;}   // drawQ draws prop art 'name' instead, once it is in PROPS
+// a sprite drawn behind the hero and the monster (e.g. wings growing from the back); removed after `until` seconds
+function backSp(tex,until){const s={tex,pos:[0,0,0],w:0,h:0,rot:0,a:0};(E.backs=E.backs||[]).push(s);at(until,()=>{const j=E.backs.indexOf(s);if(j>=0)E.backs.splice(j,1);});return s;}
 function sigTex(k,w,h,f){if(E.tex[k])return E.tex[k];const c=cv(w,h),x=c.getContext('2d');f(x,w,h);return E.tex[k]=mkTex(c);}
 const tSword=()=>prT('lightsword',sigTex('sg_sword',160,420,(x,w,h)=>{x.shadowColor='rgba(255,220,100,1)';x.shadowBlur=26;
   const g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,'#FFE9A0');g.addColorStop(.5,'#FFFFFF');g.addColorStop(1,'#FFD060');x.fillStyle=g;
@@ -1300,10 +1303,10 @@ function s2H5(sentence,th){const K=sigBase(sentence,th,'h5'),{m,gl,rm,n}=K,shard
   at(TOT,()=>{[...K.sps,com,...tail].forEach(rm);h.off.y=0;});return TOT;}
 // 牧師：天使光柱 — feather wings open behind the priest, beams of light strike the monster one after another
 function s2H6(sentence,th){const K=sigBase(sentence,th,'h6'),{m,gl,rm,n}=K,fea=tFeather(),heart=emojiTex('💖'),ringT=tRing('#FFE9A0'),h=E.hero,B0=1.3,BD=.35,NB=5,FIN=B0+NB*BD+.3,TOT=FIN+1.4;
-  const wing=[sigSp(gtex([255,240,190])),sigSp(tWingP()),sigSp(tWingP())];   // angel wings (prop 'wing'), mirrored for the left
-  tween(TOT-.3,u=>{const t=u*(TOT-.3),p=hpos(),g=ease(cl(t/.6))*(t>FIN?Math.max(0,1-(t-FIN)/.6):1),S=1.15*g,fl=.1*Math.sin(t*3.6),[gw,wl,wr]=wing;
-    gw.pos=[p[0],p[1]+.7,p[2]-.4];gw.w=2.8*g;gw.h=1.6*g;gw.a=.3*g;
-    wr.pos=[p[0]+S*.85,p[1]+.3+S*.75,p[2]-.3];wr.w=S;wr.h=S;wr.rot=-fl;wr.a=.92*g;wl.pos=[p[0]-S*.85,p[1]+.3+S*.75,p[2]-.3];wl.w=-S;wl.h=S;wl.rot=fl;wl.a=.92*g;});
+  const wing=[],bw=[backSp(gtex([255,240,190]),TOT),backSp(tWingP(),TOT),backSp(tWingP(),TOT)];   // angel wings behind the priest, mirrored for the left
+  tween(TOT-.3,u=>{const t=u*(TOT-.3),p=hpos(),g=ease(cl(t/.6))*(t>FIN?Math.max(0,1-(t-FIN)/.6):1),S=1.15*g,fl=.1*Math.sin(t*3.6),[gw,wl,wr]=bw;
+    gw.pos=[p[0],p[1]+.55,p[2]-.4];gw.w=2.6*g;gw.h=1.5*g;gw.a=.3*g;
+    wr.pos=[p[0]+.15+S*.74,p[1]+.35+S*.66,p[2]-.3];wr.w=S;wr.h=S;wr.rot=-fl;wr.a=.92*g;wl.pos=[p[0]-.15-S*.74,p[1]+.35+S*.66,p[2]-.3];wl.w=-S;wl.h=S;wl.rot=fl;wl.a=.92*g;});
   tween(.5,u=>{h.off.y=.4*ease(u);},.4);tween(.5,u=>{h.off.y=.4*(1-ease(u));},FIN+.3);
   sigWords(K,(k,t,c)=>{if(t<.1)return null;const p=hpos(),f=ease(cl((t-.1-k*.06)/.8)),tg=[p[0]+(k-(n-1)/2)*.5,p[1]+2.3+.2*Math.sin(t*2+k),p[2]+.6],dis=cl((t-B0-k*.15)/.5);if(dis>=1)return null;return{pos:[p[0]+(tg[0]-p[0])*f,p[1]+(tg[1]-p[1])*f+dis*3,p[2]+.6],a:1-dis,sc:.45+.2*f};},TOT);
   const beams=[];for(let i=0;i<NB;i++){const b=sigSp(gl),xo=[0,-1.1,1.1,-.5,.5][i];beams.push(b);tween(.7,u=>{const c=mpos(),g=u<.2?ease(u/.2):Math.max(0,1-(u-.2)/.8);b.pos=[c[0]+xo,c[1]+3,c[2]+.4];b.w=.9*g;b.h=8*g;b.a=.9*g;},B0+i*BD);
@@ -2218,11 +2221,11 @@ function s3H5(sentence,th){const K=sigBase(sentence,th,'h5'),{m,gl,rm,n}=K,h=E.h
 function s3H6(sentence,th){const K=sigBase(sentence,th,'h6'),{m,gl,rm,n}=K,h=E.hero,fea=tFeather(),warm=gtex([255,240,190]),B0=1.4,HL=2.3,HIT=3.1,TOT=HIT+1.6;
   dimScreen('brightness(.85) sepia(.2) saturate(1.2)',.1,HIT+.4);tween(.6,u=>{h.off.y=.5*ease(u);},.3);tween(.5,u=>{h.off.y=.5*(1-ease(u));},HIT+.4);
   // two angel wings (image-AI prop 'wing', drawn spreading up to the right; mirrored for the left), rooted at the priest's back, slowly beating
-  const wing=[sigSp(warm),sigSp(tWingP()),sigSp(tWingP())];
-  tween(TOT-.2,u=>{const t=u*(TOT-.2),p=hpos(),g=ease(cl(t/.7))*(t>HIT+.3?Math.max(0,1-(t-HIT-.3)/.6):1),S=1.35*g,fl=.09*Math.sin(t*3.2),[gw,wl,wr]=wing;
-    gw.pos=[p[0],p[1]+.8,p[2]-.4];gw.w=3.2*g;gw.h=1.8*g;gw.a=.35*g;
-    wr.pos=[p[0]+S*.85,p[1]+.25+S*.75,p[2]-.35];wr.w=S;wr.h=S;wr.rot=-fl;wr.a=.95*g;
-    wl.pos=[p[0]-S*.85,p[1]+.25+S*.75,p[2]-.35];wl.w=-S;wl.h=S;wl.rot=fl;wl.a=.95*g;});
+  const wing=[],bw=[backSp(warm,TOT),backSp(tWingP(),TOT),backSp(tWingP(),TOT)];   // behind the priest, rooted at the shoulders, spreading to the sides
+  tween(TOT-.2,u=>{const t=u*(TOT-.2),p=hpos(),g=ease(cl(t/.7))*(t>HIT+.3?Math.max(0,1-(t-HIT-.3)/.6):1),S=1.3*g,fl=.08*Math.sin(t*3.2),[gw,wl,wr]=bw;
+    gw.pos=[p[0],p[1]+.6,p[2]-.4];gw.w=3.0*g;gw.h=1.7*g;gw.a=.35*g;
+    wr.pos=[p[0]+.15+S*.74,p[1]+.35+S*.66,p[2]-.35];wr.w=S;wr.h=S;wr.rot=-fl;wr.a=.95*g;
+    wl.pos=[p[0]-.15-S*.74,p[1]+.35+S*.66,p[2]-.35];wl.w=-S;wl.h=S;wl.rot=fl;wl.a=.95*g;});
   for(let i=0;i<4;i++){const ang=PI/2+(i-1.5)*.42;at(B0+i*.15,()=>{const c=mpos();sigLine(uslash('h6',th),[c[0]+Math.cos(ang)*3,c[1]+.6+Math.sin(ang)*3,c[2]+.6],ang,6.5,.7,.9,warm);vfx('holy_burst',[c[0],c[1]+.5,c[2]+.7],.8);E.flash.mon=[1,1,.85,.6];sigHit(m);});}
   const halo=sigSp(tRing('#FFE9A0'));tween(HIT-HL+.6,u=>{const t=HL+u*(HIT-HL+.6),c=mpos(),q=ease(cl((t-HL)/(HIT-HL))),y=c[1]+3.4-2.8*q,r=2.6-1.0*q;halo.pos=[c[0],y,c[2]+.55];halo.w=r;halo.h=r*.3;halo.a=t<HIT?1:Math.max(0,1-(t-HIT)/.5);},HL);
   sigWords(K,(k,t,c)=>{if(t<.1||t>HIT)return null;const p=hpos(),f=ease(cl((t-.1-k*.07)/1.0)),a=k/n*PI*2+t*1.3;return{pos:lerp3([p[0]+.4,p[1]+1.3,p[2]+.6],[c[0]+Math.cos(a)*1.7,c[1]+2.6+Math.sin(a)*.4,c[2]+.6],f),a:t>HIT-.2?(HIT-t)/.2:1,sc:.42};},TOT);
