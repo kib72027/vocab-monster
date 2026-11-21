@@ -35,3 +35,58 @@ No animals, no creatures, no characters, no people, no text, no logo, no UI, no 
 - **平台要空的**：主角站左邊三分之一、怪物站右邊三分之一。
 - 想換其他風格（例如柔和手繪田園風）時，只要改 STYLE 和 SCENE，LAYOUT 和 DO NOT INCLUDE 保留。
 - 可以多生幾張不同場景（森林、雪地、海邊、火山……），之後可以依怪物屬性換背景。
+
+---
+
+## 第二批：目前缺少的場景（請生成這 4 張）
+
+現在每種屬性的怪物會在固定的場景打。檢查後，下面 4 種屬性沒有合適的場景，只能借用別的：
+
+| 屬性 | 現在用的場景 | 不搭的例子 | 需要的新場景（檔名） |
+|---|---|---|---|
+| 海洋 | 天空城堡 | 章魚、鯊魚、水滴寶寶站在城堡前 | 海底神殿 `sea.jpg` |
+| 機械 | 天空城堡 | 機械蜘蛛、齒輪巨人站在城堡前 | 機械工廠 `factory.jpg` |
+| 沙漠 | 森林神殿 | 仙人掌、木乃伊、寶箱怪站在森林裡 | 沙漠遺跡 `desert.jpg` |
+| 毒 | 森林神殿 | 毒蜘蛛、毒蠍、多頭蛇站在明亮的森林裡 | 毒沼澤 `swamp.jpg` |
+
+放進 `assets/backgrounds/` 跟我說，我會設定平台位置和環境動畫（氣泡、蒸汽、沙塵、毒霧），再換進遊戲。
+
+每張都用上面那段 prompt 的 **STYLE、LAYOUT、DO NOT INCLUDE**，只把 **SCENE** 換成下面的內容：
+
+### 1. `sea.jpg`：海底神殿（海洋）
+```text
+SCENE
+An underwater temple at the bottom of a bright tropical sea: a wide round platform of white stone and pale coral in the
+center, ancient white pillars with seashells in the far background, colorful coral reefs and swaying seaweed at the left
+and right edges, sunbeams shining down through clear turquoise water, small bubbles floating up, a softly glowing aqua
+magical circle in the platform's center.
+```
+
+### 2. `factory.jpg`：機械工廠（機械）
+```text
+SCENE
+A big steampunk workshop factory: a wide round platform made of riveted steel plates with a softly glowing orange magical
+gear-shaped circle in its center, huge brass gears and pipes on the walls in the background, glowing furnace windows,
+soft steam clouds, conveyor belts and cogs at the far left and right edges, warm orange and cool blue lights.
+```
+
+### 3. `desert.jpg`：沙漠遺跡（沙漠）
+```text
+SCENE
+Ancient desert ruins at sunset: a wide round platform of cracked sandstone tiles with a softly glowing golden magical
+circle in its center, sand dunes and a small pyramid far in the background, broken sandstone pillars and a few cacti and
+palm trees only at the far left and right edges, warm orange sky with a few soft clouds.
+```
+
+### 4. `swamp.jpg`：毒沼澤（毒）
+```text
+SCENE
+A spooky but cute poison swamp in a dark forest: a wide round platform of mossy stone with a softly glowing purple-green
+magical circle in its center, bubbling green-purple swamp water around it, twisted dark trees with hanging vines and
+glowing mushrooms in the background and at the left and right edges, light purple fog, a dim greenish sky.
+```
+
+### 注意
+- 平台一樣要**空的、平的**，左邊三分之一和右邊三分之一的上方不要有東西（主角和怪物要站在那裡）。
+- 怪物不要畫進去（DO NOT INCLUDE 要保留）。
+- 每張做兩版也可以，檔名加 `-1`（例如 `sea-1.jpg`），我挑比較好的。

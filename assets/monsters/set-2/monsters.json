@@ -8,7 +8,8 @@
    "zh": "機械蜘蛛",
    "en": "Mech Spider",
    "t": "mech",
-   "role": "x"
+   "role": "x",
+   "face": "left"
   },
   {
    "sheet": "sheet-2.jpg",
@@ -37,7 +38,8 @@
    "zh": "齒輪巨人",
    "en": "Gear Golem",
    "t": "mech",
-   "role": "x"
+   "role": "x",
+   "face": "left"
   },
   {
    "sheet": "sheet-2.jpg",

@@ -13,7 +13,9 @@ R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D=os.path.join(R,'assets','vfx')
 PICK={'fire_burst':'fire_burst.jpg','flame_loop':'flame_loop-1.jpg','ice_burst':'ice_burst.jpg','lightning':'lightning-1.jpg',
       'leaf_swirl':'leaf_swirl-1.jpg','holy_burst':'holy_burst-1.jpg','dark_burst':'dark_burst.jpg','hit_spark':'hit_spark-1.jpg',
-      'slash_arc':'slash_arc-1.jpg','water_splash':'water_splash.jpg','smoke_puff':'smoke_puff-1.jpg'}
+      'slash_arc':'slash_arc-1.jpg','water_splash':'water_splash.jpg','smoke_puff':'smoke_puff-1.jpg',
+      'explosion_big':'explosion_big.jpg','fire_pillar':'fire_pillar-1.jpg','tornado':'tornado.jpg','tidal_wave':'tidal_wave.jpg',
+      'poison_cloud':'poison_cloud.jpg','sandstorm':'sandstorm-1.jpg','laser_hit':'laser_hit.jpg'}
 SIZE=224        # frame size in pixels (square)
 INSET=.025      # trim 2.5% of the cell on each side: removes grid lines
 def glow(a):
