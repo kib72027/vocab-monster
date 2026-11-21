@@ -1542,7 +1542,7 @@ function s2H6(sentence,th){const K=sigBase(sentence,th,'h6'),{m,gl,rm,n}=K,fea=t
   const wing=[],bw=[backSp(gtex([255,240,190]),TOT),backSp(tWingP(),TOT),backSp(tWingP(),TOT)];   // angel wings behind the priest, mirrored for the left
   tween(TOT-.3,u=>{const t=u*(TOT-.3),p=hpos(),g=ease(cl(t/.6))*(t>FIN?Math.max(0,1-(t-FIN)/.6):1),S=1.15*g,fl=.1*Math.sin(t*3.6),[gw,wl,wr]=bw;
     gw.pos=[p[0],p[1]+.55,p[2]-.4];gw.w=2.6*g;gw.h=1.5*g;gw.a=.3*g;
-    wr.pos=[p[0]+.15+S*.74,p[1]+.35+S*.66,p[2]-.3];wr.w=S;wr.h=S;wr.rot=-fl;wr.a=.92*g;wl.pos=[p[0]-.15-S*.74,p[1]+.35+S*.66,p[2]-.3];wl.w=-S;wl.h=S;wl.rot=fl;wl.a=.92*g;});
+    wr.pos=[p[0]+.15+S*.74,p[1]+.35+S*.66,p[2]-.3];wr.w=-S;wr.h=S;wr.rot=fl;wr.a=.92*g;wl.pos=[p[0]-.15-S*.74,p[1]+.35+S*.66,p[2]-.3];wl.w=S;wl.h=S;wl.rot=-fl;wl.a=.92*g;});
   tween(.5,u=>{h.off.y=.4*ease(u);},.4);tween(.5,u=>{h.off.y=.4*(1-ease(u));},FIN+.3);
   sigWords(K,(k,t,c)=>{if(t<.1)return null;const p=hpos(),f=ease(cl((t-.1-k*.06)/.8)),tg=[p[0]+(k-(n-1)/2)*.5,p[1]+2.3+.2*Math.sin(t*2+k),p[2]+.6],dis=cl((t-B0-k*.15)/.5);if(dis>=1)return null;return{pos:[p[0]+(tg[0]-p[0])*f,p[1]+(tg[1]-p[1])*f+dis*3,p[2]+.6],a:1-dis,sc:.45+.2*f};},TOT);
   const beams=[];for(let i=0;i<NB;i++){const b=sigSp(gl),xo=[0,-1.1,1.1,-.5,.5][i];beams.push(b);tween(.7,u=>{const c=mpos(),g=u<.2?ease(u/.2):Math.max(0,1-(u-.2)/.8);b.pos=[c[0]+xo,c[1]+3,c[2]+.4];b.w=.9*g;b.h=8*g;b.a=.9*g;},B0+i*BD);
@@ -2456,12 +2456,12 @@ function s3H5(sentence,th){const K=sigBase(sentence,th,'h5'),{m,gl,rm,n}=K,h=E.h
 // 牧師：神聖審判 — giant feather wings open; beams of light converge from the sky; a great halo seals the monster; a cross of light explodes
 function s3H6(sentence,th){const K=sigBase(sentence,th,'h6'),{m,gl,rm,n}=K,h=E.hero,fea=tFeather(),warm=gtex([255,240,190]),B0=1.4,HL=2.3,HIT=3.1,TOT=HIT+1.6;
   dimScreen('brightness(.85) sepia(.2) saturate(1.2)',.1,HIT+.4);tween(.6,u=>{h.off.y=.5*ease(u);},.3);tween(.5,u=>{h.off.y=.5*(1-ease(u));},HIT+.4);
-  // two angel wings (image-AI prop 'wing', drawn spreading up to the right; mirrored for the left), rooted at the priest's back, slowly beating
+  // two angel wings (image-AI prop 'wing'; the right-hand one is the mirrored image, the left-hand one the original), rooted at the priest's back, slowly beating
   const wing=[],bw=[backSp(warm,TOT),backSp(tWingP(),TOT),backSp(tWingP(),TOT)];   // behind the priest, rooted at the shoulders, spreading to the sides
   tween(TOT-.2,u=>{const t=u*(TOT-.2),p=hpos(),g=ease(cl(t/.7))*(t>HIT+.3?Math.max(0,1-(t-HIT-.3)/.6):1),S=1.3*g,fl=.08*Math.sin(t*3.2),[gw,wl,wr]=bw;
     gw.pos=[p[0],p[1]+.6,p[2]-.4];gw.w=3.0*g;gw.h=1.7*g;gw.a=.35*g;
-    wr.pos=[p[0]+.15+S*.74,p[1]+.35+S*.66,p[2]-.35];wr.w=S;wr.h=S;wr.rot=-fl;wr.a=.95*g;
-    wl.pos=[p[0]-.15-S*.74,p[1]+.35+S*.66,p[2]-.35];wl.w=-S;wl.h=S;wl.rot=fl;wl.a=.95*g;});
+    wr.pos=[p[0]+.15+S*.74,p[1]+.35+S*.66,p[2]-.35];wr.w=-S;wr.h=S;wr.rot=fl;wr.a=.95*g;
+    wl.pos=[p[0]-.15-S*.74,p[1]+.35+S*.66,p[2]-.35];wl.w=S;wl.h=S;wl.rot=-fl;wl.a=.95*g;});
   for(let i=0;i<4;i++){const ang=PI/2+(i-1.5)*.42;at(B0+i*.15,()=>{const c=mpos();sigLine(uslash('h6',th),[c[0]+Math.cos(ang)*3,c[1]+.6+Math.sin(ang)*3,c[2]+.6],ang,6.5,.7,.9,warm);vfx('holy_burst',[c[0],c[1]+.5,c[2]+.7],.8);E.flash.mon=[1,1,.85,.6];sigHit(m);});}
   const halo=sigSp(tRing('#FFE9A0'));tween(HIT-HL+.6,u=>{const t=HL+u*(HIT-HL+.6),c=mpos(),q=ease(cl((t-HL)/(HIT-HL))),y=c[1]+3.4-2.8*q,r=2.6-1.0*q;halo.pos=[c[0],y,c[2]+.55];halo.w=r;halo.h=r*.3;halo.a=t<HIT?1:Math.max(0,1-(t-HIT)/.5);},HL);
   sigWords(K,(k,t,c)=>{if(t<.1||t>HIT)return null;const p=hpos(),f=ease(cl((t-.1-k*.07)/1.0)),a=k/n*PI*2+t*1.3;return{pos:lerp3([p[0]+.4,p[1]+1.3,p[2]+.6],[c[0]+Math.cos(a)*1.7,c[1]+2.6+Math.sin(a)*.4,c[2]+.6],f),a:t>HIT-.2?(HIT-t)/.2:1,sc:.42};},TOT);
