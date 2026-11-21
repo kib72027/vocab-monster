@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Add extra monsters from grid sheets to src/part_roster.js.
-  assets/monster-2/monsters.json -> RMON + RSPR   (new collectable monsters; ids n081...)
-  assets/legend/legends.json     -> LMON + LSPR   (legendary monsters, kept apart: not used by the game yet)
-Each json lists {sheet, cell, id, zh, en, t[, role]}; cells not listed are skipped (look-alikes of existing monsters).
+  assets/monsters/set-2/monsters.json, set-3/... -> RMON + RSPR (new collectable monsters; ids n081...; every
+                                                    assets/monsters/set-N folder except set-1, in order)
+  assets/monsters/legend/legends.json            -> LMON + LSPR (legendary monsters, kept apart: not used by the game yet)
+(set-1 = the original 80 monsters, cut by tools/nmcut2.py.)
+Each json lists {sheet, cell, id, zh, en, t[, role, face]} and optionally grid = {sheet: [cols, rows]} (default: 2x2 for
+3:2 sheets, else 4x4); cells not listed are skipped (look-alikes of existing monsters).
 Re-running replaces entries with the same id, so it is safe to run again after editing the json.
 Cut-outs are saved to <folder>/cut/<id>.png for review.
 Usage: python3 tools/nmadd.py [--dry]"""
@@ -25,14 +28,16 @@ def cut(path,cols,rows,box):
     return res,kind
 def enc(im):
     b=io.BytesIO();bleed(im).save(b,'WEBP',quality=82,method=4,exact=True);return base64.b64encode(b.getvalue()).decode()
-def grid(path):
-    w,h=Image.open(path).size;return (4,4) if w/h>1.6 else (2,2)   # monster sheets are 4x4 (16:9), the legend sheet 2x2 (3:2)
+def grid(path,cfg):
+    g=cfg.get('grid',{}).get(os.path.basename(path))
+    if g:return tuple(g)
+    w,h=Image.open(path).size;return (2,2) if 1.3<w/h<1.6 else (4,4)   # the legend sheet is 2x2 (3:2), monster sheets 4x4 (16:9 or square)
 def load(folder,box):
     cfg=json.load(open(os.path.join(folder,os.path.basename(folder) and '')+[f for f in os.listdir(folder) if f.endswith('.json')][0],encoding='utf-8'))
     out=[];cache={};os.makedirs(os.path.join(folder,'cut'),exist_ok=True)
     for m in cfg['monsters']:
         p=os.path.join(folder,m['sheet'])
-        if p not in cache:cols,rows=grid(p);cache[p]=cut(p,cols,rows,box)[0];print(' cut',m['sheet'],f'{cols}x{rows}')
+        if p not in cache:cols,rows=grid(p,cfg);cache[p]=cut(p,cols,rows,box)[0];print(' cut',m['sheet'],f'{cols}x{rows}')
         im=cache[p][m['cell']]
         if im is None:raise SystemExit(f"{m['id']}: cell {m['cell']} of {m['sheet']} is empty")
         im.save(os.path.join(folder,'cut',m['id']+'.png'));out.append((m,im))
@@ -40,7 +45,8 @@ def load(folder,box):
 def main(dry):
     p=os.path.join(R,'src','part_roster.js');js=open(p,encoding='utf-8').read()
     # 1) collectable monsters
-    new=load(os.path.join(R,'assets','monster-2'),(360,264))
+    M=os.path.join(R,'assets','monsters');sets=sorted((d for d in os.listdir(M) if d.startswith('set-') and d!='set-1'),key=lambda d:int(d[4:]))
+    new=[x for d in sets for x in load(os.path.join(M,d),(360,264))]
     RM=json.loads(re.search(r'const RMON=(\[.*?\]);',js).group(1));ids={m['id']:i for i,m in enumerate(RM)}
     for m,im in new:
         e={'id':m['id'],'zh':m['zh'],'en':m['en'],'t':m['t'],'role':m.get('role','x')}
@@ -53,7 +59,7 @@ def main(dry):
         else:i=js.index('const RSPR={');j=js.index('};',i);js=js[:j]+','+ent+js[j:]
     js=re.sub(r'const RMON=\[.*?\];',lambda _:'const RMON='+json.dumps(RM,ensure_ascii=False)+';',js,count=1)
     # 2) legends: separate tables, rewritten every run
-    leg=load(os.path.join(R,'assets','legend'),(440,320))
+    leg=load(os.path.join(R,'assets','monsters','legend'),(440,320))
     js=re.sub(r'\n/\* legends \*/.*?/\* end legends \*/\n','\n',js,flags=re.S)
     LM=[{'id':m['id'],'zh':m['zh'],'en':m['en'],'t':m['t'],'role':'L'} for m,_ in leg]
     LS=','.join(f"{m['id']}:{{u:\"data:image/webp;base64,{enc(im)}\",w:{im.width},h:{im.height}}}" for m,im in leg)

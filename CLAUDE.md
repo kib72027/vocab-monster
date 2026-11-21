@@ -11,8 +11,8 @@ python3 build.py                 # regenerate index.html from src/ (only needs P
 python3 tools/mkhsheet.py <id>   # cut assets/heroes/<id>/source/*.jpg into frames + src/part_hanim_<id>.js, then rebuild
 python3 tools/mkhvideo.py <id>   # hero frames from videos in assets/video/<id>/ (frames.json picks the frames); ALL heroes use this now — don't run mkhsheet (it would overwrite)
 python3 tools/mkbg.py            # battle backgrounds: assets/backgrounds/backgrounds.json (+ images) -> src/part_bg.js (BGS/BGT, chosen by monster element)
-python3 tools/nmadd.py           # add/update extra monsters (assets/monster-2) and legends (assets/legend) in part_roster.js
-python3 tools/nmcut2.py          # re-cut assets/monsters/monster-sheet-1..5.jpg into RSPR (add --dry to only write assets/monsters/cut/)
+python3 tools/nmadd.py           # add/update extra monsters (assets/monsters/set-2, set-3, …) and legends (assets/monsters/legend) in part_roster.js
+python3 tools/nmcut2.py          # re-cut assets/monsters/set-1/monster-sheet-1..5.jpg into RSPR (add --dry to only write set-1/cut/)
 node tools/merge_vocab.js        # merge data/vocab/*_out*.json into src/part_data.js
 ```
 
@@ -37,7 +37,7 @@ Play/test: open `index.html` directly in a browser (the in-app browser pane need
 - **Battle flow** (`part_game.js`): `startBattle(kind,id)` → `nextQ()` → `answerB(idx)` → `nextB()` → `finish(win)` (star thresholds 0.85 / 0.65) → `rollBonus()`. Elite/boss heal on wrong answer is in `answerB()`. Hearts/mana/HP bars update only when the attack animation actually lands (`ENG.hurt` returns hit time), not on click.
 - **Rendering** (`part_3d.js`): custom WebGL toon engine `ENG` (`setup`, `hurt`, `finale`, `ultimate`, billboards with depth test off, particles). Per-hero ultimates in the `SIGF` table. Falls back to 2D `stageHTML` without WebGL.
 - **Data**: `RAW` = 40 lessons `{id, week, title, words:[[word, zh, defText, example, pos] | "ref"]}`; `VX[word] = {d:[3 defs], e:[3 examples]}`, `variant(t)` picks one at random per question. Data rules: definitions 4–10 words, examples 5–11 words, A1–A2 vocabulary, headword appears exactly in each example and never in definitions. Duplicate words across lessons keep the first lesson's data.
-- **Monsters**: `RMON` (113, ids `n001`–`n113`; n081+ added by `tools/nmadd.py` from `assets/monster-2/monsters.json`; legends in separate `LMON`/`LSPR`, not used yet; roles n/e/b/r/x, element `t` from `TYPES`), art in `RSPR[id]`. The engine mirrors monster art so it faces the hero (left); `f:0` in RMON marks art that already faces left (set via `face:'left'` in `assets/monster-2/monsters.json`). Monster size = equal visual area (sqrt(w*h)), not equal height. `MPLAN.normal[i]` / `.elite[w]` / `.boss[j]` assign monsters to lessons / weeks / two-week blocks. `MON`/`MSPR` are legacy and unused in battles.
+- **Monsters**: `RMON` (125, ids `n001`–`n125`; all monster art is under `assets/monsters/` (set-1 = original 80, set-2/set-3 = extras, legend); n081+ added by `tools/nmadd.py` from `assets/monsters/set-N/monsters.json`; legends in separate `LMON`/`LSPR`, not used yet; roles n/e/b/r/x, element `t` from `TYPES`), art in `RSPR[id]`. The engine mirrors monster art so it faces the hero (left); `f:0` in RMON marks art that already faces left (set via `face:'left'` in a set's `monsters.json`). Monster size = equal visual area (sqrt(w*h)), not equal height. `MPLAN.normal[i]` / `.elite[w]` / `.boss[j]` assign monsters to lessons / weeks / two-week blocks. `MON`/`MSPR` are legacy and unused in battles.
 - **Test lab** (`viewTest`/`tlAct` in `part_game.js`, card at the bottom of the home screen): real battle stage to replay every hero action, monster attack, sound and monster sprite; must never change progress.
 - **Heroes**: `HSPR` (10 heroes). Heroes with `HANIM[hid]` (from `part_hanim_<id>.js`) use frame animation (idle loop, attack, hit, win); others use a static sprite + programmatic motion.
 

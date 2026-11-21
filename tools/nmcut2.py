@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Cut the monster sheets (assets/monsters/monster-sheet-1..5.jpg, 4x4, solid magenta or green background)
+"""Cut the monster sheets (assets/monsters/set-1/monster-sheet-1..5.jpg, 4x4, solid magenta or green background)
 into transparent sprites and replace their RSPR entries in src/part_roster.js.
 Sheet k holds monsters n{16(k-1)+1 .. 16k}, row by row (80 monsters). Names, roles and MPLAN live in part_roster.js.
-Usage : python3 tools/nmcut2.py            (writes src/part_roster.js, cut-outs in assets/monsters/cut/)
+Usage : python3 tools/nmcut2.py            (writes src/part_roster.js, cut-outs in assets/monsters/set-1/cut/)
         python3 tools/nmcut2.py --dry      (previews only)"""
 import sys,os,io,re,base64
 import numpy as np
 from PIL import Image
 from scipy import ndimage as nd
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-V2=os.path.join(R,'assets','monsters')
+V2=os.path.join(R,'assets','monsters','set-1')
 BOX=(360,264)      # max sprite size (old art was 300x220); the engine only uses the aspect ratio
 def bgkind(a):
     e=np.concatenate([a[:8].reshape(-1,3),a[-8:].reshape(-1,3),a[:,:8].reshape(-1,3),a[:,-8:].reshape(-1,3)]);r,g,b=np.median(e,0)
@@ -18,7 +18,7 @@ def key(a,bgc=None,shadow=False):
     """alpha from 'how much background colour' a pixel has; only background connected to the sheet border is removed,
     so purple/pink/green parts inside a monster stay opaque. Semi-transparent edges are un-mixed from the background (no fringe).
     bgc: the measured background colour (videos are not pure #00FF00); default = pure key colour.
-    shadow: also remove a floor shadow painted in darkened key colour (magenta sheets of assets/monster-2): pixels with
+    shadow: also remove a floor shadow painted in darkened key colour (magenta sheets of assets/monsters/set-2): pixels with
     almost no green and the background's red/blue ratio, connected to the background. Monster purples carry some green."""
     a=a.astype(np.float32);r,g,b=a[...,0],a[...,1],a[...,2];kind=bgkind(a)
     if kind=='green':d=g-np.maximum(r,b);bg=np.array([0,255,0],np.float32)

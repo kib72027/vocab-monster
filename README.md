@@ -65,14 +65,15 @@ Open `index.html` in any modern browser (Chrome / Safari / Edge; desktop, phone,
 - Wrong words are re-queued in the same fight and become "revenge" words.
 - Hearts max is fixed at 5, no random crits, the example sentence is always auto-read, the potion is usable from the HUD (+3 hearts) and also auto-revives at 0 hearts.
 
-## Monsters (113 + 4 legends)
-- Codex has **113 monsters** (`RMON`), each `{id:'n001'…'n113', zh, en, t (element type), role}`.
+## Monsters (125 + 4 legends)
+- Codex has **125 monsters** (`RMON`), each `{id:'n001'…'n125', zh, en, t (element type), role}`.
   Roles: `n` normal lesson monster (40), `e` elite (18), `b` boss (9), `r` rare (chest only, 8), `x` spare (chest only, 38).
-- n081–n113 come from `assets/monster-2/sheet-2..6.jpg` (`assets/monster-2/monsters.json` lists which cells; look-alikes of existing monsters were skipped, sheet-1 entirely) via `tools/nmadd.py`.
-- **Legends (傳奇)**: 4 monsters in `LMON`/`LSPR` from `assets/legend/` (`legends.json`), harder to get than bosses. Not used by the game yet — how players earn them is still to be decided.
+- All monster art lives in `assets/monsters/`: `set-1/` (the original 80), `set-2/`, `set-3/` (extra monsters) and `legend/`. Each set has its sheets, a `cut/` folder with the cut-outs, and (set-2 onward) a `monsters.json`.
+- n081–n113 come from `assets/monsters/set-2/sheet-2..6.jpg`, n114–n125 from `assets/monsters/set-3/` (each set's `monsters.json` lists which cells; look-alikes of existing monsters were skipped) via `tools/nmadd.py`. A new set = a new folder `set-4/` with sheets + `monsters.json`, then run `tools/nmadd.py`.
+- **Legends (傳奇)**: 4 monsters in `LMON`/`LSPR` from `assets/monsters/legend/` (`legends.json`), harder to get than bosses. Not used by the game yet — how players earn them is still to be decided.
   Element types: fire, ice, elec, poison, forest, sea, desert, sky, ghost, mech, skel, dragon (`TYPES`).
 - `MPLAN = {normal:[40 ids], elite:[18 ids], boss:[9 ids]}` assigns monsters. Lesson *i* uses `MPLAN.normal[i]`; the *w*-th week uses `MPLAN.elite[w]`; the *j*-th two-week block uses `MPLAN.boss[j]`.
-- Art: full-body transparent WebP cut-outs (`RSPR[id] = {u: dataURI, w, h}`), cut by `tools/nmcut2.py` from 5 redrawn 4×4 sheets (`assets/monsters/monster-sheet-1..5.jpg`, magenta background; sheet *k* = `n{16(k-1)+1}`…`n{16k}`, row by row). The old 96-monster art (6 sheets) was removed. Heroes: `HSPR` (10 heroes). `MON`/`MSPR` are the legacy 11 procedural monsters (no longer used for battles).
+- Art: full-body transparent WebP cut-outs (`RSPR[id] = {u: dataURI, w, h}`), cut by `tools/nmcut2.py` from 5 redrawn 4×4 sheets (`assets/monsters/set-1/monster-sheet-1..5.jpg`, magenta background; sheet *k* = `n{16(k-1)+1}`…`n{16k}`, row by row). The old 96-monster art (6 sheets) was removed. Heroes: `HSPR` (10 heroes). `MON`/`MSPR` are the legacy 11 procedural monsters (no longer used for battles).
 
 ## Vocabulary data
 - `RAW` = list of lessons `{id, week:"Week 7", title, words:[[word, zh, defText, example, pos] | "stringRef"]}` (40 lessons, 338 words).
@@ -111,9 +112,9 @@ src/              editable sources
   part_game.js      battle logic + views (spliced into part_app2.js)
   part_app2.js      app shell: storage, practice mode, click handler (+ spliced game block)
 tools/            how the data/art were produced (python/node; paths inside point to the original sandbox -> adjust)
-  nmcut2.py         cut the 80 monsters out of assets/monsters/monster-sheet-1..5.jpg and replace their RSPR art in src/part_roster.js
-  nmadd.py          add/update the extra monsters (assets/monster-2/monsters.json -> RMON/RSPR) and legends (assets/legend/legends.json -> LMON/LSPR); removes painted floor shadows
-                    (names/roles/MPLAN are edited directly in part_roster.js; cut-outs saved to assets/monsters/cut/)
+  nmcut2.py         cut the 80 monsters out of assets/monsters/set-1/monster-sheet-1..5.jpg and replace their RSPR art in src/part_roster.js
+  nmadd.py          add/update the extra monsters (assets/monsters/set-N/monsters.json, N>=2 -> RMON/RSPR) and legends (assets/monsters/legend/legends.json -> LMON/LSPR); removes painted floor shadows
+                    (names/roles/MPLAN are edited directly in part_roster.js; cut-outs saved to each set's cut/ folder)
   cuth4.py, mkroster.py   hero cut-outs from assets/heroes/poster/hero-poster.png / older roster builder
   mkhsheet.py       cut a hero's grid sprite sheets (assets/heroes/<id>/source) into transparent frames + src/part_hanim_<id>.js
   mkhvideo.py       same output from videos (assets/video/<id>/<id>_<action>.mp4 + frames.json listing the frames to use); used for all 10 heroes
