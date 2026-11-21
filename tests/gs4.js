@@ -59,6 +59,10 @@ act('goGame');A(!/等你復仇/.test(clean()),'no revenge card left');
  let k=0,again=0;while(D.S.view==='battle'&&k++<60){const q=D.B.q;if(q.t.w===w0)again++;act('pick',{i:String(q.choices.findIndex(c=>c.correct))});flush();act('nextB');flush();}
  A(again>0,'the missed word was asked again in the same fight');A(D.store.missed.includes(w0),'missed word kept for revenge after being answered right later in the fight');
  act('goGame');A(/等你復仇/.test(clean()),'revenge card shows after a lesson fight with a mistake');D.store.missed.splice(0);}
+// monster special moves: one tier up (lesson -> elite moves 'e', elite -> boss moves 'b', boss -> legend moves 'L'); every 3rd miss, a boss at 1/3 HP or less every 2nd
+{const miss=(kind,n,setup)=>{act('goGame');act('fight',{id:__a});flush();D.B.kind=kind;D.B.wrongN=0;if(setup)setup();const out=[];for(let i=0;i<n;i++){D.B.php=5;D.B.busy=false;D.B.lockUntil=0;const q=D.B.q;act('pick',{i:String(q.choices.findIndex(c=>!c.correct))});out.push(D.B.spTier||'-');flush();act('nextB');flush();}act('goGame');D.store.missed.splice(0);return out.join('');};
+ const a=miss('set',6),b=miss('elite',3),c=miss('boss',3,()=>{D.B.hp=20;D.B.maxhp=20;}),d=miss('boss',4,()=>{D.B.maxhp=30;D.B.hp=5;});
+ A(a==='--e--e','lesson monster: elite move every 3rd miss ('+a+')');A(b==='--b','elite: boss move on the 3rd miss ('+b+')');A(c==='--L','boss: legend move on the 3rd miss ('+c+')');A(d==='-L-L','boss at 1/3 HP: legend move every 2nd miss ('+d+')');}
 // ultimates: with a 終極卷軸 the ultimate is the hero's finisher (uses one scroll, 4 damage); otherwise the first or second ultimate at random
 {const g=D.G();g.inv.finisher=1;act('goGame');act('fight',{id:__a});flush();D.B.mana=99;const hp0=D.B.hp,q=D.B.q;act('pick',{i:String(q.choices.findIndex(c=>c.correct))});
  A(D.B.ultKind==='fin'&&g.inv.finisher===0,'scroll turns the ultimate into the finisher ('+D.B.ultKind+')');A(hp0-D.B.hp===Math.min(4,hp0-1)||hp0-D.B.hp===4,'finisher deals 4 damage');flush();act('nextB');flush();
