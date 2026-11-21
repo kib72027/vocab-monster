@@ -21,6 +21,7 @@ SHEETS=[('robot.jpg',2,['robot0','robot1','robot2','robot3']),
         ('props-2.jpg',4,['boulder','rockchunk','pyramid','bubble','bone','skelhand','iceblock','icespike','mine','chain','root','lightsword','lightarrow','windbow','wing','skull'])]
 TURN={'dagger':-45,'spear':-45,'rocket':-40}   # batch-2 props are drawn already pointing the way the engine expects (see the prompt doc)   # degrees (counter-clockwise) so the point faces right
 INSET=.03
+TINT={'lightarrow':(150,255,150),'windbow':(130,235,120)}   # green objects drawn on the green key lose their colour: recolour them from brightness
 INSETS={'robot.jpg':.065}   # this sheet draws thick white lines around and between the cells
 def despill(rgba,green):
     """glows were painted over the key colour: take the leaked green (or magenta) back out and thin that haze"""
@@ -42,6 +43,8 @@ def main():
             r,c=divmod(i,n);x0,y0,x1,y1=int(c*cw+cw*ins),int(r*ch+ch*ins),int((c+1)*cw-cw*ins),int((r+1)*ch-ch*ins)
             rgba,kind=key(np.ascontiguousarray(a[y0:y1,x0:x1]));im=Image.fromarray(despill(rgba,kind=='green'))
             if name in TURN:im=im.rotate(TURN[name],resample=Image.BICUBIC,expand=True)
+            if name in TINT:
+                q=np.asarray(im).astype(np.float32);L=(q[...,:3].max(-1)*.6+q[...,:3].mean(-1)*.4)/255;q[...,:3]=np.clip(L[...,None]*np.array(TINT[name],np.float32)[None,None,:]*1.7,0,255);im=Image.fromarray(q.astype(np.uint8))
             group.append((name,im))
         helper=f.startswith(('robot','turret'))
         if helper:   # one shared crop box for all frames of a helper (no jumping between poses), feet on the bottom

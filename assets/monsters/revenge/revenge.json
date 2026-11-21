@@ -1,0 +1,11 @@
+{
+  "_note": "Revenge monsters (復仇怪): the Mistake Ghost at 4 power levels; the revenge battle shows the level that matches how many missed words are waiting (1-3, 4-6, 7-9, 10+). Stored as VMON/VSPR in src/part_roster.js, not collectable. size = drawn this much smaller/larger than the equal-area size, so the levels visibly grow.",
+  "grid": {"mistake_ghost_power.jpg": [2, 2]},
+  "inset": 0.025,
+  "monsters": [
+    {"sheet": "mistake_ghost_power.jpg", "cell": 0, "id": "V01", "zh": "小復仇怪", "en": "Little Mistake Ghost", "t": "ghost", "face": "left", "size": 0.8},
+    {"sheet": "mistake_ghost_power.jpg", "cell": 1, "id": "V02", "zh": "復仇怪",   "en": "Mistake Ghost",        "t": "ghost", "face": "left", "size": 0.9},
+    {"sheet": "mistake_ghost_power.jpg", "cell": 2, "id": "V03", "zh": "大復仇怪", "en": "Big Mistake Ghost",    "t": "ghost", "face": "left", "size": 1.0},
+    {"sheet": "mistake_ghost_power.jpg", "cell": 3, "id": "V04", "zh": "復仇怪王", "en": "Mistake Ghost King",   "t": "ghost", "face": "left", "size": 1.12}
+  ]
+}

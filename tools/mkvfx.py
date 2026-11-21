@@ -15,11 +15,19 @@ PICK={'fire_burst':'fire_burst.jpg','flame_loop':'flame_loop-1.jpg','ice_burst':
       'leaf_swirl':'leaf_swirl-1.jpg','holy_burst':'holy_burst-1.jpg','dark_burst':'dark_burst.jpg','hit_spark':'hit_spark-1.jpg',
       'slash_arc':'slash_arc-1.jpg','water_splash':'water_splash.jpg','smoke_puff':'smoke_puff-1.jpg',
       'explosion_big':'explosion_big.jpg','fire_pillar':'fire_pillar-1.jpg','tornado':'tornado.jpg','tidal_wave':'tidal_wave.jpg',
-      'poison_cloud':'poison_cloud.jpg','sandstorm':'sandstorm-1.jpg','laser_hit':'laser_hit.jpg'}
+      'poison_cloud':'poison_cloud.jpg','sandstorm':'sandstorm-1.jpg','laser_hit':'laser_hit.jpg',
+      'vine_whip':'vine_whip.jpg','thorn_burst':'thorn_burst-1.jpg','root_burst':'root_burst.jpg','lightning_h':'lightning_h-1.jpg',
+      'storm_cloud':'storm_cloud-1.jpg','fire_breath':'fire_breath-1.jpg','ghost_hand':'ghost_hand.jpg','flower_bloom':'flower_bloom.jpg',
+      'frost_breath':'frost_breath.jpg','water_beam':'water_beam.jpg','laser_beam':'laser_beam-1.jpg','fireball':'fireball.jpg','meteor':'meteor.jpg',
+      'water_spout':'water_spout-1.jpg','poison_geyser':'poison_geyser.jpg','whirlpool':'whirlpool-1.jpg','quicksand':'quicksand-1.jpg','dark_portal':'dark_portal.jpg',
+      'wind_blade':'wind_blade.jpg','sun_orb':'sun_orb.jpg','lava_crack':'lava_crack-1.jpg','energy_pillar':'energy_pillar-1.jpg','water_dragon':'water_dragon-1.jpg','fire_dragon':'fire_dragon-1.jpg'}
+# solid things (vines, roots, a dark cloud, petals) are not glows: brightness-as-alpha would make them see-through, so they get an
+# opaque cut-out where only the near-black background (and a soft edge) turns transparent
+SOLID={'vine_whip':(24,46),'thorn_burst':(22,44),'root_burst':(16,36),'storm_cloud':(8,30),'flower_bloom':(28,50),'meteor':(12,32),'quicksand':(14,34)}   # (black level, edge width)
 SIZE=224        # frame size in pixels (square)
 INSET=.025      # trim 2.5% of the cell on each side: removes grid lines
-def glow(a):
-    a=a.astype(np.float32);m=a.max(-1);A=np.clip((m-16)/170,0,1)
+def glow(a,solid=None):
+    a=a.astype(np.float32);m=a.max(-1);A=np.clip((m-solid[0])/solid[1],0,1) if solid else np.clip((m-16)/170,0,1)
     rgb=np.where(A[...,None]>.02,a/np.maximum(A[...,None],.02),0)
     return np.dstack([np.clip(rgb,0,255),A*255]).astype(np.uint8)
 _e=np.minimum(np.arange(SIZE),np.arange(SIZE)[::-1])/(SIZE*.07);_e=np.clip(_e,0,1)
@@ -36,7 +44,7 @@ def picks():
 def main():
     out={};os.makedirs(os.path.join(D,'cut'),exist_ok=True);total=0
     for name,f in picks().items():
-        g=glow(np.asarray(Image.open(os.path.join(D,f)).convert('RGB')));H,W=g.shape[:2];cw,ch=W/4,H/4;frames=[];strip=Image.new('RGBA',(SIZE*16,SIZE))
+        g=glow(np.asarray(Image.open(os.path.join(D,f)).convert('RGB')),SOLID.get(name));H,W=g.shape[:2];cw,ch=W/4,H/4;frames=[];strip=Image.new('RGBA',(SIZE*16,SIZE))
         for i in range(16):
             r,c=divmod(i,4);x0,y0=int(c*cw+cw*INSET),int(r*ch+ch*INSET);x1,y1=int((c+1)*cw-cw*INSET),int((r+1)*ch-ch*INSET)
             im=Image.fromarray(g[y0:y1,x0:x1]).resize((SIZE,SIZE),Image.LANCZOS);a=np.asarray(im).copy();a[...,3]=(a[...,3]*EDGE).astype(np.uint8);im=Image.fromarray(a);strip.paste(im,(i*SIZE,0))

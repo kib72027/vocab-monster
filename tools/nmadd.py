@@ -3,6 +3,7 @@
   assets/monsters/set-2/monsters.json, set-3/... -> RMON + RSPR (new collectable monsters; ids n081...; every
                                                     assets/monsters/set-N folder except set-1, in order)
   assets/monsters/legend/legends.json            -> LMON + LSPR (legendary monsters, kept apart: not used by the game yet)
+  assets/monsters/revenge/revenge.json           -> VMON + VSPR (the revenge monster, 4 levels; used by revenge battles)
 (set-1 = the original 80 monsters, cut by tools/nmcut2.py.)
 Each json lists {sheet, cell, id, zh, en, t[, role, face]} and optionally grid = {sheet: [cols, rows]} (default: 2x2 for
 3:2 sheets, else 4x4); cells not listed are skipped (look-alikes of existing monsters).
@@ -26,6 +27,19 @@ def cut(path,cols,rows,box):
         if s<1:im=im.resize((round(im.width*s),round(im.height*s)),Image.LANCZOS)
         res.append(im)
     return res,kind
+def cutcells(path,cols,rows,box,ins):
+    """sheets with drawn grid lines and glows: crop each cell inside its border, key it, and take the leaked key colour out of the glow"""
+    from mkprops import despill
+    a=np.asarray(Image.open(path).convert('RGB'));H,W=a.shape[:2];cw,ch=W/cols,H/rows;res=[]
+    for i in range(cols*rows):
+        r,c=divmod(i,cols);x0,y0,x1,y1=int(c*cw+cw*ins),int(r*ch+ch*ins),int((c+1)*cw-cw*ins),int((r+1)*ch-ch*ins)
+        rgba,kind=key(np.ascontiguousarray(a[y0:y1,x0:x1]));im=Image.fromarray(despill(rgba,kind=='green'))
+        bb=im.getbbox()
+        if not bb:res.append(None);continue
+        im=im.crop(bb);sc=min(1,box[1]/im.height,box[0]/im.width)
+        if sc<1:im=im.resize((round(im.width*sc),round(im.height*sc)),Image.LANCZOS)
+        res.append(im)
+    return res
 def enc(im):
     b=io.BytesIO();bleed(im).save(b,'WEBP',quality=82,method=4,exact=True);return base64.b64encode(b.getvalue()).decode()
 def grid(path,cfg):
@@ -37,7 +51,7 @@ def load(folder,box):
     out=[];cache={};os.makedirs(os.path.join(folder,'cut'),exist_ok=True)
     for m in cfg['monsters']:
         p=os.path.join(folder,m['sheet'])
-        if p not in cache:cols,rows=grid(p,cfg);cache[p]=cut(p,cols,rows,box)[0];print(' cut',m['sheet'],f'{cols}x{rows}')
+        if p not in cache:cols,rows=grid(p,cfg);cache[p]=cutcells(p,cols,rows,box,cfg['inset']) if cfg.get('inset') else cut(p,cols,rows,box)[0];print(' cut',m['sheet'],f'{cols}x{rows}')
         im=cache[p][m['cell']]
         if im is None:raise SystemExit(f"{m['id']}: cell {m['cell']} of {m['sheet']} is empty")
         im.save(os.path.join(folder,'cut',m['id']+'.png'));out.append((m,im))
@@ -65,6 +79,13 @@ def main(dry):
     LM=[dict({'id':m['id'],'zh':m['zh'],'en':m['en'],'t':m['t'],'role':'L'},**({'f':0} if m.get('face')=='left' else {})) for m,_ in leg]
     LS=','.join(f"{m['id']}:{{u:\"data:image/webp;base64,{enc(im)}\",w:{im.width},h:{im.height}}}" for m,im in leg)
     js=js.rstrip('\n')+'\n/* legends */\nconst LMON='+json.dumps(LM,ensure_ascii=False)+';\nconst LSPR={'+LS+'};\n/* end legends */\n'
+    # 3) revenge monsters (the Mistake Ghost, 4 levels): separate tables, rewritten every run
+    rf=os.path.join(R,'assets','monsters','revenge')
+    if os.path.isdir(rf):
+        rv=load(rf,(400,320));js=re.sub(r'\n/\* revenge \*/.*?/\* end revenge \*/\n','\n',js,flags=re.S)
+        VM=[dict({'id':m['id'],'zh':m['zh'],'en':m['en'],'t':m['t'],'role':'v'},**({'f':0} if m.get('face')=='left' else {}),**({'z':m['size']} if m.get('size') else {})) for m,_ in rv]
+        VS=','.join(f"{m['id']}:{{u:\"data:image/webp;base64,{enc(im)}\",w:{im.width},h:{im.height}}}" for m,im in rv)
+        js=js.rstrip('\n')+'\n/* revenge */\nconst VMON='+json.dumps(VM,ensure_ascii=False)+';\nconst VSPR={'+VS+'};\n/* end revenge */\n'
     if not dry:open(p,'w',encoding='utf-8').write(js)
     print(('would write' if dry else 'wrote'),len(RM),'monsters +',len(LM),'legends;',len(js)//1024,'KB')
 if __name__=='__main__':main('--dry' in sys.argv)

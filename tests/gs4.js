@@ -15,7 +15,7 @@ const src=fs.readFileSync('app2.js','utf8');
  localStorage._d[KEY]=JSON.stringify({missed:[...__played,...__unplayed],g:{def:{[a.id]:1},stars:{[a.id]:3},learned:{[a.id]:1}}});global.__a=a.id;global.__raw=raw;}
 const timers=[];global.setTimeout=f=>{timers.push(f);return 1};const flush=()=>{while(timers.length)timers.shift()()};
 global.requestAnimationFrame=f=>0;
-{const i=src.lastIndexOf('})();');eval(src.slice(0,i)+'global.BGS0=typeof BGS!=="undefined"?BGS:undefined;global.D={G,get B(){return B},get S(){return S},RMON,RSPR,MPLAN,HANIM,HSPR,HEROES,store,LMON,LSPR};'+src.slice(i));}
+{const i=src.lastIndexOf('})();');eval(src.slice(0,i)+'global.BGS0=typeof BGS!=="undefined"?BGS:undefined;global.D={G,get B(){return B},get S(){return S},RMON,RSPR,MPLAN,HANIM,HSPR,HEROES,store,LMON,LSPR,VMON,VSPR,revMon};'+src.slice(i));}
 const act=(a,ds={})=>click({target:{closest:()=>({dataset:Object.assign({act:a},ds),disabled:false})}});
 const D=global.D,A=(c,m)=>{if(!c){console.log('FAIL',m);process.exit(1)}};
 const clean=()=>app.innerHTML.replace(/data:image[^"]*/g,'');
@@ -41,7 +41,7 @@ for(const h of D.HEROES){const H=D.HANIM[h.id];
 act('goGame');A(clean().includes('收集 '+D.RMON.length+' 隻怪物'),'home shows the monster count');
 // legends: stored for later, not part of the collection yet
 act('goGame');act('coll');A((app.innerHTML.match(/class="rt legend locked"/g)||[]).length===4,'codex shows 4 locked legends');act('cdx',{t:'tL'});A((app.innerHTML.match(/rt legend/g)||[]).length===4&&!/rt locked role-/.test(app.innerHTML),'legend tab shows only legends');act('goGame');
-A(D.LMON.length===4&&D.LMON.every(m=>D.LSPR[m.id]&&D.LSPR[m.id].w>0&&!D.RMON.some(r=>r.id===m.id)),'4 legends stored apart');
+A(D.VMON.length===4&&D.VMON.every(m=>D.VSPR[m.id]&&!D.RMON.some(r=>r.id===m.id)),'4 revenge levels stored apart');A(D.revMon(1)==='V01'&&D.revMon(5)==='V02'&&D.revMon(8)==='V03'&&D.revMon(12)==='V04','revenge level follows missed-word count');A(D.LMON.length===4&&D.LMON.every(m=>D.LSPR[m.id]&&D.LSPR[m.id].w>0&&!D.RMON.some(r=>r.id===m.id)),'4 legends stored apart');
 A(/4 個字等你復仇/.test(clean()),'revenge card counts 4 (fought lesson only): '+(clean().match(/\d+ 個字等你復仇[^<]*/)||['none'])[0]);
 act('revenge');A(D.S.view==='battle'&&D.B.kind==='revenge','revenge battle starts');
 A(D.B.maxhp===4,'revenge hp 4, got '+D.B.maxhp);
@@ -72,7 +72,7 @@ act('goGame');A(!/等你復仇/.test(clean()),'no revenge card left');
 {act('goGame');A(/data-act="test"/.test(app.innerHTML),'home has test button');act('test');A(D.S.view!=='test'&&/id="tpwin"/.test(app.innerHTML),'test lab asks for a password');
  act('testgo',{pw:'0000'});A(D.S.view!=='test'&&/tpwbad/.test(app.innerHTML),'wrong password refused');act('testno');A(!/tpwin/.test(app.innerHTML),'cancel closes the dialog');act('test');act('testgo',{pw:'0828'});A(D.S.view==='test','right password opens the test lab');act('goGame');const g=D.G(),snap=JSON.stringify([g.xp,g.coins,g.heroId,g.stars,g.def,g.rcards]);
  act('test');A(D.S.view==='test','test view');const h=clean();A(!/undefined|NaN/.test(h),'test html clean');
- A((app.innerHTML.match(/data-k="hero"/g)||[]).length===10,'10 hero buttons');A((app.innerHTML.match(/data-k="mon"/g)||[]).length===D.RMON.length+D.LMON.length,'all monsters + legends listed');
+ A((app.innerHTML.match(/data-k="hero"/g)||[]).length===10,'10 hero buttons');A((app.innerHTML.match(/data-k="mon"/g)||[]).length===D.RMON.length+D.LMON.length+D.VMON.length,'all monsters + legends + revenge listed');
  A((app.innerHTML.match(/data-k="bg"/g)||[]).length===Object.keys(global.BGS0||{}).length+1||typeof global.BGS0==='undefined','one scene button per background + auto');
  A((app.innerHTML.match(/data-k="matk"/g)||[]).length===12&&(app.innerHTML.match(/data-k="sndm"/g)||[]).length===12,'12 element attacks and sounds');
  const other=g.heroId==='h3'?'h4':'h3';act('tl',{k:'hero',id:other});act('tl',{k:'mon',id:'n050'});act('tl',{k:'next'});act('tl',{k:'prev'});
