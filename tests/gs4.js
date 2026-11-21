@@ -53,6 +53,12 @@ A(__played.every(w=>!D.store.missed.includes(w)),'revenge words cleared after wi
 A(__unplayed.every(w=>D.store.missed.includes(w)),'unplayed-lesson words kept for practice mode');
 act('goGame');A(!/等你復仇/.test(clean()),'no revenge card left');
 
+// a word missed in a lesson fight stays for revenge even though the fight asks it again and it is answered right then
+{act('goGame');act('fight',{id:__a});flush();A(D.S.view==='battle','lesson battle starts ('+D.S.view+')');
+ const q0=D.B.q,w0=q0.t.w;act('pick',{i:String(q0.choices.findIndex(c=>!c.correct))});flush();act('nextB');flush();
+ let k=0,again=0;while(D.S.view==='battle'&&k++<60){const q=D.B.q;if(q.t.w===w0)again++;act('pick',{i:String(q.choices.findIndex(c=>c.correct))});flush();act('nextB');flush();}
+ A(again>0,'the missed word was asked again in the same fight');A(D.store.missed.includes(w0),'missed word kept for revenge after being answered right later in the fight');
+ act('goGame');A(/等你復仇/.test(clean()),'revenge card shows after a lesson fight with a mistake');D.store.missed.splice(0);}
 // cap: 20 missed words from two fought lessons -> card says 每次 10 個, fight has 10 hp
 {const g=D.G(),w=s=>s.words.map(e=>typeof e==='string'?e:e[0]);const s1=__raw[1],s2=__raw[2];g.def[s1.id]=1;g.def[s2.id]=1;
  D.store.missed.push(...w(s1),...w(s2));act('goGame');const t=clean().match(/(\d+) 個字等你復仇（每次 10 個）/);
