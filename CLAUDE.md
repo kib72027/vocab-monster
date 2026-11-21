@@ -11,6 +11,7 @@ python3 build.py                 # regenerate index.html from src/ (only needs P
 python3 tools/mkhsheet.py <id>   # cut assets/heroes/<id>/source/*.jpg into frames + src/part_hanim_<id>.js, then rebuild
 python3 tools/mkhvideo.py <id>   # hero frames from videos in assets/video/<id>/ (frames.json picks the frames); ALL heroes use this now — don't run mkhsheet (it would overwrite)
 python3 tools/mkbg.py            # battle backgrounds: assets/backgrounds/backgrounds.json (+ images) -> src/part_bg.js (BGS/BGT, chosen by monster element)
+python3 tools/mkfx.py            # ultimate effect art: assets/heroes/h8/finisher/{beasts,lion}.jpg -> src/part_fx.js (FXSPR; summoner's spirit beasts, lion, golden circle)
 python3 tools/nmadd.py           # add/update extra monsters (assets/monsters/set-2, set-3, …) and legends (assets/monsters/legend) in part_roster.js
 python3 tools/nmcut2.py          # re-cut assets/monsters/set-1/monster-sheet-1..5.jpg into RSPR (add --dry to only write set-1/cut/)
 node tools/merge_vocab.js        # merge data/vocab/*_out*.json into src/part_data.js
@@ -23,7 +24,7 @@ Play/test: open `index.html` directly in a browser (the in-app browser pane need
 
 ## Build / file rules (important)
 
-- `index.html` is **generated** — never edit it by hand. Concatenation order: `part_head2.html` + `part_data.js` + `part_monsters.js` + `part_sprites.js` + `part_roster.js` + `part_hanim_*.js` + `part_app2.js`.
+- `index.html` is **generated** — never edit it by hand. Concatenation order: `part_head2.html` + `part_data.js` + `part_monsters.js` + `part_sprites.js` + `part_roster.js` + `part_bg.js` + `part_fx.js` + `part_hanim_*.js` + `part_app2.js`.
 - `build.py` **rewrites sources in place** via two splices:
   1. `src/part_3d.js` → into `src/part_game.js` between `/* ================= 3D: tiny WebGL` and `/* ---------- battle ---------- */`
   2. game block of `part_game.js` → into `src/part_app2.js` between `/* ================= GAME: monster battles` and `/*GAMEEND*/`

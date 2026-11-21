@@ -113,6 +113,7 @@ src/              editable sources
   part_app2.js      app shell: storage, practice mode, click handler (+ spliced game block)
 tools/            how the data/art were produced (python/node; paths inside point to the original sandbox -> adjust)
   nmcut2.py         cut the 80 monsters out of assets/monsters/set-1/monster-sheet-1..5.jpg and replace their RSPR art in src/part_roster.js
+  mkfx.py           effect art for ultimates (assets/heroes/h8/finisher/beasts.jpg + lion.jpg -> src/part_fx.js FXSPR)
   nmadd.py          add/update the extra monsters (assets/monsters/set-N/monsters.json, N>=2 -> RMON/RSPR) and legends (assets/monsters/legend/legends.json -> LMON/LSPR); removes painted floor shadows
                     (names/roles/MPLAN are edited directly in part_roster.js; cut-outs saved to each set's cut/ folder)
   cuth4.py, mkroster.py   hero cut-outs from assets/heroes/poster/hero-poster.png / older roster builder
