@@ -169,6 +169,11 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 - 也可以用影片：把 4 段綠底、固定鏡頭的影片放到 `assets/video/<id>/`（`<id>_idle.mp4`、`_attack`、`_hit`、`_victory`），在 `frames.json` 寫要用哪幾格，執行 `python3 tools/mkhvideo.py <id>` 再 `python3 build.py`。**10 位主角現在全部用影片做**（`assets/heroes/<id>/source/` 的格子圖保留但沒用；**不要再跑 mkhsheet.py**，會蓋掉影片版）。`frames.json` 的攻擊格要跳過影片自帶的特效（刀光、魔法光、閃電），遊戲有自己的特效。
 - 目前已有動畫格：h1～h10 全部（影片）。舊的格子圖做法（mkhsheet.py）：待機只用和動作同方向、彼此相似的格；攻擊只用蓄力、出招兩格，受傷只用受擊一格，由程式淡入淡出。
 
+## 戰鬥背景
+- `assets/backgrounds/` 放圖片 AI 生成的背景圖（prompt 在 `docs/background-prompt.md`），`backgrounds.json` 設定每張圖給哪些怪物屬性用、石台高度 `py`（主角和怪物的腳會對到那裡）。
+- 執行 `python3 tools/mkbg.py` 產生 `src/part_bg.js`，再 `python3 build.py`。目前：森林神殿（森林／毒／沙漠）、火山城堡（火／龍／雷）、天空城堡（其他屬性）。
+- 背景圖鋪滿戰鬥畫面（不變形、多的裁掉），必要時放大讓石台對準腳的位置。沒有背景圖時會改用程式畫的場景。
+
 ## 測試工具（家長／老師用）
 - 首頁最下面的「🧪 測試工具」：用真正的戰鬥畫面，選任一位主角看攻擊、受傷、勝利、大絕招；觸發 12 種屬性的怪物攻擊（含出招音和命中音）；把 80 隻怪物逐一放上場（或自動輪播）檢查破圖，怪物格子用棋盤格底色方便看出去背問題；單獨播放每個音效和朗讀。
 - 完全不影響進度（不加經驗、金幣，不改主角選擇）。前一個動作還沒播完就按新按鈕，會中斷並重新開始。

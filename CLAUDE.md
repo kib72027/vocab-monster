@@ -10,6 +10,7 @@ Kid-friendly English vocabulary battle game (Reading Plus workbook, Weeks 1–18
 python3 build.py                 # regenerate index.html from src/ (only needs Python 3)
 python3 tools/mkhsheet.py <id>   # cut assets/heroes/<id>/source/*.jpg into frames + src/part_hanim_<id>.js, then rebuild
 python3 tools/mkhvideo.py <id>   # hero frames from videos in assets/video/<id>/ (frames.json picks the frames); ALL heroes use this now — don't run mkhsheet (it would overwrite)
+python3 tools/mkbg.py            # battle backgrounds: assets/backgrounds/backgrounds.json (+ images) -> src/part_bg.js (BGS/BGT, chosen by monster element)
 python3 tools/nmadd.py           # add/update extra monsters (assets/monster-2) and legends (assets/legend) in part_roster.js
 python3 tools/nmcut2.py          # re-cut assets/monsters/monster-sheet-1..5.jpg into RSPR (add --dry to only write assets/monsters/cut/)
 node tools/merge_vocab.js        # merge data/vocab/*_out*.json into src/part_data.js

@@ -1,0 +1,8 @@
+{
+  "_note": "Battle backgrounds. py = height of the platform centre (0 = top, 1 = bottom): the fighters' feet are placed there. types = monster element types that fight on this background; 'default' is used for every other type.",
+  "backgrounds": [
+    {"key": "forest",  "file": "forest.jpg",  "py": 0.76, "types": ["forest", "poison", "desert"]},
+    {"key": "volcano", "file": "volcano.jpg", "py": 0.76, "types": ["fire", "dragon", "elec"]},
+    {"key": "castle",  "file": "castle.jpg",  "py": 0.68, "types": ["default"]}
+  ]
+}
