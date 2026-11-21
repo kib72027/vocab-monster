@@ -16,8 +16,10 @@ D=os.path.join(R,'assets','props')
 SHEETS=[('robot.jpg',2,['robot0','robot1','robot2','robot3']),
         ('turret.jpg',2,['turret0','turret1','turret2','turret3']),
         ('weapons-1.jpg',4,['dagger','spear','wrench','bolt','gear','gear2','rocket','bomb','shield','orb','hourglass','heart','feather','paw','crystal','iceshard']),
-        ('nature.jpg',2,['leaf','vine','blossom','petal'])]
-TURN={'dagger':-45,'spear':-45,'rocket':-40}   # degrees (counter-clockwise) so the point faces right
+        ('nature.jpg',2,['leaf','vine','blossom','petal']),
+        # batch 2 (docs/prop-spritesheet-prompt.md): replaces hand-drawn shapes in the special moves; skipped until the file exists
+        ('props-2.jpg',4,['boulder','rockchunk','pyramid','bubble','bone','skelhand','iceblock','icespike','mine','chain','root','lightsword','lightarrow','windbow','wing','skull'])]
+TURN={'dagger':-45,'spear':-45,'rocket':-40}   # batch-2 props are drawn already pointing the way the engine expects (see the prompt doc)   # degrees (counter-clockwise) so the point faces right
 INSET=.03
 INSETS={'robot.jpg':.065}   # this sheet draws thick white lines around and between the cells
 def despill(rgba,green):
@@ -31,6 +33,10 @@ def enc(im):
 def main():
     out={};os.makedirs(os.path.join(D,'cut'),exist_ok=True)
     for f,n,names in SHEETS:
+        if not os.path.exists(os.path.join(D,f)):
+            alt=[x for x in os.listdir(D) if os.path.splitext(x)[0]==os.path.splitext(f)[0]]
+            if not alt:print(' (skip',f,'- not there yet)');continue
+            f=alt[0]
         a=np.asarray(Image.open(os.path.join(D,f)).convert('RGB'));H,W=a.shape[:2];cw,ch=W/n,H/n;group=[];ins=INSETS.get(f,INSET)
         for i,name in enumerate(names):
             r,c=divmod(i,n);x0,y0,x1,y1=int(c*cw+cw*ins),int(r*ch+ch*ins),int((c+1)*cw-cw*ins),int((r+1)*ch-ch*ins)

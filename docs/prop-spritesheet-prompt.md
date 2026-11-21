@@ -98,3 +98,39 @@ A 2x2 grid (4 equal cells), one object per cell, on a solid pure magenta backgro
 - **有方向的東西（飛刀、長槍、火箭、機器人、砲塔）要面向右邊**，因為主角在左邊、怪物在右邊。
 - 每樣做兩張讓我挑也可以，檔名加 `-1`（例如 `robot-1.png`）。
 - 不用一次做完，**先做 1～3 號**（機器人、砲塔、武器）。
+
+---
+
+## 第二批：`props-2.png`，取代絕招裡手畫的東西
+
+絕招裡的石頭、骨頭、冰刺、金字塔、泡泡、光劍、光箭、風之弓目前是程式畫的簡單圖形，看起來很假。
+**這張圖放進 `assets/props/` 後，遊戲會自動換上，不用改招式**。所以每樣東西的**方向一定要照下面寫的畫**（程式是照這個方向去轉動它們）。
+
+4×4 格，純綠背景 `#00FF00`，共用規則貼在最後面。
+
+```text
+A 4x4 grid (16 equal cells), one different object per cell, all in the same style and similar size.
+Every object is centered in its own cell, fully visible, not touching the cell borders.
+IMPORTANT: draw each object in EXACTLY the direction written below.
+1 a large rough brown-grey boulder, round and heavy
+2 a small jagged rock chunk
+3 a golden ancient pyramid with a glowing cyan eye symbol, seen from the front
+4 a clear shiny soap bubble with a white highlight, mostly transparent in the middle
+5 a single white bone spike, standing STRAIGHT UP, the sharp pointed end at the TOP, the knobby joint at the bottom
+6 a giant skeletal hand, palm facing the viewer, fingers pointing STRAIGHT UP, wrist at the bottom
+7 a big translucent blue ice block with sharp edges, cube-like
+8 a sharp light-blue ice spike, standing STRAIGHT UP, the point at the TOP
+9 a round dark metal land mine with a small red light on top
+10 a short piece of heavy iron chain, horizontal
+11 a thick gnarled brown tree root with a few small leaves, standing STRAIGHT UP, the pointed tip at the TOP
+12 a glowing golden holy sword of light, pointing STRAIGHT DOWN (blade tip at the BOTTOM, handle at the top)
+13 a glowing green arrow of light, pointing straight to the RIGHT
+14 a glowing green bow made of wind and leaves, facing RIGHT (the bow curves out to the right, the string on the left)
+15 a single large glowing white feathered angel wing, spreading upward to the right
+16 a cute cartoon skull, front view
+```
+
+### 注意
+- **方向最重要**：5、6、8、11 朝上，12 朝下，13、14 朝右。方向不對的話，招式裡的東西會歪掉或倒過來。
+- 這張是綠背景；冰塊、泡泡要畫得清楚有邊框，去背後才看得到。
+- 可以做兩版（`props-2-1.png`），我挑比較好的。
