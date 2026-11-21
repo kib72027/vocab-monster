@@ -59,6 +59,11 @@ act('goGame');A(!/等你復仇/.test(clean()),'no revenge card left');
  let k=0,again=0;while(D.S.view==='battle'&&k++<60){const q=D.B.q;if(q.t.w===w0)again++;act('pick',{i:String(q.choices.findIndex(c=>c.correct))});flush();act('nextB');flush();}
  A(again>0,'the missed word was asked again in the same fight');A(D.store.missed.includes(w0),'missed word kept for revenge after being answered right later in the fight');
  act('goGame');A(/等你復仇/.test(clean()),'revenge card shows after a lesson fight with a mistake');D.store.missed.splice(0);}
+// ultimates: with a 終極卷軸 the ultimate is the hero's finisher (uses one scroll, 4 damage); otherwise the first or second ultimate at random
+{const g=D.G();g.inv.finisher=1;act('goGame');act('fight',{id:__a});flush();D.B.mana=99;const hp0=D.B.hp,q=D.B.q;act('pick',{i:String(q.choices.findIndex(c=>c.correct))});
+ A(D.B.ultKind==='fin'&&g.inv.finisher===0,'scroll turns the ultimate into the finisher ('+D.B.ultKind+')');A(hp0-D.B.hp===Math.min(4,hp0-1)||hp0-D.B.hp===4,'finisher deals 4 damage');flush();act('nextB');flush();
+ const kinds=new Set();for(let i=0;i<30;i++){D.B.mana=99;D.B.busy=false;const q2=D.B.q;if(!q2)break;D.B.hp=99;act('pick',{i:String(q2.choices.findIndex(c=>c.correct))});if(D.B.ult)kinds.add(D.B.ultKind);flush();act('nextB');flush();if(D.S.view!=='battle')break;}
+ A(kinds.has('1')&&kinds.has('2')&&!kinds.has('fin'),'without a scroll both ultimates appear: '+[...kinds]);act('goGame');}
 // cap: 20 missed words from two fought lessons -> card says 每次 10 個, fight has 10 hp
 {const g=D.G(),w=s=>s.words.map(e=>typeof e==='string'?e:e[0]);const s1=__raw[1],s2=__raw[2];g.def[s1.id]=1;g.def[s2.id]=1;
  D.store.missed.push(...w(s1),...w(s2));act('goGame');const t=clean().match(/(\d+) 個字等你復仇（每次 10 個）/);

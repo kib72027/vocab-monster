@@ -113,6 +113,7 @@ src/              editable sources
   part_app2.js      app shell: storage, practice mode, click handler (+ spliced game block)
 tools/            how the data/art were produced (python/node; paths inside point to the original sandbox -> adjust)
   nmcut2.py         cut the 80 monsters out of assets/monsters/set-1/monster-sheet-1..5.jpg and replace their RSPR art in src/part_roster.js
+  mkprops.py        props and helpers (assets/props/*.jpg -> src/part_props.js PROPS: robot, turret, dagger, spear, gears, rocket, shield, orb, heart, leaf...)
   mkvfx.py          effect animations (assets/vfx/*.jpg, 16 frames each, prompt in docs/vfx-spritesheet-prompt.md -> src/part_vfx.js VFX)
   mkfx.py           effect art for ultimates (assets/heroes/h8/finisher/beasts.jpg + lion.jpg -> src/part_fx.js FXSPR)
   nmadd.py          add/update the extra monsters (assets/monsters/set-N/monsters.json, N>=2 -> RMON/RSPR) and legends (assets/monsters/legend/legends.json -> LMON/LSPR); removes painted floor shadows

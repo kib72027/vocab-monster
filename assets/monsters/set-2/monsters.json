@@ -106,7 +106,8 @@
    "zh": "森林妖精",
    "en": "Forest Fairy",
    "t": "forest",
-   "role": "x"
+   "role": "x",
+   "face": "left"
   },
   {
    "sheet": "sheet-3.jpg",

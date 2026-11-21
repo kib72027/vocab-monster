@@ -22,9 +22,18 @@ def glow(a):
     return np.dstack([np.clip(rgb,0,255),A*255]).astype(np.uint8)
 _e=np.minimum(np.arange(SIZE),np.arange(SIZE)[::-1])/(SIZE*.07);_e=np.clip(_e,0,1)
 EDGE=np.minimum(_e[:,None],_e[None,:])   # fade the last 7% at each edge: no hard square edge when a glow reaches the cell border
+def picks():
+    """PICK plus any new sheet dropped into assets/vfx (name.jpg/png; if name-1 also exists the plain one is used unless PICK says otherwise)"""
+    P=dict(PICK)
+    for f in sorted(os.listdir(D)):
+        b,e=os.path.splitext(f)
+        if e.lower() not in('.jpg','.jpeg','.png','.webp'):continue
+        k=b[:-2] if b.endswith('-1') else b
+        if k not in P or (P[k].startswith(k+'-1') and not b.endswith('-1') and k not in PICK):P[k]=f
+    return P
 def main():
     out={};os.makedirs(os.path.join(D,'cut'),exist_ok=True);total=0
-    for name,f in PICK.items():
+    for name,f in picks().items():
         g=glow(np.asarray(Image.open(os.path.join(D,f)).convert('RGB')));H,W=g.shape[:2];cw,ch=W/4,H/4;frames=[];strip=Image.new('RGBA',(SIZE*16,SIZE))
         for i in range(16):
             r,c=divmod(i,4);x0,y0=int(c*cw+cw*INSET),int(r*ch+ch*INSET);x1,y1=int((c+1)*cw-cw*INSET),int((r+1)*ch-ch*INSET)

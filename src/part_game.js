@@ -144,7 +144,8 @@ const SLOTN={hat:'帽子',outfit:'衣服',back:'背飾',weapon:'武器'};
 const TOOLS=[
   {id:'potion',icon:'🧪',name:'復活藥水',desc:'戰鬥中點「藥水」鈕回復 3 顆愛心；愛心歸零時也會自動使用（可以買很多瓶）',price:30,stack:true},
   {id:'crystal',icon:'🔮',name:'提示水晶',desc:'答題時使用，去掉 2 個錯誤選項（可以買很多顆）',price:15,stack:true},
-  {id:'note',icon:'📒',name:'單字筆記',desc:'答錯的字，之後再答對就多得 3 金幣（買一次永久有效）',price:60,stack:false}
+  {id:'note',icon:'📒',name:'單字筆記',desc:'答錯的字，之後再答對就多得 3 金幣（買一次永久有效）',price:60,stack:false},
+  {id:'finisher',icon:'🌌',name:'終極卷軸',desc:'下一次大絕招變成主角的「終極絕招」：每位主角都不一樣，威力更強（怪物 -4 HP，可以買很多張）',price:80,stack:true}
 ];
 let HID=0;
 function learnedTotal(){const g=G();return ALL.filter(w=>(g.mast[w.w]||0)>=3).length;}
@@ -483,7 +484,7 @@ function wordTex(word,glow,lo){
   x.shadowColor=glow||'#FFB020';x.shadowBlur=34;x.lineJoin='round';x.lineWidth=24;x.strokeStyle='#1B2A4A';x.strokeText(word,256,106);
   x.shadowBlur=0;const g=x.createLinearGradient(0,50,0,160);g.addColorStop(0,'#FFFFFF');g.addColorStop(.55,'#FFF3A0');g.addColorStop(1,lo||'#FFC83D');x.fillStyle=g;x.fillText(word,256,106);
   return{tex:mkTex(c),asp:Math.max(1.4,(w+60)/200*1.0)*1.0};}
-function emojiTex(e){if(E.tex[e])return E.tex[e];const _t=emojiTex0(e);_t.vx=e==='🔥'?'fire':e==='❄️'?'snow':e==='⚡'?'bolt':null;return E.tex[e]=_t;}
+function emojiTex(e){if(E.tex[e])return E.tex[e];const _t=emojiTex0(e);_t.vx=e==='🔥'?'fire':e==='❄️'?'snow':e==='⚡'?'bolt':null;_t.pr=PMAP[e]||null;return E.tex[e]=_t;}
 function emojiTex0(e){const c=cv(160,160),x=c.getContext('2d');x.font='110px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(e,80,88);return E.tex[e]=mkTex(c);}
 // soft sparkle instead of a hard outlined star: glowing core, thin 4-point rays, faint diagonal rays
 function sparkle(rgb){const c=cv(128,128),x=c.getContext('2d'),C=rgb.join(',');x.translate(64,64);
@@ -592,7 +593,7 @@ function ambDraw(I){
     if(q.flick)a*=.6+.4*Math.sin(t*20+u*50);
     if(q.tw)s*=Math.sin(Math.PI*(1-f));
     if(q.sway)u+=.012*Math.sin(t*2+q.sway);
-    sprite(q.tex,[X(u),Y(q.v),0],hw(s)*(q.ar||1),hh(s),q.rot||0,a,I,I);});
+    drawQ(q.tex,[X(u),Y(q.v),0],hw(s)*(q.ar||1),hh(s),q.rot||0,a,0,I,I);});
 }
 function arenaTexs(){
   if(E.tex.arena)return;
@@ -648,14 +649,14 @@ const SPR=id=>(typeof MSPR!=='undefined'&&MSPR[id])||(typeof RSPR!=='undefined'&
 const MINFO=id=>(typeof MBY!=='undefined'&&MBY[id])||(typeof LMON!=='undefined'&&LMON.find(m=>m.id===id))||{};
 function mon0(id){return E.big?3.3:2.8;}
 function setup(monId,eq,hid,big){
-  E.big=!!big;
+  E.big=!!big;E.leg=MINFO(monId).role==='L';   // legends: far bigger than any boss, with a gold aura
   const m=SPR(monId)?{root:Gp(),sc:1}:monModel(monId),h=heroModel(eq);
   const SP=SPR(monId);if(SP&&!E.imgs[monId]){const im=new Image();im.src=SP.u;E.imgs[monId]={im,tex:null};}
-  const mon={nf:MINFO(monId).f===0,img:SP?monId:null,root:SP?Gp():m.root,base:[E.big?3.4:3.0,0,.1],ry:-.8,sc:m.sc,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},id:monId};
+  const mon={nf:MINFO(monId).f===0,img:SP?monId:null,root:SP?Gp():m.root,base:[E.leg?3.9:E.big?3.4:3.0,0,.1],ry:-.8,sc:m.sc,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},id:monId};
   const HA0=(typeof HANIM!=='undefined')&&hid&&HANIM[hid];if(HA0&&!HA0._ld){HA0._ld=1;['idle','attack','hit','win'].forEach(k=>HA0[k].forEach(f=>{const im=new Image();im.src=f.u;f.im=im;f.tex=null;if(im.decode)im.decode().catch(()=>{});}));}
   const HS=(typeof HSPR!=='undefined')&&hid&&HSPR[hid];if(HS&&!E.imgs['H'+hid]){const im=new Image();im.src=HS.u;E.imgs['H'+hid]={im,tex:null};}
   const hero={himg:HS?hid:null,root:HS?Gp():h.root,base:[-2.75,0,.4],ry:.8,sc:1,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},armR:HS?{r:[0,0,0]}:h.armR,hand:h.hand,head:h.head};
-  E.mon=mon;E.hero=hero;E.parts=[];E.tw=[];E.tl=[];E.sprites=[];E.flash={mon:null,hero:null};E.shake=0;
+  E.mon=mon;E.hero=hero;E.parts=[];E.tw=[];E.tl=[];E.sprites=[];E.legAura=null;E.flash={mon:null,hero:null};E.shake=0;
   const R=5.2,mk=[];
   // soft painted scenery (warm pastoral fantasy): painted backdrop billboard + grassy ground + painted bushes/trees/flowers
   scenery();
@@ -666,7 +667,7 @@ function setup(monId,eq,hid,big){
   E.bg=null;
   if(typeof BGS!=='undefined'){const mt=MINFO(monId).t,k=(E.forceBg&&BGS[E.forceBg])?E.forceBg:(BGT[mt]||BGT['default']),B=BGS[k];
     if(B){if(!E.imgs['BG'+k]){const im=new Image();im.src=B.u;E.imgs['BG'+k]={im,tex:null};}E.bg={k,py:B.py,pu:B.pu==null?.5:B.pu,pw:B.pw||.35,ia:B.w/B.h,amb:B.amb};E.env=[ring];}}
-  ambInit();fxLoad();vfxLoad();
+  ambInit();fxLoad();vfxLoad();propLoad();
   E.decor=[{t:'tree',x:-13,z:-16,s:2.6},{t:'tree',x:14,z:-18,s:2.9},{t:'tree',x:-19,z:-20,s:3},{t:'bush',x:-15,z:-14,s:1.2},{t:'bush',x:16.5,z:-15,s:1.1},
     {t:'bush',x:-8,z:-5,s:1.0},{t:'bush',x:8.6,z:-4.6,s:1.1},{t:'rock',x:-5.8,z:1.4,s:.55},{t:'rock',x:6.3,z:1.0,s:.5},
     {t:'flowers',x:-4.3,z:3.5,s:.8},{t:'flowers',x:4.6,z:3.8,s:.8},{t:'flowers',x:.7,z:5.1,s:.7},{t:'flowers',x:-7.5,z:.4,s:.7},{t:'flowers',x:8.2,z:.2,s:.7}].sort((a,b)=>a.z-b.z);
@@ -703,6 +704,8 @@ const cl=u=>u<0?0:u>1?1:u;
 function update(dt){
   const t=E.time;
   ambUpdate(dt);
+  if(E.leg&&E.mon){const c=mpos(),gt=gtex([255,215,110]);if(Math.random()<dt*14)E.parts.push({x:c[0]+(Math.random()-.5)*4.5,y:.1+Math.random()*.6,z:c[2]+.2+(Math.random()-.5)*1.2,vx:0,vy:.8+Math.random()*1.2,vz:0,g:0,life:2.2,max:2.2,size:.1+Math.random()*.12,gs:-.03,tex:Math.random()<.5?starTex():gt,rot:0,vr:1});
+    if(!E.legAura){E.legAura={tex:gt,pos:c,w:0,h:0,rot:0,a:0};E.sprites.unshift(E.legAura);}const A=E.legAura;A.pos=[c[0],c[1]+.6,c[2]-.4];A.w=4.6+.3*Math.sin(E.time*2.2);A.h=4.0+.3*Math.sin(E.time*2.2);A.a=.34+.08*Math.sin(E.time*2.2);}
   if(E.mon&&E.tex.glow&&Math.random()<dt*5)E.parts.push({x:-10+Math.random()*20,y:.4+Math.random()*4.5,z:-5+Math.random()*7,vx:.12+Math.random()*.2,vy:.04+Math.random()*.1,vz:0,g:0,life:4,max:4,size:.05+Math.random()*.06,tex:E.tex.glow,rot:0,vr:0,al:.65});   // drifting pollen / light motes
   // idle
   [E.mon,E.hero].forEach((o,i)=>{if(!o)return;o.off.sqi=1+.03*Math.sin(t*2.3+i);});
@@ -780,14 +783,14 @@ function draw(){
       if(false){const q=(E.time-o.pe.t)/.25;if(q<1&&o.pe.f.tex)sprite(o.pe.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else o.pe=null;}}}
   if(E.mon.img){const o=E.mon,c=E.imgs[o.img],S=SPR(o.img);
     if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
-    if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,M=E.big?3.45:3.0,h0=Math.min(E.big?4.2:3.6,(E.big?5.2:4.6)/asp,M/Math.sqrt(asp));   // same visual area (sqrt(w*h)=M) for every monster: slimes, golems and long dragons look equally heavy next to the hero
+    if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,M=E.leg?5.8:E.big?3.45:3.0,h0=Math.min(E.leg?6.2:E.big?4.2:3.6,(E.leg?9.4:E.big?5.2:4.6)/asp,M/Math.sqrt(asp));   // same visual area (sqrt(w*h)=M) for every monster: slimes, golems and long dragons look equally heavy next to the hero
       const h=h0*k*sq,w=(o.nf?1:-1)*h0*asp*k*(1+(1-sq)*.6),rot=-f.rz*.6-(o.idz||0);   // mirror art drawn facing right so every monster faces the hero (o.nf: already faces left)
       sprite(c.tex,[o.base[0]+f.x+(o.jx||0)+PSG*Math.sin(rot)*h/2,o.base[1]+f.y+(o.bob||0)+Math.cos(rot)*h/2+.02,o.base[2]+.2],w/2,h/2,rot,f.al==null?1:f.al,V,Pr,E.flash.mon);}}
   gl.enable(gl.DEPTH_TEST);
-  E.sprites.forEach(s=>{const tx=vxSwap(s.tex,E.time+s.pos[0]*.37);sprite(tx,s.pos,s.w,s.h,tx===s.tex?s.rot:0,s.a,V,Pr);});
+  E.sprites.forEach(s=>drawQ(s.tex,s.pos,s.w,s.h,s.rot,s.a,E.time+s.pos[0]*.37,V,Pr));
   E.parts.forEach(p=>{const fa=Math.min(1,p.life/.4)*(p.al||1);
     if(p.st){const sp=Math.hypot(p.vx,p.vy),L=p.size*Math.min(5,1+sp*.35);sprite(p.tex,[p.x,p.y,p.z],L,p.size*.28,Math.atan2(p.vy,p.vx),fa*(.7+.3*Math.random()),V,Pr);}
-    else{const tx=vxSwap(p.tex,p.max-p.life+p.x*3);sprite(tx,[p.x,p.y,p.z],p.size*(p.ar||1),p.size,tx===p.tex?p.rot:0,fa,V,Pr);}});
+    else drawQ(p.tex,[p.x,p.y,p.z],p.size*(p.ar||1),p.size,p.rot,fa,p.max-p.life+p.x*3,V,Pr);});
   gl.depthMask(true);
 }
 const PSG=1;
@@ -806,6 +809,14 @@ function frame(now){
 function tween(dur,fn,delay){E.tw.push({t0:E.time+(delay||0),dur,fn});}
 function at(dt,fn){E.tl.push({t:E.time+dt,fn});}
 function mpos(){return[E.mon.base[0]+E.mon.off.x-.2,E.mon.img?1.5+E.mon.off.y:1.5*Math.max(1,E.mon.sc*.9),E.mon.base[2]];}
+// props (src/part_props.js, tools/mkprops.py): image-AI art drawn in place of emoji objects. Pointed props face right.
+const PMAP={'🗡️':'dagger','🔱':'spear','🔧':'wrench','🔩':'bolt','⚙️':'gear','🚀':'rocket','💣':'bomb','🛡️':'shield','🔮':'orb','⏳':'hourglass','💖':'heart','🐾':'paw','🍃':'leaf','🌿':'vine','🌸':'blossom','🤖':'robot0'};
+function propLoad(){if(typeof PROPS==='undefined'||E.prl)return;E.prl=1;Object.keys(PROPS).forEach(k=>{const im=new Image();im.onload=()=>{try{E.tex['pr_'+k]=mkTex(im);}catch(e){}};im.src=PROPS[k].u;});}
+function propTex(k,fb){return E.tex['pr_'+k]||fb;}
+function propAsp(k){const p=typeof PROPS!=='undefined'&&PROPS[k];return p?p.w/p.h:1;}
+// draw a sprite or particle: emoji objects become their prop (fit inside the emoji's square), 🔥/❄️/⚡ become animation frames
+function drawQ(t,pos,w,h,rot,a,age,V,Pr){if(t&&t.pr){const pt=E.tex['pr_'+t.pr];if(pt){const as=propAsp(t.pr);sprite(pt,pos,as>=1?w:w*as,as>=1?h/as:h,rot,a,V,Pr);return;}}
+  const tx=vxSwap(t,age);sprite(tx,pos,w,h,tx===t?rot:0,a,V,Pr);}
 // effect animations (src/part_vfx.js, tools/mkvfx.py): 16 frames each, image-AI sprite sheets on black
 function vfxLoad(){if(typeof VFX==='undefined'||E.vxl)return;E.vxl=1;Object.keys(VFX).forEach(k=>VFX[k].u.forEach((u,i)=>{const im=new Image();im.onload=()=>{try{E.tex['vx_'+k+i]=mkTex(im);}catch(e){}};im.src=u;}));}
 function vfxFrame(k,age,fps,loop){const V=typeof VFX!=='undefined'&&VFX[k];if(!V)return null;const n=V.u.length;let i=Math.floor(age*(fps||24));if(loop)i=((i%n)+n)%n;else if(i>=n)return null;return E.tex['vx_'+k+i]||null;}
@@ -925,7 +936,7 @@ function letter(ch,i){
     at(.58,()=>{const f=HAND(hpos()),c=mpos();sigLine(ray,[(f[0]+c[0])/2,f[1],f[2]],0,(c[0]-f[0])*.55,.12,.2,gl);});
     flyL(tArrow(),ch,i,.58,IMP,(u,s,c)=>lerp3([s[0]+.9,s[1]+.35,s[2]+.9],[c[0]-.3,s[1]+.35,c[2]+.5],u),{sz:.22,ar:4,ly:.45});hit(1);}
   else if(hid==='h5'){   // 龍騎士: throws the spear in a straight line, trailing ice mist
-    flyL(emojiTex('🔱'),ch,i,.4,IMP,(u,s,c)=>{const p=lerp3(HAND(s),TGT(c),u);return[p[0],p[1]+.3*Math.sin(PI*u),p[2]];},{sz:.6,orient:1,ro:-PI/2+PI,trail:.3,ttex:gtex([170,230,255])});hit(1.05);}
+    flyL(emojiTex('🔱'),ch,i,.4,IMP,(u,s,c)=>{const p=lerp3(HAND(s),TGT(c),u);return[p[0],p[1]+.3*Math.sin(PI*u),p[2]];},{sz:.6,orient:1,ro:0,trail:.3,ttex:gtex([170,230,255])});hit(1.05);}
   else if(hid==='h6'){   // 牧師: a ball of light floats down onto the monster inside a soft beam
     const bm=sigSp(gl);tween(.55,u=>{const c=mpos(),g=Math.sin(PI*u);bm.pos=[c[0],c[1]+2.2,c[2]+.4];bm.w=.55*g;bm.h=3.2*g;bm.a=.55*g;},.25);at(.85,()=>{const j=E.sprites.indexOf(bm);if(j>=0)E.sprites.splice(j,1);});
     flyL(gl,ch,i,.3,IMP,(u,s,c)=>[c[0],c[1]+4.2-3.9*(1-(1-u)*(1-u)),c[2]+.5],{sz:.7,trail:.3,ttex:star});hit(1);}
@@ -967,7 +978,7 @@ function finale(word,big){
   else if(hid==='h8'){   // all four spirit beasts charge together
     H8B.forEach((b,k)=>beastDash(b,.2+k*.06,F,.5,.5+k*.28,null,k));}
   else if(hid==='h9'){   // three small rockets curve in from different sides
-    [[-1.5,3],[0,4.2],[1.2,2.6]].forEach((q,k)=>flyL(emojiTex('🚀'),null,k,.25+k*.06,F,(u,s,c)=>{const a=[s[0]+.5,s[1]+1,s[2]+.9],b=[(s[0]+c[0])/2+q[0],q[1],s[2]+.9],e=TGT(c);return bz(a,b,e,u);},{sz:.42,orient:1,ro:-PI/4,trail:.28,ttex:tSmokeG()}));}
+    [[-1.5,3],[0,4.2],[1.2,2.6]].forEach((q,k)=>flyL(emojiTex('🚀'),null,k,.25+k*.06,F,(u,s,c)=>{const a=[s[0]+.5,s[1]+1,s[2]+.9],b=[(s[0]+c[0])/2+q[0],q[1],s[2]+.9],e=TGT(c);return bz(a,b,e,u);},{sz:.42,orient:1,ro:0,trail:.28,ttex:tSmokeG()}));}
   else{   // a small black hole opens on the monster, sucks in sparks, then pops
     const bh=sigSp(tSmoke());tween(.6,u=>{const c=mpos();bh.pos=[c[0],c[1]+.5,c[2]+.7];bh.w=bh.h=.3+1.1*ease(u);bh.rot=u*8;bh.a=.95;if(Math.random()<.9){const a=Math.random()*PI*2;E.parts.push({x:c[0]+Math.cos(a)*1.8,y:c[1]+.5+Math.sin(a)*1.4,z:c[2]+.7,vx:-Math.cos(a)*3.5,vy:-Math.sin(a)*3,vz:0,g:0,life:.45,max:.45,size:.22,tex:star,rot:0,vr:0});}},.1);at(F,()=>rm(bh));}
   // shared landing: the word appears on the monster with the big hit
@@ -1219,7 +1230,7 @@ function s2H7(sentence,th){const K=sigBase(sentence,th,'h7'),{m,gl,rm,n}=K,dag=e
   at(V,()=>{const p=hpos();goldBurst([p[0],p[1]+.5,p[2]+.6],30,3,.7,.6,smoke);h.off.y=40;});
   sigWords(K,(k,t,c)=>{if(t<.1||t>FIN)return null;const f=ease(cl((t-.1)/.6)),a=k/n*PI*2-t*1.5,r=2.4-.4*f;return{pos:[c[0]+Math.cos(a)*r,c[1]+.8+Math.sin(a)*r*.7,c[2]+.7],a:f*(t>FIN-.3?(FIN-t)/.3:1),sc:.45};},TOT);
   for(let i=0;i<N;i++){const a=i*2.4;at(R0+i*DT,()=>{const c=mpos(),s0=[c[0]+Math.cos(a)*3.2,c[1]+.8+Math.sin(a)*2.2,c[2]+.7],d=sigSp(dag);goldBurst(s0,6,1.5,.4,.4,smoke);
-    tween(.2,u=>{const c2=mpos(),tg=[c2[0],c2[1]+.8,c2[2]+.7];d.pos=[s0[0]+(tg[0]-s0[0])*u,s0[1]+(tg[1]-s0[1])*u,s0[2]];d.rot=Math.atan2(tg[1]-s0[1],tg[0]-s0[0])-PI/4;d.w=d.h=.9;d.a=1;});
+    tween(.2,u=>{const c2=mpos(),tg=[c2[0],c2[1]+.8,c2[2]+.7];d.pos=[s0[0]+(tg[0]-s0[0])*u,s0[1]+(tg[1]-s0[1])*u,s0[2]];d.rot=Math.atan2(tg[1]-s0[1],tg[0]-s0[0]);d.w=d.h=.9;d.a=1;});
     at(.2,()=>{rm(d);const t=mpos();goldBurst(t,8,3,.35,.28,gl);E.flash.mon=[.75,.5,1,.55];E.shake=Math.max(E.shake,.3);sigHit(m);});});}
   at(FIN-.15,()=>{h.off.y=0;h.off.x=dx();const p=hpos();goldBurst([p[0],p[1]+.5,p[2]+.6],20,3,.6,.5,smoke);});
   at(FIN,()=>{const t=mpos();sigLine(ray,[t[0],t[1]+.7,t[2]+.9],.3,12,1.1,.6,gl);sigBig(m,t,dag,gl);goldBurst(t,30,5,1.0,.5,smoke);});
@@ -1237,15 +1248,15 @@ function s2H8(sentence,th){const K=sigBase(sentence,th,'h8'),{m,gl,rm,n}=K,EM=H8
   at(TOT,()=>{[...K.sps,...runs.map(r=>r.s)].forEach(rm);});return TOT;}
 // 工程師：機器人援軍 — a robot drops in beside the engineer, the words are fed into its cannon, it fires a laser beam
 function s2H9(sentence,th){const K=sigBase(sentence,th,'h9'),{m,gl,rm,n}=K,bot=emojiTex('🤖'),gear=emojiTex('⚙️'),sm=tSmokeG(),og=gtex([255,170,60]),DROP=1.2,CH=DROP+.5,FIRE=CH+.9,TOT=FIRE+1.8;
-  const R=sigSp(bot),beam=sigSp(og),core=sigSp(gtex([255,255,255])),eye=sigSp(og),RP=()=>{const p=hpos();return[p[0]+1.5,1.15,p[2]+1.0];};
-  tween(TOT,u=>{const t=u*TOT,P=RP();let y=P[1];if(t<DROP){const q=cl((t-.3)/(DROP-.3));y=P[1]+8*(1-q*q);}R.pos=[P[0],y,P[2]];R.w=R.h=1.9;R.a=t<.3?0:t>TOT-.4?(TOT-t)/.4:1;R.rot=t>FIRE&&t<FIRE+1?.04*Math.sin(t*60):0;
-    const ck=t<CH?0:t<FIRE?ease((t-CH)/(FIRE-CH)):t<FIRE+1?1:Math.max(0,1-(t-FIRE-1)/.3),E0=[P[0]+.6,P[1]+.1,P[2]+.1];eye.pos=E0;eye.w=eye.h=(.4+1.0*ck)*(1+.15*Math.sin(t*30));eye.a=ck;
+  const R=sigSp(bot),beam=sigSp(og),core=sigSp(gtex([255,255,255])),eye=sigSp(og),RP=()=>{const p=hpos();return[p[0]+1.95,1.1,p[2]+1.0];},RH=1.05;
+  tween(TOT,u=>{const t=u*TOT,P=RP();let y=P[1];if(t<DROP){const q=cl((t-.3)/(DROP-.3));y=P[1]+8*(1-q*q);}R.tex=propTex(t<DROP+.3?'robot3':t<CH?'robot0':t<FIRE?'robot1':t<FIRE+1?'robot2':'robot0',bot);R.pos=[P[0],y,P[2]];R.h=RH*(t>DROP&&t<DROP+.2?1-.08*Math.sin(PI*(t-DROP)/.2):1);R.w=RH*propAsp('robot0');R.a=t<.3?0:t>TOT-.4?(TOT-t)/.4:1;R.rot=t>FIRE&&t<FIRE+1?.03*Math.sin(t*60):0;
+    const ck=t<CH?0:t<FIRE?ease((t-CH)/(FIRE-CH)):t<FIRE+1?1:Math.max(0,1-(t-FIRE-1)/.3),E0=[P[0]+RH*.86,P[1]+RH*.1,P[2]+.1];eye.pos=E0;eye.w=eye.h=(.4+1.0*ck)*(1+.15*Math.sin(t*30));eye.a=ck;
     if(t>FIRE&&t<FIRE+1.3){const c=mpos(),len=(c[0]+6)-E0[0],k=t<FIRE+1?ease(cl((t-FIRE)/.12)):Math.max(0,1-(t-FIRE-1)/.3);beam.pos=[E0[0]+len/2,E0[1],E0[2]];beam.w=len/2;beam.h=.45*k*(1+.12*Math.sin(t*50));beam.a=k;core.pos=beam.pos;core.w=len/2;core.h=.16*k;core.a=k;
       if(Math.random()<.9)E.parts.push({x:c[0]-.2,y:E0[1]+(Math.random()-.5)*.5,z:E0[2]+.1,vx:-(1+Math.random()*3),vy:(Math.random()-.3)*4,vz:0,g:5,life:.5,max:.5,size:.3,tex:Math.random()<.5?gear:og,rot:0,vr:6});}
     else{beam.a=core.a=0;}});
   at(DROP,()=>{const P=RP();goldBurst([P[0],.3,P[2]],20,3,.6,.5,sm);E.shake=Math.max(E.shake,.6);});
   sigWords(K,(k,t,c)=>{if(t<.1)return null;const P=RP(),p=hpos(),a=k/n*PI*2+t*2.5,s=[p[0]+Math.cos(a)*1.1,p[1]+.6+Math.sin(a)*.6,P[2]];if(t<CH)return{pos:s,a:ease(cl((t-.1)/.5)),sc:.4};
-    const q=cl((t-CH-k*.06)/.4);if(q>=1)return null;const tg=[P[0]+.6,P[1]+.1,P[2]+.1];return{pos:[s[0]+(tg[0]-s[0])*q,s[1]+(tg[1]-s[1])*q,tg[2]],a:1-q*.5,sc:.4*(1-q*.6)};},TOT);
+    const q=cl((t-CH-k*.06)/.4);if(q>=1)return null;const tg=[P[0]+RH*.86,P[1]+RH*.1,P[2]+.1];return{pos:[s[0]+(tg[0]-s[0])*q,s[1]+(tg[1]-s[1])*q,tg[2]],a:1-q*.5,sc:.4*(1-q*.6)};},TOT);
   for(let j=0;j<5;j++)at(FIRE+.1+j*.18,()=>{E.shake=Math.max(E.shake,.35);E.flash.mon=[1,.8,.5,.6];sigHit(m);});
   at(FIRE+1.0,()=>{const t=mpos();sigBig(m,t,gear,og);E.flash.mon=[1,.75,.4,1];});
   at(TOT,()=>{[...K.sps,R,beam,core,eye].forEach(rm);});return TOT;}
@@ -1347,21 +1358,22 @@ function sigH7(sentence,th){const K=sigBase(sentence,th,'h7'),{m,gl,rm,n}=K,ray=
   at(TOT,()=>{K.sps.forEach(rm);h.off.x=0;h.off.y=0;h.off.rz=0;undo();});return TOT;}
 // --- 工程師：機械砲轟 (gears fly together into a turret beside the engineer; the words are loaded in; it spins up and fires a stream of tracers, then one big shell) ---
 function sigH9(sentence,th){const K=sigBase(sentence,th,'h9'),{m,gl,rm,n}=K,gear=emojiTex('⚙️'),bolt=emojiTex('🔩'),sm=tSmokeG(),og=gtex([255,170,60]),steel=gtex([200,215,230]),BT=1.4,F0=BT+.6,NF=16,FD=.08,BIGS=F0+NF*FD+.3,TOT=BIGS+1.5;
-  const TP=()=>{const p=hpos();return[p[0]+1.5,.8,p[2]+1.0];},HOME=[[0,0],[-.45,.35],[.45,.35],[0,.75],[0,-.3]];
-  const gs=HOME.map(()=>sigSp(gear)),barrel=sigSp(steel),muz=sigSp(og);
+  const TP=()=>{const p=hpos();return[p[0]+1.9,.8,p[2]+1.0];},HOME=[[0,0],[-.45,.35],[.45,.35],[0,.75],[0,-.3]];
+  const gs=HOME.map(()=>sigSp(gear)),tur=sigSp(gear),muz=sigSp(og),TH=.82,TIP=()=>{const P=TP();return[P[0]+TH*propAsp('turret0')*.9,P[1]+.05+TH*.4,P[2]+.1];};
   tween(TOT,u=>{const t=u*TOT,P=TP(),spin=t>F0&&t<BIGS?t*30:t*3,out=t>TOT-.4?(TOT-t)/.4:1;
-    gs.forEach((s,j)=>{const from=[P[0]-2+j*.8,P[1]+3+j*.3],q=ease(cl((t-.3-j*.12)/.6)),hp=[P[0]+HOME[j][0],P[1]+HOME[j][1]];s.pos=[from[0]+(hp[0]-from[0])*q,from[1]+(hp[1]-from[1])*q,P[2]];s.w=s.h=(j===0?.75:.45)*cl(q*3);s.rot=spin*(j%2?-1:1);s.a=cl(q*3)*out;});
-    const bk=ease(cl((t-BT)/.4)),rec=t>F0&&t<BIGS?.08*Math.sin(t*80):t>BIGS&&t<BIGS+.3?-.3*(1-(t-BIGS)/.3):0;barrel.pos=[P[0]+.9*bk+rec,P[1]+.75,P[2]+.05];barrel.w=.9*bk;barrel.h=.16*bk;barrel.a=bk*out;
-    const fl=t>F0&&t<BIGS?(Math.sin(t*90)>0?1:.3):0;muz.pos=[P[0]+1.85*bk,P[1]+.75,P[2]+.1];muz.w=muz.h=.55*fl;muz.a=fl;});
+    gs.forEach((s,j)=>{const from=[P[0]-2+j*.8,P[1]+3+j*.3],q=ease(cl((t-.3-j*.12)/.6)),hp=[P[0]+HOME[j][0],P[1]+HOME[j][1]];s.pos=[from[0]+(hp[0]-from[0])*q,from[1]+(hp[1]-from[1])*q,P[2]];s.w=s.h=(j===0?.75:.45)*cl(q*3);s.rot=spin*(j%2?-1:1);s.a=cl(q*3)*out*(t<BT?1:Math.max(0,1-(t-BT)/.2));});
+    const bk=ease(cl((t-BT)/.25)),rec=t>F0&&t<BIGS?.03*Math.sin(t*80):t>BIGS&&t<BIGS+.3?-.15*(1-(t-BIGS)/.3):0,fr=t<F0-.3?'turret0':t<F0?'turret1':t<BIGS?(Math.sin(t*95)>0?'turret2':'turret1'):t<BIGS+.3?'turret3':'turret0';
+    tur.tex=propTex(fr,gear);tur.pos=[P[0]+rec,.05+TH*(.6+.4*bk),P[2]+.05];tur.h=TH*(.6+.4*bk);tur.w=tur.h*propAsp('turret0');tur.a=bk*out;
+    const fl=t>F0&&t<BIGS+.3?(Math.sin(t*90)>0?1:.4):0,T0=TIP();muz.pos=T0;muz.w=muz.h=.5*fl;muz.a=.7*fl;});
   at(BT,()=>{const P=TP();goldBurst([P[0],P[1]+.3,P[2]],16,2,.5,.45,sm);E.shake=Math.max(E.shake,.3);});
   sigWords(K,(k,t,c)=>{if(t<.1)return null;const p=hpos(),P=TP(),f=ease(cl((t-.1)/.5)),a=k/n*PI*2+t*2,s=[p[0]+Math.cos(a)*1.0,p[1]+.9+Math.sin(a)*.5,p[2]+.8],q=cl((t-BT-k*.05)/.35);if(q>=1)return null;
-    return{pos:lerp3(s,[P[0],P[1]+.6,s[2]],q),a:f*(1-q*.6),sc:.4*(1-q*.5)};},TOT);
-  for(let i=0;i<NF;i++)at(F0+i*FD,()=>{const P=TP(),s=[P[0]+1.9,P[1]+.75+(Math.random()-.5)*.1,P[2]+.1],tr=sigSp(og),dy=(Math.random()-.5)*.6;
+    return{pos:lerp3(s,[P[0],P[1]+.5,s[2]],q),a:f*(1-q*.6),sc:.4*(1-q*.5)};},TOT);
+  for(let i=0;i<NF;i++)at(F0+i*FD,()=>{const s=TIP(),tr=sigSp(og),dy=(Math.random()-.5)*.6;
     tween(.18,u=>{const c=mpos();tr.pos=lerp3(s,[c[0]-.2,c[1]+.3+dy,c[2]+.6],u);tr.w=.45;tr.h=.1;tr.a=1;});
     at(.18,()=>{rm(tr);if(i%2===0){const t=mpos();goldBurst(t,5,3,.3,.25,og);E.parts.push({x:t[0]-.2,y:t[1]+.4,z:t[2]+.7,vx:-1.5,vy:2,vz:0,g:6,life:.6,max:.6,size:.22,tex:bolt,rot:0,vr:8});E.shake=Math.max(E.shake,.2);sigHit(m);}});});
-  const sh=sigSp(og);tween(.3,u=>{const P=TP(),c=mpos(),p=lerp3([P[0]+1.9,P[1]+.75,P[2]+.1],[c[0],c[1]+.4,c[2]+.6],u);sh.pos=[p[0],p[1]+.5*Math.sin(PI*u),p[2]];sh.w=sh.h=.8;sh.a=1;E.parts.push({x:sh.pos[0],y:sh.pos[1],z:sh.pos[2],vx:0,vy:.4,vz:0,g:0,life:.4,max:.4,size:.4,gs:.6,tex:sm,rot:0,vr:0});},BIGS);
+  const sh=sigSp(og);tween(.3,u=>{const c=mpos(),p=lerp3(TIP(),[c[0],c[1]+.4,c[2]+.6],u);sh.pos=[p[0],p[1]+.5*Math.sin(PI*u),p[2]];sh.w=sh.h=.8;sh.a=1;E.parts.push({x:sh.pos[0],y:sh.pos[1],z:sh.pos[2],vx:0,vy:.4,vz:0,g:0,life:.4,max:.4,size:.4,gs:.6,tex:sm,rot:0,vr:0});},BIGS);
   at(BIGS+.3,()=>{rm(sh);const t=mpos();sigBig(m,t,gear,og);burst(t,16,bolt,6,.5);goldBurst(t,30,4,1.0,.6,sm);E.flash.mon=[1,.75,.4,1];});
-  at(TOT,()=>{[...K.sps,...gs,barrel,muz,sh].forEach(rm);});return TOT;}
+  at(TOT,()=>{[...K.sps,...gs,tur,muz,sh].forEach(rm);});return TOT;}
 // --- 神秘使者：水晶隕落 (the crystal orb rises; the words fly up over the monster and fuse into one giant crystal, which falls and bursts into a fan of prism light) ---
 function sigH10(sentence,th){const K=sigBase(sentence,th,'h10'),{m,gl,rm,n}=K,h=E.hero,crys=tCrystal(),ball=emojiTex('🔮'),pur=gtex([170,140,255]),G0=.9,FORM=2.2,FALL=2.7,HIT=2.95,TOT=HIT+1.6;
   const og=sigSp(pur),ob=sigSp(ball),bg=sigSp(pur),big=sigSp(crys);
@@ -1377,6 +1389,240 @@ function sigH10(sentence,th){const K=sigBase(sentence,th,'h10'),{m,gl,rm,n}=K,h=
     [[255,120,120],[255,200,100],[255,255,140],[130,255,150],[120,200,255],[180,140,255]].forEach((cc,j)=>{const a=PI/2+(j-2.5)*.38,b=sigSp(gtex(cc));
       tween(.9,u=>{const L=2.6*ease(Math.min(1,u*2));b.pos=[t[0]+Math.cos(a)*L*.5,t[1]+.5+Math.sin(a)*L*.5,t[2]+.8];b.rot=a;b.w=L*.5+.1;b.h=.14;b.a=1-u;});at(.95,()=>rm(b));});});
   at(TOT,()=>{[...K.sps,og,ob,bg,big].forEach(rm);h.off.y=0;});return TOT;}
+// ===== shared helpers for the big moves =====
+// first effect animation that exists (new sheets from docs/vfx-spritesheet-prompt.md are used as soon as they are added)
+function vfxOr(...ks){if(typeof VFX==='undefined')return ks[ks.length-1];for(const k of ks)if(VFX[k])return k;return ks[ks.length-1];}
+function dimScreen(f,t0,t1){const c=E.canvas,undo=()=>{try{c.style.filter='';}catch(e){}};at(t0,()=>{try{c.style.transition='filter .35s';c.style.filter=f;}catch(e){}});at(t1,undo);setTimeout(undo,(t1+1.5)*2000);}
+function flashScreen(t,k){at(t,()=>{const c=E.canvas;try{c.style.transition='filter .04s';c.style.filter='brightness('+(1.7+(k||0))+') saturate(.7)';setTimeout(()=>{try{c.style.transition='filter .45s';c.style.filter='';}catch(e){}},90);}catch(e){}});}
+// a glowing rune lying on the ground (a squashed billboard), fades in and out
+function groundRune(x,z,col,rgb,R,t0,dur){const s={tex:tRune(col),pos:[x,.06,z],w:0,h:0,rot:0,a:0},g={tex:gtex(rgb),pos:[x,.3,z-.05],w:0,h:0,rot:0,a:0};at(t0,()=>{E.sprites.unshift(g);E.sprites.push(s);});
+  tween(dur,u=>{const k=u<.2?ease(u/.2):u>.8?(1-u)/.2:1;s.w=R*k;s.h=R*.3*k;s.a=.95*k;g.w=R*1.3*k;g.h=R*.6*k;g.a=.45*k*(.8+.2*Math.sin(u*40));},t0);
+  at(t0+dur+.02,()=>[s,g].forEach(q=>{const j=E.sprites.indexOf(q);if(j>=0)E.sprites.splice(j,1);}));}
+function rmSp(s){const j=E.sprites.indexOf(s);if(j>=0)E.sprites.splice(j,1);}
+// the hero takes a monster hit at dt: element effect, spark, flash, knock-back (small = a lighter hit inside a combo)
+function heroHurt(dt,rgb,small,vk){const h=E.hero;at(dt,()=>{try{SFX.impact(small)}catch(e){}const t=hpos();
+  if(vk){if(vk==='lightning')vfx(vk,[t[0]+.2,0,t[2]+.7],small?1.1:1.5,{bottom:1});else vfx(vk,[t[0]+.2,t[1],t[2]+.7],small?.9:1.3);}vfx('hit_spark',[t[0]+.3,t[1],t[2]+.75],small?.6:.85);
+  goldBurst(t,small?10:22,4,.5,.34,gtex(rgb));E.shake=Math.max(E.shake,small?.3:.7);E.flash.hero=[rgb[0]/255,rgb[1]/255,rgb[2]/255,small?.45:.8];
+  if(!small){heroPlay('hit',.7);tween(.6,u=>{const e=Math.sin(PI*u)*Math.pow(1-u,.5);h.off.x=-.9*e;h.off.rz=.35*e;h.off.sq=1-.2*Math.sin(PI*cl(u*1.5));});}});return dt+.12;}
+// monster wind-ups: rear back, rise up, or lunge at the hero
+function monWind(kind,dur){const m=E.mon;tween(dur,u=>{const e=Math.sin(PI*u);if(kind==='up'){m.off.y=.5*e;m.off.sc=1+.1*e;}else if(kind==='rear'){m.off.rz=.25*e;m.off.sq=1-.12*e;}
+  else{m.off.x=u<.45?.35*ease(u/.45):.35-1.35*Math.sin(PI*(u-.45)/.55);m.off.sq=1-.1*e;}});at(dur,()=>{m.off.x=0;m.off.y=0;m.off.sq=1;m.off.rz=0;m.off.sc=1;});}
+const MF=()=>{const p=mpos();return[p[0]-.8,p[1]+.2,p[2]+.5];},HT0=()=>{const p=hpos();return[p[0]+.2,p[1]-.2,p[2]+.5];};
+// ===== second attack for every element (the battle picks one of the two at random) =====
+function hurt2(type){if(!E.mon)return 0;const R=Math.random,p=hpos(),x=p[0]+.2,z=p[2]+.7;at(.3,()=>{try{SFX.matk(type)}catch(e){}});
+  if(type==='fire'){   // a pillar of fire erupts under the hero
+    monWind('rear',.5);groundRune(x,z,'#FF8A3A',[255,140,50],1.6,.25,1.5);
+    for(let j=0;j<3;j++)vfx('flame_loop',[x+(j-1)*.45,.6+(j%2)*.2,z+.05],.75+.1*(j%2),{loop:1,dur:1.0,delay:.7+j*.05,rise:.4});
+    vfx(vfxOr('fire_pillar','fire_burst'),[x,1.3,z+.1],1.6,{delay:.75});return heroHurt(.8,[255,140,50],false,null);}
+  if(type==='ice'){   // a line of ice spikes races along the ground to the hero
+    monWind('rear',.45);const a=MF(),b=HT0();
+    for(let j=0;j<7;j++){const q=(j+1)/7,xx=a[0]+(b[0]+.3-a[0])*q,s={tex:tShard(),pos:[xx,0,b[2]+.3],w:0,h:0,rot:0,a:1},t0=.35+j*.06;
+      at(t0,()=>{E.sprites.push(s);goldBurst([xx,.2,b[2]+.4],5,2,.4,.25,gtex([200,240,255]));});
+      tween(.7,u=>{const g=u<.25?ease(u/.25):1;s.w=.3;s.h=(.55+.5*q)*g;s.pos=[xx,s.h*.9,b[2]+.3+(j%2)*.25];s.a=u<.7?1:(1-u)/.3;},t0);at(t0+.72,()=>rmSp(s));}
+    return heroHurt(.35+6*.06+.1,[140,220,255],false,'ice_burst');}
+  if(type==='elec'){   // a crackling ball of lightning zig-zags to the hero
+    monWind('up',.5);const core={tex:gtex([255,240,140]),pos:MF(),w:0,h:0,rot:0,a:0},bolt={tex:null,pos:MF(),w:0,h:0,rot:0,a:0},sk=sparkTex([255,240,160]);at(.35,()=>E.sprites.push(core,bolt));
+    tween(.6,u=>{const P=lerp3(MF(),HT0(),u);P[1]+=.4*Math.sin(u*PI*5);core.pos=P;core.w=core.h=.7+.2*Math.sin(u*60);core.a=1;bolt.tex=E.tex['vx_lightning'+(4+(Math.floor(u*30)&1))]||null;bolt.pos=[P[0],P[1],P[2]+.02];bolt.w=.5;bolt.h=.7;bolt.rot=u*20;bolt.a=.9;
+      if(R()<.7)E.parts.push({x:P[0],y:P[1],z:P[2],vx:(R()-.5)*3,vy:(R()-.5)*3,vz:0,g:0,life:.2,max:.2,size:.18,tex:sk,rot:0,vr:0,st:1});},.35);
+    at(.95,()=>{rmSp(core);rmSp(bolt);});return heroHurt(.95,[255,235,90],false,'lightning');}
+  if(type==='poison'){   // a toxic cloud rolls over the hero, dripping
+    monWind('rear',.5);const pg=gtex([170,90,220]),gg=gtex([140,220,90]);
+    tween(1.1,()=>{for(let j=0;j<3;j++)E.parts.push({x:x+(R()-.5)*1.8,y:p[1]+.4+(R()-.5)*1.2,z,vx:(R()-.5)*.4,vy:.2,vz:0,g:0,life:1,max:1,size:.4+R()*.4,gs:.5,al:.55,tex:R()<.5?pg:gg,rot:0,vr:0});
+      if(R()<.4)E.parts.push({x:x+(R()-.5)*1.4,y:p[1]+1.2,z,vx:0,vy:-2.5,vz:0,g:3,life:.6,max:.6,size:.16,tex:gg,rot:0,vr:0});},.3);
+    vfx(vfxOr('poison_cloud','dark_burst'),[x,p[1]+.3,z+.05],1.25,{delay:.4,a:.8});heroHurt(.6,[170,90,220],true,null);return heroHurt(1.1,[170,90,220],false,null);}
+  if(type==='forest'){   // thorny vines burst out of the ground around the hero
+    monWind('rear',.5);groundRune(x,z,'#7CFF8A',[120,235,140],1.4,.25,1.2);
+    for(let j=0;j<5;j++){const s={tex:emojiTex('🌿'),pos:[0,0,0],w:0,h:0,rot:0,a:1},xx=x+(j-2)*.35,t0=.45+j*.05;at(t0,()=>E.sprites.push(s));
+      tween(.8,u=>{const g=u<.3?ease(u/.3):1;s.w=s.h=.7*g;s.pos=[xx,.2+.8*g,z+(j%2)*.2];s.rot=(j-2)*.3+.2*Math.sin(u*12);s.a=u<.75?1:(1-u)/.25;},t0);at(t0+.82,()=>rmSp(s));}
+    return heroHurt(.7,[120,235,140],false,'leaf_swirl');}
+  if(type==='sea'){   // a rolling wave of splashes runs along the ground
+    monWind('lunge',.6);const a=MF(),b=HT0();for(let j=0;j<6;j++){const q=j/5;vfx(vfxOr('tidal_wave','water_splash'),[a[0]+(b[0]-a[0])*q,.55,b[2]+.3],.65+.25*q,{delay:.35+j*.07,fps:32});}
+    return heroHurt(.35+5*.07+.15,[120,200,255],false,'water_splash');}
+  if(type==='desert'){   // a swirling sandstorm around the hero
+    monWind('rear',.5);const sd=[gtex([230,200,140]),gtex([200,160,100])];
+    tween(1.0,()=>{for(let j=0;j<5;j++){const a=R()*PI*2,r=.4+R()*1.1;E.parts.push({x:x+Math.cos(a)*r,y:.2+R()*2.2,z:z+Math.sin(a)*r*.4,vx:-Math.sin(a)*3,vy:.5,vz:Math.cos(a),g:0,life:.5,max:.5,size:.25+R()*.3,gs:.4,al:.7,tex:sd[j&1],rot:0,vr:0});}},.3);
+    vfx(vfxOr('sandstorm','smoke_puff'),[x,p[1],z],1.3,{delay:.5,a:.7});return heroHurt(.9,[220,180,110],false,null);}
+  if(type==='sky'){   // a whirlwind travels across and hits the hero
+    monWind('up',.5);const sk=sparkTex([235,245,255]);
+    tween(.8,u=>{const c=lerp3(MF(),HT0(),u);for(let j=0;j<6;j++){const a=R()*PI*2,y=R()*2.4,r=.25+y*.35;E.parts.push({x:c[0]+Math.cos(a)*r,y:.1+y,z:c[2]+Math.sin(a)*r*.4,vx:-Math.sin(a)*4,vy:.6,vz:Math.cos(a)*1.5,g:0,dr:2,life:.35,max:.35,size:.14,tex:sk,rot:0,vr:0,st:1});}},.35);
+    vfx(vfxOr('tornado','smoke_puff'),[x,1.0,z],1.2,{delay:.9,a:.8});return heroHurt(1.15,[200,230,255],false,null);}
+  if(type==='mech'){   // charges a red laser and sweeps it over the hero
+    monWind('rear',.4);const og=gtex([255,90,70]),bm={tex:og,pos:[0,0,0],w:0,h:0,rot:0,a:0},bc={tex:gtex([255,240,230]),pos:[0,0,0],w:0,h:0,rot:0,a:0},ch={tex:og,pos:MF(),w:0,h:0,rot:0,a:0};E.sprites.push(ch,bm,bc);
+    tween(1.2,u=>{const t=u*1.2,a=MF(),b=HT0(),ck=t<.5?ease(t/.5):1;ch.pos=a;ch.w=ch.h=.3+.5*ck*(1+.2*Math.sin(t*50));ch.a=ck*(t<1?1:(1.2-t)/.2);
+      if(t>.5&&t<1.05){const L=Math.hypot(b[0]-a[0],b[1]-a[1]),ang=Math.atan2(b[1]-a[1],b[0]-a[0]),k=t<.56?(t-.5)/.06:t>.95?(1.05-t)/.1:1;bm.pos=bc.pos=[(a[0]+b[0])/2,(a[1]+b[1])/2,a[2]];bm.rot=bc.rot=ang;bm.w=bc.w=L/2;bm.h=.32*k*(1+.15*Math.sin(t*70));bc.h=.1*k;bm.a=bc.a=k;
+        if(R()<.5)vfx('hit_spark',[b[0]+.1,b[1]+(R()-.5)*.4,b[2]+.3],.45,{fps:40});}else bm.a=bc.a=0;});
+    at(1.25,()=>{rmSp(bm);rmSp(bc);rmSp(ch);});heroHurt(.6,[255,90,70],true,null);return heroHurt(1.0,[255,90,70],false,vfxOr('laser_hit','fire_burst'));}
+  if(type==='ghost'||type==='skel'){   // shadow claws (ghost) or bone spikes (skeleton) shoot up from the ground
+    monWind('up',.5);const bone=type==='skel',tx=bone?gtex([245,240,225]):gtex([110,60,170]);vfx('dark_burst',[x,.45,z],1.0,{delay:.35,a:.85});
+    for(let j=0;j<(bone?6:4);j++){const s={tex:tx,pos:[0,0,0],w:0,h:0,rot:0,a:1},xx=x+(j-1.5)*.4,lean=(j-1.5)*.18,t0=.45+j*.05;at(t0,()=>E.sprites.push(s));
+      tween(.7,u=>{const g=u<.3?ease(u/.3):1;s.w=bone?.12:.22;s.h=(bone?1.0:.9)*g;s.pos=[xx+lean*g,s.h,z+.05];s.rot=-lean;s.a=u<.7?1:(1-u)/.3;},t0);at(t0+.72,()=>rmSp(s));}
+    return heroHurt(.75,bone?[230,220,200]:[150,100,220],false,'dark_burst');}
+  if(type==='dragon'){   // a long stream of dragon fire
+    monWind('rear',.5);tween(.75,()=>{const a=MF(),b=HT0();for(let j=0;j<4;j++){const P=lerp3(a,b,R()*.15);E.parts.push({x:P[0],y:P[1]+(R()-.5)*.2,z:P[2],vx:(b[0]-a[0])*1.6,vy:(b[1]-a[1])*1.6+(R()-.5)*1.2,vz:0,g:0,life:.6,max:.6,size:.3+R()*.3,gs:1,tex:emojiTex('🔥'),rot:0,vr:0});}},.35);
+    return heroHurt(.8,[255,120,60],false,'fire_burst');}
+  return 0;}
+// ===== special moves of elites ('e'), bosses ('b') and legends ('L'): charge, then a big strike in the monster's element =====
+function monUlt(type,tier){if(!E.mon)return 0;const m=E.mon,big=tier==='b'||tier==='L',L=tier==='L',S=L?1.5:big?1.2:1,T0=big?1.3:1.0,rgb=(HURT[type]||{}).c||[255,120,60],col='rgb('+rgb.join(',')+')',R=Math.random,sk=sparkTex(rgb);
+  const mp=mpos();groundRune(mp[0],mp[2]+.4,col,rgb,2.2*S,0,T0+.3);
+  tween(T0,u=>{const e=Math.sin(PI*Math.min(1,u*1.3));m.off.y=.4*e*S;m.off.sc=1+.08*e;E.flash.mon=[rgb[0]/255,rgb[1]/255,rgb[2]/255,.5*e];
+    if(R()<.8){const c=mpos(),a=R()*PI*2,r=2.2*S;E.parts.push({x:c[0]+Math.cos(a)*r,y:c[1]+Math.sin(a)*r*.7,z:c[2]+.5,vx:-Math.cos(a)*r*1.6,vy:-Math.sin(a)*r*1.1,vz:0,g:0,life:.6,max:.6,size:.2,tex:sk,rot:0,vr:0,st:1});}});
+  at(T0,()=>{m.off.y=0;m.off.sc=1;});if(big)dimScreen(L?'brightness(.5) saturate(1.25)':'brightness(.66) saturate(1.1)',.1,T0+1.7);
+  at(.2,()=>{try{SFX.matk(type)}catch(e){}});at(T0-.1,()=>{try{SFX.matk(type)}catch(e){}});
+  const p=hpos(),cx=p[0]+.2,z=p[2]+.7,n=L?9:big?7:5,DT=.16,FIN=T0+n*DT+.3;
+  const style={fire:'meteor',dragon:'meteor',ice:'ice',elec:'storm',poison:'dark',ghost:'dark',skel:'dark',forest:'vine',sea:'wave',desert:'tornado',sky:'tornado',mech:'laser'}[type]||'meteor';
+  const drop=(t0,xx,sz,tex,tail,land)=>{const hd={tex,pos:[0,0,0],w:0,h:0,rot:0,a:0},tl=tail?{tex:tail,pos:[0,0,0],w:0,h:0,rot:0,a:0}:null;at(t0,()=>{E.sprites.push(hd);if(tl)E.sprites.push(tl);});
+    tween(.35,u=>{const s=[xx+2.6,6.5],e=[xx,.35],q=u*u,P=[s[0]+(e[0]-s[0])*q,s[1]+(e[1]-s[1])*q,z],ang=Math.atan2(e[1]-s[1],e[0]-s[0]);hd.pos=P;hd.w=hd.h=sz;hd.a=1;hd.rot=u*6;
+      if(tl){tl.pos=[P[0]-Math.cos(ang)*sz*1.5,P[1]-Math.sin(ang)*sz*1.5,z-.02];tl.rot=ang;tl.w=sz*2.6;tl.h=sz*.6;tl.a=.9;}},t0);
+    at(t0+.35,()=>{rmSp(hd);if(tl)rmSp(tl);land([xx,.4,z]);E.shake=Math.max(E.shake,.4);});};
+  for(let j=0;j<n;j++){const t0=T0+j*DT,xx=cx+(R()-.5)*2.6;
+    if(style==='meteor')drop(t0,xx,.45*S,emojiTex('🔥'),uslash('h4',ULT.h4),P=>{vfx('fire_burst',[P[0],.75,P[2]],.85*S);goldBurst(P,10,4,.5,.3,gtex(rgb));});
+    else if(style==='ice')drop(t0,xx,.5*S,tShard(),null,P=>{vfx('ice_burst',[P[0],.7,P[2]],.8*S);});
+    else if(style==='storm')at(t0,()=>{vfx('lightning',[xx,0,z],1.4*S,{bottom:1});E.bgFlash=1;E.shake=Math.max(E.shake,.35);});
+    else if(style==='dark')at(t0,()=>{vfx('dark_burst',[xx,.6,z],.8*S);goldBurst([xx,.4,z],8,3,.5,.3,gtex(rgb));});
+    else if(style==='vine')at(t0,()=>{const s={tex:emojiTex('🌿'),pos:[xx,0,z],w:0,h:0,rot:0,a:1};E.sprites.push(s);tween(.6,u=>{const g=u<.3?ease(u/.3):1;s.w=s.h=.8*S*g;s.pos=[xx,.25+.8*S*g,z];s.rot=.2*Math.sin(u*14);s.a=u<.7?1:(1-u)/.3;});at(.62,()=>rmSp(s));vfx('leaf_swirl',[xx,.6,z],.6*S,{delay:.1});});
+    else if(style==='wave')at(t0,()=>{const q=j/(n-1),a=MF();vfx(vfxOr('tidal_wave','water_splash'),[a[0]+(cx-a[0])*q,.7,z-.3],(.7+.4*q)*S,{fps:30});});
+    else if(style==='tornado')at(t0,()=>{const q=j/(n-1),a=MF(),c=[a[0]+(cx-a[0])*q,0,z];for(let k=0;k<10;k++){const an=R()*PI*2,y=R()*2.8*S,r=.3+y*.3;E.parts.push({x:c[0]+Math.cos(an)*r,y:.1+y,z:c[2]+Math.sin(an)*r*.4,vx:-Math.sin(an)*5,vy:.8,vz:Math.cos(an)*2,g:0,dr:2,life:.4,max:.4,size:.16,tex:sk,rot:0,vr:0,st:1});}vfx('smoke_puff',[c[0],.6,c[2]],.6*S,{a:.6});});
+    else if(style==='laser')at(t0,()=>{const b={tex:gtex(rgb),pos:[xx,3,z],w:0,h:0,rot:0,a:0};E.sprites.push(b);tween(.3,u=>{const k=Math.sin(PI*u);b.w=.3*S*k;b.h=6*k;b.a=k;});at(.32,()=>rmSp(b));at(.08,()=>vfx('fire_burst',[xx,.6,z],.7*S));});
+    if(j%2===1)heroHurt(t0+.36,rgb,true,null);}
+  // the final blow lands on the hero; legends add a shock wave and a second burst
+  const fk={meteor:'fire_burst',ice:'ice_burst',storm:'lightning',dark:'dark_burst',vine:'leaf_swirl',wave:'water_splash',tornado:'smoke_puff',laser:'fire_burst'}[style];
+  at(FIN-.05,()=>{const t=hpos(),q=[t[0]+.2,t[1],t[2]+.75];if(fk==='lightning')vfx(fk,[q[0],0,q[2]],2.0*S,{bottom:1});else vfx(fk,q,1.5*S);vfx('hit_spark',q,1.2*S);flashScreen(0,L?.4:0);
+    if(L){const rg=sigSp(tRing(col));tween(.8,u=>{rg.pos=[q[0],q[1],q[2]];rg.w=rg.h=.8+5*ease(u);rg.a=1-u;});at(.85,()=>rmSp(rg));vfx(vfxOr('explosion_big','holy_burst'),q,2.2,{delay:.1});}});
+  return heroHurt(FIN,rgb,false,null);}
+// ===== ultimate finishers (終極絕招): bought as the 終極卷軸 scroll in the shop; the biggest move of each hero =====
+const ULT3N={h1:'天界聖劍',h2:'銀河崩落',h3:'千羽流星箭',h4:'煉獄斬',h5:'絕對零度',h6:'神聖審判',h7:'影之千刃',h8:'萬獸之王',h9:'終極機甲砲',h10:'時空崩壞'};
+// 勇者：天界聖劍 — rises in a column of light; six light swords circle above the monster and plunge around it; a colossal sword falls in the middle
+function s3H1(sentence,th){const K=sigBase(sentence,th,'h1'),{m,gl,rm,n}=K,h=E.hero,gold=gtex([255,225,120]),S0=1.6,SD=.22,BIG=S0+6*SD+.55,HIT=BIG+.35,TOT=HIT+1.5;
+  dimScreen('brightness(.8) sepia(.25) saturate(1.3)',.1,HIT+.4);tween(.6,u=>{h.off.y=.5*ease(u);},.2);tween(.5,u=>{h.off.y=.5*(1-ease(u));},HIT);
+  const hc=sigSp(gold);tween(HIT,u=>{const p=hpos(),g=Math.min(1,u*4)*(u>.9?(1-u)*10:1);hc.pos=[p[0],p[1]+3,p[2]+.3];hc.w=.9*g;hc.h=6*g;hc.a=.55*g;});
+  const sw=[0,1,2,3,4,5].map(()=>sigSp(tSword())),RING=(j,t)=>{const c=mpos(),a=j/6*PI*2+t*1.2;return[c[0]+Math.cos(a)*1.6,c[1]+2.9+Math.sin(a)*.35,c[2]+.6+Math.sin(a)*.4];};
+  sw.forEach((s,j)=>{const ts=S0+j*SD;tween(TOT,u=>{const t=u*TOT,c=mpos(),g=ease(cl((t-.5-j*.08)/.5));if(t<ts){s.pos=RING(j,t);s.w=.32*g;s.h=.85*g;s.rot=PI;s.a=g;}
+      else{const q=cl((t-ts)/.18),r=RING(j,ts),gx=c[0]+Math.cos(j/6*PI*2)*1.3;s.pos=[r[0]+(gx-r[0])*q,r[1]+(.85-r[1])*q*q,r[2]];s.rot=PI;s.a=t>HIT+.3?Math.max(0,1-(t-HIT-.3)/.4):1;}});
+    at(ts+.18,()=>{const c=mpos(),gx=c[0]+Math.cos(j/6*PI*2)*1.3;vfx('holy_burst',[gx,.6,c[2]+.7],.7);goldBurst([gx,.3,c[2]+.7],12,4,.5,.3,gold);E.shake=Math.max(E.shake,.35);sigHit(m);E.flash.mon=[1,1,.8,.6];});});
+  sigWords(K,(k,t,c)=>{if(t<.1||t>BIG)return null;const p=hpos(),f=ease(cl((t-.2-k*.06)/.8)),a=k/n*PI*2+t*2,ctr=[c[0],c[1]+2.9,c[2]+.65];return{pos:lerp3([p[0]+.5,p[1]+1,p[2]+.8],[ctr[0]+Math.cos(a)*.8,ctr[1]+Math.sin(a)*.25,ctr[2]],f),a:t>BIG-.2?(BIG-t)/.2:1,sc:.4};},TOT);
+  const cs=sigSp(tSword()),cg=sigSp(gold);tween(HIT+.9-BIG+.6,u=>{const t=BIG-.6+u*(HIT+.9-BIG+.6),c=mpos(),g=ease(cl((t-BIG+.6)/.5)),fy=c[1]+.4+2.4;let y=6.2;if(t>BIG){const q=cl((t-BIG)/(HIT-BIG));y=6.2+(fy-6.2)*q*q;}
+    cs.pos=[c[0],t<BIG?6.2:y,c[2]+.75];cs.w=.95*g;cs.h=2.4*g;cs.a=t<HIT+.6?g:Math.max(0,1-(t-HIT-.6)/.3);cg.pos=cs.pos;cg.w=1.8*g;cg.h=3.4*g;cg.a=.5*cs.a;},BIG-.6);
+  at(HIT,()=>{const t=mpos();flashScreen(0,.3);sigBig(m,t,K.star,gold);vfx('holy_burst',[t[0],t[1]+.4,t[2]+.8],2.8);goldBurst(t,60,7,1.0,.4,gold);E.flash.mon=[1,1,.85,1];
+    sw.forEach((_,j)=>{const gx=t[0]+Math.cos(j/6*PI*2)*1.3,b=sigSp(gold);tween(.8,u=>{const k=Math.sin(PI*u);b.pos=[gx,3,t[2]+.6];b.w=.35*k;b.h=6*k;b.a=.8*k;},j*.04);at(.9+j*.04,()=>rm(b));});});
+  at(TOT,()=>{[...K.sps,hc,...sw,cs,cg].forEach(rm);h.off.y=0;});return TOT;}
+// 魔法師：銀河崩落 — night falls; a giant rune turns in the sky and a galaxy of stars swirls into it; one huge meteor falls
+function s3H2(sentence,th){const K=sigBase(sentence,th,'h2'),{m,gl,rm,n}=K,h=E.hero,star=K.star,pink=gtex([255,150,230]),tail=uslash('h2',th),M0=2.6,HIT=M0+.9,TOT=HIT+1.6;
+  dimScreen('brightness(.45) saturate(1.3) hue-rotate(-10deg)',.1,HIT+.5);tween(.5,u=>{h.off.y=.3*Math.sin(PI*u);},.2);
+  const SK=()=>{const c=mpos();return[c[0]-.6,c[1]+3.6,c[2]+.2];},rn=sigSp(tRune('#FF8AE8')),rg=sigSp(pink);
+  tween(HIT,u=>{const t=u*HIT,P=SK(),g=ease(cl((t-.3)/.6))*(t>HIT-.3?(HIT-t)/.3:1);rn.pos=P;rn.w=rn.h=2.6*g;rn.rot=t*.8;rn.a=.9*g;rg.pos=P;rg.w=rg.h=3.6*g;rg.a=.4*g;
+    if(t<M0&&R3()<.9)for(let j=0;j<2;j++){const a=R3()*PI*2,r=3+R3();E.parts.push({x:P[0]+Math.cos(a)*r,y:P[1]+Math.sin(a)*r*.55,z:P[2],vx:-Math.cos(a)*r*1.4-Math.sin(a)*2,vy:-Math.sin(a)*r*.8+Math.cos(a)*1.2,vz:0,g:0,dr:.5,life:.7,max:.7,size:.12+R3()*.12,tex:R3()<.5?star:pink,rot:0,vr:2});}});
+  sigWords(K,(k,t,c)=>{if(t<.2||t>M0)return null;const p=hpos(),P=SK(),f=ease(cl((t-.2-k*.06)/1.0)),a=k/n*PI*2+t*2.4,r=1.5*(1-cl((t-1.6)/(M0-1.6)));return{pos:lerp3([p[0]+.6,p[1]+1,p[2]+.8],[P[0]+Math.cos(a)*r,P[1]+Math.sin(a)*r*.5,P[2]],f),a:1,sc:.4};},TOT);
+  const hd=sigSp(pink),hc=sigSp(gtex([255,255,255])),tl=sigSp(tail);
+  tween(HIT-M0+.05,u=>{const P=SK(),c=mpos(),s=[P[0],P[1],P[2]],e=[c[0],c[1]+.4,c[2]+.7],q=u*u*u,pos=lerp3(s,e,q),ang=Math.atan2(e[1]-s[1],e[0]-s[0]),sz=.6+1.0*u;
+    hd.pos=pos;hd.w=hd.h=sz*1.4;hd.a=1;hc.pos=pos;hc.w=hc.h=sz*.6;hc.a=1;tl.pos=[pos[0]-Math.cos(ang)*sz*2,pos[1]-Math.sin(ang)*sz*2,pos[2]-.02];tl.rot=ang;tl.w=sz*3.2;tl.h=sz*.8;tl.a=.9;
+    for(let j=0;j<3;j++)E.parts.push({x:pos[0],y:pos[1],z:pos[2]-.05,vx:(R3()-.5)*2,vy:(R3()-.5)*2,vz:0,g:0,life:.4,max:.4,size:.2,gs:-.3,tex:star,rot:0,vr:0});},M0);
+  at(HIT,()=>{rm(hd);rm(hc);rm(tl);const t=mpos();flashScreen(0,.4);sigBig(m,t,star,pink);vfx('holy_burst',[t[0],t[1]+.4,t[2]+.8],2.6);vfx(vfxOr('explosion_big','fire_burst'),[t[0],t[1]+.3,t[2]+.85],2.0,{delay:.05});burst(t,40,star,9,.8);E.flash.mon=[1,.75,.95,1];});
+  at(TOT,()=>{[...K.sps,rn,rg,hd,hc,tl].forEach(rm);h.off.y=0;});return TOT;}
+// 弓箭手：千羽流星箭 — shoots one glowing arrow into the sky; a rain of light arrows falls; a giant arrow comes down last
+function s3H3(sentence,th){const K=sigBase(sentence,th,'h3'),{m,gl,rm,n}=K,h=E.hero,arrow=tArrow(),grn=gtex([150,255,140]),UP=1.0,R0=1.6,NA=26,DA=.045,BIG=R0+NA*DA+.3,HIT=BIG+.3,TOT=HIT+1.5;
+  swing(.8);tween(.3,u=>{h.off.rz=.25*ease(u);},.5);tween(.4,u=>{h.off.rz=.25*(1-ease(u));},UP+.1);
+  const up=sigSp(arrow),sky=sigSp(grn);tween(.5,u=>{const p=hpos();up.pos=[p[0]+.8,p[1]+1+7*u*u,p[2]+.9];up.rot=PI/2;up.w=1.3;up.h=.32;up.a=1;},UP-.1);at(UP+.4,()=>rm(up));
+  tween(HIT-UP,u=>{const t=UP+u*(HIT-UP),c=mpos(),g=ease(cl((t-UP)/.4));sky.pos=[c[0],c[1]+4.6,c[2]];sky.w=3.5*g;sky.h=1.4*g;sky.a=.55*g;},UP);
+  for(let i=0;i<NA;i++){const ts=R0+i*DA,ox=(R3()-.5)*3,s=sigSp(arrow);tween(.22,u=>{const c=mpos(),x=c[0]+ox,y0=6.2,y1=.5+R3()*.2;s.pos=[x+.4*(1-u),y0+(y1-y0)*u,c[2]+.6];s.rot=-PI/2-.12;s.w=.9;s.h=.2;s.a=1;},ts);
+    at(ts+.22,()=>{rm(s);const c=mpos();goldBurst([c[0]+ox,.4,c[2]+.6],5,2.5,.35,.24,grn);if(i%4===0){E.shake=Math.max(E.shake,.25);sigHit(m);E.flash.mon=[.8,1,.7,.45];}});}
+  sigWords(K,(k,t,c)=>{if(t<.1||t>BIG)return null;const p=hpos(),f=ease(cl((t-.1-k*.05)/.7)),tg=[c[0]+(k-(n-1)/2)*.55,c[1]+3.4+.1*Math.sin(t*3+k),c[2]+.6],q=cl((t-R0-k*.12)/.3);if(q>=1)return null;return{pos:q>0?lerp3(tg,[c[0],c[1]+.6,c[2]+.7],q*q):lerp3([p[0]+.6,p[1]+1,p[2]+.8],tg,f),a:1,sc:.42};},TOT);
+  const ga=sigSp(arrow),gg=sigSp(grn);tween(HIT-BIG+.05,u=>{const c=mpos(),y=6.8+(c[1]+1.6-6.8)*u*u;ga.pos=[c[0],y,c[2]+.75];ga.rot=-PI/2;ga.w=2.6;ga.h=.6;ga.a=1;gg.pos=ga.pos;gg.w=1.2;gg.h=3;gg.a=.6;},BIG);
+  at(HIT,()=>{rm(ga);rm(gg);const t=mpos();flashScreen(0,.2);sigBig(m,t,K.star,grn);vfx('leaf_swirl',[t[0],t[1]+.4,t[2]+.8],2.4);burst(t,26,emojiTex('🍃'),7,.5);E.flash.mon=[.85,1,.75,1];});
+  at(TOT,()=>{[...K.sps,sky].forEach(rm);h.off.rz=0;});return TOT;}
+// 劍士：煉獄斬 — dashes in for six crossing fire slashes, leaps high and cleaves straight down; pillars of fire burst up along the ground
+function s3H4(sentence,th){const K=sigBase(sentence,th,'h4'),{m,gl,rm,n}=K,h=E.hero,ray=uslash('h4',th),emb=gtex([255,140,40]),D=1.0,S0=1.35,SD=.2,UP=S0+6*SD+.1,HIT=UP+.75,TOT=HIT+1.5,dx=()=>(m.base[0]-1.5)-h.base[0];
+  tween(.3,u=>{h.off.x=dx()*ease(u);},D);
+  for(let j=0;j<6;j++){const ts=S0+j*SD,ang=[.7,-.7,0,1.2,-1.2,.35][j];at(ts,()=>{const t=mpos(),P=[t[0],t[1]+.5,t[2]+.95];heroPlay('attack',.25);h.off.rz=(j%2?.2:-.2);vfx('slash_arc',P,1.3,{rot:ang-.5,fps:34});sigLine(ray,P,ang,5,.6,.25,gl);vfx('fire_burst',[t[0]+(R3()-.5),t[1]+.3,t[2]+.8],.6);E.shake=Math.max(E.shake,.4);E.flash.mon=[1,.6,.3,.65];sigHit(m);});}
+  tween(.75,u=>{h.off.y=u<.45?2.6*ease(u/.45):2.6*(1-Math.pow((u-.45)/.55,2));h.off.rz=-.4*Math.sin(PI*u);},UP);
+  sigWords(K,(k,t,c)=>{if(t<.1||t>UP)return null;const f=ease(cl((t-.1)/.6)),a=k/n*PI*2+t*(t>S0?7:2.5),r=1.8*f;return{pos:[c[0]+Math.cos(a)*r,c[1]+.6+Math.sin(a)*.8,c[2]+.7+Math.sin(a)*.4],a:1,sc:.42};},TOT);
+  at(HIT,()=>{const t=mpos();h.off.rz=0;flashScreen(0,.3);sigLine(ray,[t[0],t[1]+.8,t[2]+.95],PI/2,12,1.4,.6,gl);sigBig(m,t,emojiTex('🔥'),emb);vfx('fire_burst',[t[0],t[1]+.4,t[2]+.85],2.6);
+    for(let j=0;j<7;j++)vfx('flame_loop',[t[0]-2.4+j*.8,.8,t[2]+.6+(j%2)*.3],.85,{loop:1,dur:1.1,delay:j*.04,rise:.5});});
+  tween(.5,u=>{h.off.x=dx()*(1-ease(u));},HIT+.6);
+  at(TOT,()=>{K.sps.forEach(rm);h.off.x=0;h.off.y=0;h.off.rz=0;});return TOT;}
+// 龍騎士：絕對零度 — everything turns cold; ice crystals erupt in a ring; the monster is sealed in ice; the knight dives and shatters it
+function s3H5(sentence,th){const K=sigBase(sentence,th,'h5'),{m,gl,rm,n}=K,h=E.hero,big=E.big?1.3:1,ig=gtex([150,220,255]),shard=tShard(),RG=1.2,SEAL=2.3,DIVE=3.0,HIT=3.4,TOT=HIT+1.5;
+  dimScreen('saturate(.55) brightness(1.08) hue-rotate(12deg)',.1,HIT+.3);
+  tween(HIT,()=>{const c=mpos();for(let j=0;j<2;j++)E.parts.push({x:c[0]-5+R3()*10,y:5.5,z:c[2]+R3()*1.5-.3,vx:-.5,vy:-1.6-R3(),vz:0,g:0,life:3,max:3,size:.08+R3()*.1,tex:R3()<.6?emojiTex('❄️'):ig,rot:R3()*6,vr:1});});
+  for(let j=0;j<8;j++){const a=j/8*PI*2,s=sigSp(shard),t0=RG+j*.07;tween(TOT-t0,u=>{const t=t0+u*(TOT-t0),c=mpos(),g=ease(cl((t-t0)/.25));s.pos=[c[0]+Math.cos(a)*1.9,1.1*g*(1+.3*Math.sin(j*2.1)),c[2]+.5+Math.sin(a)*.6];s.w=.42;s.h=1.25*g*(1+.3*Math.sin(j*2.1));s.a=t<HIT?1:0;},t0);
+    at(t0,()=>{const c=mpos();goldBurst([c[0]+Math.cos(a)*1.9,.3,c[2]+.5+Math.sin(a)*.6],6,2.5,.4,.26,ig);E.shake=Math.max(E.shake,.2);});}
+  const ice=sigSp(tIce());tween(HIT-SEAL+.02,u=>{const c=mpos(),g=ease(cl(u*3)),H=2.05*big*g;ice.pos=[c[0],H,c[2]+.8];ice.w=1.8*big;ice.h=H;ice.a=.88*g;E.flash.mon=[.6,.9,1,.6*g];},SEAL);
+  sigWords(K,(k,t,c)=>{if(t<.1||t>SEAL+.2)return null;const p=hpos(),f=ease(cl((t-.1-k*.06)/.9)),a=k/n*PI*2+t*1.5;return{pos:lerp3([p[0]+.5,p[1]+1,p[2]+.8],[c[0]+Math.cos(a)*1.4,c[1]+.8+Math.sin(a)*.9,c[2]+.75],f),a:t>SEAL?1-(t-SEAL)/.2:1,sc:.42};},TOT);
+  tween(.4,u=>{h.off.y=9*ease(u);},DIVE-.6);const com=sigSp(ig),tl=sigSp(uslash('h5',th));
+  tween(HIT-DIVE,u=>{const c=mpos(),s=[c[0]-2.4,9,c[2]+.8],e=[c[0],c[1]+.4,c[2]+.8],q=u*u,P=lerp3(s,e,q),ang=Math.atan2(e[1]-s[1],e[0]-s[0]);com.pos=P;com.w=com.h=1.8;com.a=1;tl.pos=[P[0]-Math.cos(ang)*1.4,P[1]-Math.sin(ang)*1.4,P[2]];tl.rot=ang;tl.w=2.8;tl.h=.7;tl.a=.9;},DIVE);
+  at(HIT,()=>{rm(ice);rm(com);rm(tl);const t=mpos();flashScreen(0,.3);sigBig(m,t,shard,ig);for(let j=0;j<3;j++)vfx('ice_burst',[t[0]+(j-1)*.9,t[1]+.3+(j%2)*.4,t[2]+.8],1.6,{delay:j*.08});
+    for(let j=0;j<46;j++){const a=R3()*PI*2,v=3+R3()*6;E.parts.push({x:t[0]+(R3()-.5)*1.4,y:t[1]+.3+R3()*1.6,z:t[2]+.7,vx:Math.cos(a)*v,vy:2+R3()*4,vz:0,g:7,life:1.1,max:1.1,size:.3+R3()*.35,tex:shard,rot:R3()*6,vr:(R3()-.5)*10});}});
+  tween(.45,u=>{h.off.y=9*(1-ease(u));},HIT+.5);
+  at(TOT,()=>{K.sps.forEach(rm);h.off.y=0;});return TOT;}
+// 牧師：神聖審判 — giant feather wings open; beams of light converge from the sky; a great halo seals the monster; a cross of light explodes
+function s3H6(sentence,th){const K=sigBase(sentence,th,'h6'),{m,gl,rm,n}=K,h=E.hero,fea=tFeather(),warm=gtex([255,240,190]),B0=1.4,HL=2.3,HIT=3.1,TOT=HIT+1.6;
+  dimScreen('brightness(.85) sepia(.2) saturate(1.2)',.1,HIT+.4);tween(.6,u=>{h.off.y=.5*ease(u);},.3);tween(.5,u=>{h.off.y=.5*(1-ease(u));},HIT+.4);
+  const wing=[];for(let i=0;i<20;i++)wing.push(sigSp(fea));
+  tween(TOT-.2,u=>{const t=u*(TOT-.2),p=hpos(),g=ease(cl(t/.7))*(t>HIT+.3?Math.max(0,1-(t-HIT-.3)/.6):1);wing.forEach((s,i)=>{const side=i<10?-1:1,j=i%10;s.pos=[p[0]+side*(.3+j*.2)*g,p[1]+.4+j*.16*g+.08*Math.sin(t*3+j),p[2]-.35];s.rot=(.15+j*.17)*-side;s.w=.6*g;s.h=1.5*g;s.a=.92*g;});});
+  for(let i=0;i<4;i++){const ang=PI/2+(i-1.5)*.42;at(B0+i*.15,()=>{const c=mpos();sigLine(uslash('h6',th),[c[0]+Math.cos(ang)*3,c[1]+.6+Math.sin(ang)*3,c[2]+.6],ang,6.5,.7,.9,warm);vfx('holy_burst',[c[0],c[1]+.5,c[2]+.7],.8);E.flash.mon=[1,1,.85,.6];sigHit(m);});}
+  const halo=sigSp(tRing('#FFE9A0'));tween(HIT-HL+.6,u=>{const t=HL+u*(HIT-HL+.6),c=mpos(),q=ease(cl((t-HL)/(HIT-HL))),y=c[1]+3.4-2.8*q,r=2.6-1.0*q;halo.pos=[c[0],y,c[2]+.55];halo.w=r;halo.h=r*.3;halo.a=t<HIT?1:Math.max(0,1-(t-HIT)/.5);},HL);
+  sigWords(K,(k,t,c)=>{if(t<.1||t>HIT)return null;const p=hpos(),f=ease(cl((t-.1-k*.07)/1.0)),a=k/n*PI*2+t*1.3;return{pos:lerp3([p[0]+.4,p[1]+1.3,p[2]+.6],[c[0]+Math.cos(a)*1.7,c[1]+2.6+Math.sin(a)*.4,c[2]+.6],f),a:t>HIT-.2?(HIT-t)/.2:1,sc:.42};},TOT);
+  at(HIT,()=>{const t=mpos(),p=hpos();flashScreen(0,.5);sigBig(m,t,fea,warm);vfx('holy_burst',[t[0],t[1]+.4,t[2]+.8],3.0);
+    const v=sigSp(warm),hz=sigSp(warm);tween(1.0,u=>{const g=u<.15?u/.15:Math.max(0,1-(u-.15)/.85);v.pos=hz.pos=[t[0],t[1]+.6,t[2]+.8];v.w=.8*g;v.h=4.5*g;hz.w=3.4*g;hz.h=.7*g;v.a=hz.a=g;});at(1.05,()=>{rm(v);rm(hz);});
+    for(let j=0;j<10;j++)E.parts.push({x:p[0]+(R3()-.5),y:p[1]+.5,z:p[2]+.9,vx:(R3()-.5)*1.5,vy:1.5+R3(),vz:0,g:0,dr:1,life:1.5,max:1.5,size:.4,tex:emojiTex('💖'),rot:0,vr:0});});
+  at(TOT,()=>{[...K.sps,...wing,halo].forEach(rm);h.off.y=0;});return TOT;}
+// 盜賊：影之千刃 — darkness; daggers appear one by one in a ring around the monster, all strike at once; a giant shadow X slash
+function s3H7(sentence,th){const K=sigBase(sentence,th,'h7'),{m,gl,rm,n}=K,h=E.hero,dag=emojiTex('🗡️'),ray=uslash('h7',th),ND=16,A0=1.0,STRIKE=A0+ND*.07+.35,X=STRIKE+.45,TOT=X+1.4,dx=()=>(m.base[0]-1.6)-h.base[0];
+  dimScreen('brightness(.4) contrast(1.15) saturate(.8)',.1,X+.3);
+  const ds=[];for(let i=0;i<ND;i++){const a=i/ND*PI*2,s=sigSp(dag),t0=A0+i*.07;ds.push(s);
+    tween(TOT-t0,u=>{const t=t0+u*(TOT-t0),c=mpos(),R=t<STRIKE?2.6:2.6*(1-ease(cl((t-STRIKE)/.15))),ctr=[c[0],c[1]+.7,c[2]+.7],g=ease(cl((t-t0)/.2));s.pos=[ctr[0]+Math.cos(a)*R,ctr[1]+Math.sin(a)*R*.75,ctr[2]];s.rot=a+PI;s.w=s.h=.5*g;s.a=t<STRIKE+.16?g:0;},t0);
+    at(t0,()=>{const c=mpos();goldBurst([c[0]+Math.cos(a)*2.6,c[1]+.7+Math.sin(a)*1.95,c[2]+.7],4,1.5,.3,.3,tSmoke());});}
+  at(STRIKE+.15,()=>{const t=mpos();vfx('dark_burst',[t[0],t[1]+.4,t[2]+.8],1.6);E.shake=1;E.flash.mon=[.8,.5,1,.9];sigHit(m);});
+  at(A0-.3,()=>{const p=hpos();vfx('smoke_puff',[p[0],p[1]+.4,p[2]+.65],.9);h.off.y=40;});
+  sigWords(K,(k,t,c)=>{if(t<.1||t>STRIKE+.1)return null;const f=ease(cl((t-.1)/.6)),a=k/n*PI*2-t*2;return{pos:[c[0]+Math.cos(a)*1.4*f,c[1]+.7+Math.sin(a)*1.0*f,c[2]+.75],a:1,sc:.42};},TOT);
+  at(X-.2,()=>{h.off.y=0;h.off.x=dx();const p=hpos();vfx('smoke_puff',[p[0],p[1]+.4,p[2]+.65],.9);});
+  at(X,()=>{const t=mpos(),P=[t[0],t[1]+.7,t[2]+.95];flashScreen(0,.2);vfx('slash_arc',P,2.2,{rot:.2});vfx('slash_arc',P,2.2,{rot:-1.6,delay:.08});sigLine(ray,P,.65,12,1.1,.6,gl);sigLine(ray,P,-.65,12,1.1,.6,gl);sigBig(m,t,dag,gl);vfx('dark_burst',[t[0],t[1]+.4,t[2]+.85],2.4,{delay:.05});});
+  tween(.45,u=>{h.off.x=dx()*(1-ease(u));},X+.5);
+  at(TOT,()=>{[...K.sps,...ds].forEach(rm);h.off.x=0;h.off.y=0;});return TOT;}
+// 召喚師：萬獸之王 — all four spirit beasts charge together from different heights; a giant lion rises, roars a shock wave and pounces
+function s3H8(sentence,th){const K=sigBase(sentence,th,'h8'),{m,gl,rm,n}=K,gold=gtex([255,215,110]),C0=.9,RUN=1.3,LR=RUN+.9,LJ=LR+.8,HIT=LJ+.55,TOT=HIT+1.5,LH=3.0;
+  const p0=hpos();groundRune(p0[0]+1.8,p0[2]+1.1,'#FFD86A',[255,215,110],3.6,C0-.6,HIT-C0+1.4);
+  H8B.forEach((b,k)=>beastDash(b,RUN+k*.12,RUN+k*.12+.55,.75,.3+k*.3,null,k));
+  sigWords(K,(k,t,c)=>{if(t<.1||t>RUN+.6)return null;const p=hpos(),f=ease(cl((t-.1-k*.05)/.6));return{pos:lerp3([p[0]+.5,p[1]+1,p[2]+.8],[p[0]+1.8+(k-(n-1)/2)*.42,p[1]+1.9,p[2]+.9],f),a:t>RUN+.4?(RUN+.6-t)/.2:1,sc:.42};},TOT);
+  const lion=sigSp(gold),lg=sigSp(gold),GC=()=>{const p=hpos();return[p[0]+1.8,.05,p[2]+1.0];};
+  tween(TOT-LR,u=>{const t=LR+u*(TOT-LR),c=mpos(),G=GC(),y0=.2+LH*.9,y1=c[1]+.5;lion.tex=fxTex('h8_lion',gold);let P,s=1,a=1,rot=0,st=0;
+    if(t<LJ){const f=ease(cl((t-LR)/.5)),roar=Math.sin(PI*cl((t-LR-.45)/.35));P=[G[0],.2+(y0-.2)*f,G[2]-.1];s=(.3+.7*f)*(1+.08*roar);a=f;}
+    else if(t<HIT){const q=(t-LJ)/(HIT-LJ),e=q*q*(3-2*q);P=[G[0]+(c[0]-.3-G[0])*e,y0+(y1-y0)*e+1.6*Math.sin(PI*q),G[2]-.1+(c[2]+.6-G[2])*q];rot=.2-.45*q;st=Math.sin(PI*q);
+      if(R3()<.8)E.parts.push({x:lion.pos[0],y:lion.pos[1],z:lion.pos[2]-.02,vx:0,vy:0,vz:0,g:0,life:.18,max:.18,size:lion.h,ar:lion.w/Math.max(.01,lion.h),al:.55,tex:lion.tex,rot:lion.rot,vr:0});}
+    else{P=[c[0]-.3,y1,c[2]+.6];a=Math.max(0,1-(t-HIT)/.4);}
+    lion.pos=P;lion.h=LH*s*(1-.06*st);lion.w=LH*s*fxAsp('h8_lion')*(1+.14*st);lion.a=a;lion.rot=rot;lg.pos=[P[0],P[1],P[2]-.05];lg.w=lg.h=LH*1.5*s;lg.a=.4*a;},LR);
+  at(LR+.5,()=>{const G=GC(),rg=sigSp(tRing('#FFD86A'));tween(.7,u=>{rg.pos=[G[0],1.8,G[2]];rg.w=rg.h=1+6*ease(u);rg.a=1-u;});at(.75,()=>rm(rg));E.shake=Math.max(E.shake,.8);flashScreen(0,0);});
+  at(HIT,()=>{const t=mpos();flashScreen(0,.4);sigBig(m,t,K.star,gold);beastPop([t[0]-.3,t[1]+.3,t[2]+.6],['h8_lion','✨',[255,215,110]],LH*.9);H8B.forEach((b,k)=>vfx(b[3]==='lightning'?'lightning':b[3],b[3]==='lightning'?[t[0]+(k-1.5)*.7,0,t[2]+.7]:[t[0]+(k-1.5)*.7,t[1]+.3,t[2]+.75],1.3,{delay:.05+k*.06,bottom:b[3]==='lightning'}));});
+  at(TOT,()=>{[...K.sps,lion,lg].forEach(rm);});return TOT;}
+// 工程師：終極機甲砲 — the robot drops in and the turret is built; both fire together; then a barrage of rockets and one huge explosion
+function s3H9(sentence,th){const K=sigBase(sentence,th,'h9'),{m,gl,rm,n}=K,og=gtex([255,170,60]),sm=tSmokeG(),D=.9,F0=1.7,F1=2.9,RK=3.0,NR=8,HIT=RK+NR*.11+.4,TOT=HIT+1.6;
+  const R=sigSp(og),T=sigSp(og),RP=()=>{const p=hpos();return[p[0]+1.4,1.1,p[2]+1.3];},TP=()=>{const p=hpos();return[p[0]+2.3,.85,p[2]+.6];};
+  tween(TOT,u=>{const t=u*TOT,P=RP(),Q=TP(),out=t>TOT-.4?(TOT-t)/.4:1;let y=P[1];if(t<D){const q=cl((t-.2)/(D-.2));y=P[1]+8*(1-q*q);}
+    R.tex=propTex(t<D+.3?'robot3':t<F0?'robot0':t<F1?'robot2':'robot1',og);R.pos=[P[0],y,P[2]];R.h=1.0;R.w=propAsp('robot0');R.a=(t<.2?0:1)*out;
+    const bk=ease(cl((t-.6)/.3));T.tex=propTex(t<F0?'turret0':t<F1?(Math.sin(t*95)>0?'turret2':'turret1'):'turret0',og);T.h=.8*(.6+.4*bk);T.w=T.h*propAsp('turret0');T.pos=[Q[0],.05+T.h,Q[2]];T.a=bk*out;});
+  at(D,()=>{const P=RP();goldBurst([P[0],.3,P[2]],20,3,.6,.5,sm);E.shake=Math.max(E.shake,.6);});
+  for(let i=0;i<12;i++)at(F0+i*.1,()=>{const Q=TP(),P=RP(),c=mpos();[[Q[0]+.75,Q[1]+.35],[P[0]+.86,P[1]+.1]].forEach((s0,k)=>{const tr=sigSp(og);tween(.18,u=>{tr.pos=lerp3([s0[0],s0[1],Q[2]+.1],[c[0]-.2,c[1]+.3+(R3()-.5)*.6,c[2]+.6],u);tr.w=.45;tr.h=.1;tr.a=1;});at(.18,()=>{rm(tr);if(k===0&&i%2===0){vfx('hit_spark',[c[0]-.2,c[1]+.4,c[2]+.7],.5);sigHit(m);E.shake=Math.max(E.shake,.2);}});});});
+  sigWords(K,(k,t,c)=>{if(t<.1||t>RK)return null;const p=hpos(),f=ease(cl((t-.1)/.5)),a=k/n*PI*2+t*2;return{pos:[p[0]+Math.cos(a)*1.1,p[1]+1+Math.sin(a)*.5,p[2]+.8],a:f*(t>RK-.3?(RK-t)/.3:1),sc:.4};},TOT);
+  for(let i=0;i<NR;i++){const t0=RK+i*.11,q=[(R3()-.5)*3,2.5+R3()*2.5];flyL(emojiTex('🚀'),null,i,t0,t0+.45,(u,s,c)=>bz([s[0]+.6,s[1]+1.2,s[2]+.9],[(s[0]+c[0])/2+q[0],q[1]+1,s[2]+.9],TGT(c),u),{sz:.42,orient:1,ro:0,trail:.3,ttex:sm});
+    at(t0+.45,()=>{const c=mpos();vfx('fire_burst',[c[0]+(R3()-.5)*.8,c[1]+.3+(R3()-.5)*.6,c[2]+.8],.75);E.shake=Math.max(E.shake,.35);sigHit(m);});}
+  at(HIT,()=>{const t=mpos();flashScreen(0,.4);sigBig(m,t,emojiTex('⚙️'),og);vfx(vfxOr('explosion_big','fire_burst'),[t[0],t[1]+.4,t[2]+.85],2.6);for(let j=0;j<3;j++)vfx('smoke_puff',[t[0]+(j-1)*.9,t[1]+.6,t[2]+.8],1.2,{delay:.15+j*.06,a:.7});burst(t,16,emojiTex('🔩'),6,.5);});
+  at(TOT,()=>{[...K.sps,R,T].forEach(rm);});return TOT;}
+// 神秘使者：時空崩壞 — time stops; crystals freeze in a ring; a black hole opens on the monster and swallows everything; it collapses into a burst of prism light
+function s3H10(sentence,th){const K=sigBase(sentence,th,'h10'),{m,gl,rm,n}=K,h=E.hero,crys=tCrystal(),star=K.star,ST=1.0,BH=1.9,COL=3.3,TOT=COL+1.8;
+  const cvs=E.canvas,undo=()=>{try{cvs.style.filter='';}catch(e){}};at(ST,()=>{try{cvs.style.transition='filter .25s';cvs.style.filter='grayscale(.85) brightness(.8) contrast(1.15)';}catch(e){}});at(COL-.05,undo);setTimeout(undo,(TOT+1)*2000);
+  const seal=sigSp(tRune('#B8A8FF')),clock=sigSp(emojiTex('⏳'));tween(COL,u=>{const t=u*COL,c=mpos(),g=ease(cl((t-.2)/.5))*(t>COL-.3?(COL-t)/.3:1);seal.pos=[c[0],c[1]+.7,c[2]+.3];seal.w=seal.h=4.6*g;seal.rot=-Math.min(t,ST)*3;seal.a=.8*g;clock.pos=[c[0],c[1]+.7,c[2]+.35];clock.w=clock.h=1.1*g*(t<BH?1:Math.max(0,1-(t-BH)/.3));clock.rot=Math.min(t,ST)*7;clock.a=clock.w>0?1:0;});
+  const cs=[];for(let i=0;i<10;i++){const a=i/10*PI*2,s=sigSp(crys);cs.push(s);tween(COL+.1,u=>{const t=u*(COL+.1),c=mpos(),g=ease(cl((t-.3-i*.05)/.4)),pull=t<BH?0:ease(cl((t-BH)/(COL-BH))),R=2.4*(1-pull);s.pos=[c[0]+Math.cos(a+t*.5*(1-cl(t-ST)))*R,c[1]+.7+Math.sin(a)*R*.7,c[2]+.7];s.w=.35*g*(1-pull*.7);s.h=.55*g*(1-pull*.7);s.rot=a+pull*6;s.a=g*(1-pull*pull);});}
+  const bh=sigSp(tSmoke()),bg=sigSp(gtex([120,80,220]));tween(COL-BH+.1,u=>{const c=mpos(),g=ease(cl(u*2));bh.pos=[c[0],c[1]+.6,c[2]+.75];bh.w=bh.h=(.4+1.6*g)*(u>.9?1-(u-.9)*8:1);bh.rot=u*14;bh.a=.95;bg.pos=bh.pos;bg.w=bg.h=bh.w*1.9;bg.a=.45*g;
+    for(let j=0;j<3;j++){const a=R3()*PI*2,r=2.6;E.parts.push({x:c[0]+Math.cos(a)*r,y:c[1]+.6+Math.sin(a)*r*.8,z:c[2]+.75,vx:-Math.cos(a)*r*2.2-Math.sin(a)*2,vy:-Math.sin(a)*r*1.7+Math.cos(a)*2,vz:0,g:0,life:.42,max:.42,size:.18,gs:-.3,tex:R3()<.5?star:crys,rot:0,vr:4});}
+    m.off.sc=1-.12*g*Math.sin(u*30);},BH);
+  sigWords(K,(k,t,c)=>{if(t<.2||t>COL)return null;const p=hpos(),f=ease(cl((t-.2-k*.07)/.8)),a=k/n*PI*2+Math.min(t,ST)*2,pull=t<BH?0:ease(cl((t-BH)/(COL-BH-.2))),R=2.0*(1-pull);
+    return{pos:lerp3([p[0]+.4,p[1]+1.6,p[2]+.8],[c[0]+Math.cos(a+pull*8)*R,c[1]+.7+Math.sin(a+pull*8)*R*.7,c[2]+.75],f),a:1-pull*pull,sc:.42*(1-pull*.6),rot:t>ST&&t<BH?.05*Math.sin(t*40+k):0};},TOT);
+  at(COL,()=>{rm(bh);rm(bg);m.off.sc=1;const t=mpos();flashScreen(0,.6);sigBig(m,t,crys,gtex([170,140,255]));vfx('dark_burst',[t[0],t[1]+.4,t[2]+.8],2.4);vfx('holy_burst',[t[0],t[1]+.4,t[2]+.85],2.2,{delay:.08});burst(t,30,crys,8,.5);
+    [[255,120,120],[255,200,100],[255,255,140],[130,255,150],[120,200,255],[180,140,255],[255,150,230]].forEach((cc,j)=>{const a=j/7*PI*2,b=sigSp(gtex(cc));tween(1.0,u=>{const L=3.4*ease(Math.min(1,u*2));b.pos=[t[0]+Math.cos(a)*L*.5,t[1]+.5+Math.sin(a)*L*.5,t[2]+.8];b.rot=a;b.w=L*.5+.1;b.h=.16;b.a=1-u;});at(1.05,()=>rm(b));});});
+  at(TOT,()=>{[...K.sps,seal,clock,...cs,bh,bg].forEach(rm);undo();m.off.sc=1;});return TOT;}
+const R3=Math.random;
+const SIG3={h1:s3H1,h2:s3H2,h3:s3H3,h4:s3H4,h5:s3H5,h6:s3H6,h7:s3H7,h8:s3H8,h9:s3H9,h10:s3H10};
+function ultimate3(sentence,hid){if(!E.mon)return;heroPlay('attack',1.2);return(SIG3[hid]||SIG3.h1)(sentence,ULT[hid]||ULT.h1);}
+function ult3Name(hid){return ULT3N[hid]||ULT3N.h1;}
 function ultimate(sentence,hid){ // 大絕招 (per hero): the sentence's words are the ammo
   if(!E.mon)return;heroPlay('attack',1.2);if(SIGF[hid])return SIGF[hid](sentence,ULT[hid]);const th=ULT[hid]||ULT.h1,m=E.mon,star=ustar(hid,th),gl=utex(hid,th),slash=uslash(hid,th),FM=th.fall;
   const gb=(p,nn,sp,life,size)=>goldBurst(p,nn,sp,life,size,gl),rm=s=>{const j=E.sprites.indexOf(s);if(j>=0)E.sprites.splice(j,1);};
@@ -1447,8 +1693,8 @@ const HURT={fire:{e:'🔥',st:'ball',c:[255,130,40]},ice:{e:'❄️',st:'volley'
 poison:{e:'☠️',st:'lob',c:[150,255,110]},forest:{e:'🍃',st:'swirl',n:6,c:[120,230,110]},sea:{e:'🌊',st:'sweep',c:[90,180,255]},
 desert:{e:'🪨',st:'volley',n:3,arc:1.8,c:[240,190,110]},sky:{e:'🌪️',st:'dash',c:[210,230,255]},ghost:{e:'👻',st:'drift',c:[190,160,255]},
 mech:{e:'🚀',st:'volley',n:3,fast:1,c:[255,170,60]},skel:{e:'🦴',st:'ball',spin:16,c:[235,225,210]},dragon:{e:'🔥',st:'breath',c:[255,90,40]}};
-function hurt(emoji,type){
-  if(!E.mon)return;const h=E.hero,m=E.mon,H=HURT[type]||{e:emoji||'💥',st:'ball',c:[255,120,60]},st=H.st,c=H.c,tex=emojiTex(H.e),gl=gtex(c),star=starTex();
+function hurt(emoji,type,mode){
+  if(!E.mon)return;if(mode===2){const r2=hurt2(type);if(r2)return r2;}const h=E.hero,m=E.mon,H=HURT[type]||{e:emoji||'💥',st:'ball',c:[255,120,60]},st=H.st,c=H.c,tex=emojiTex(H.e),gl=gtex(c),star=starTex();
   const rm=s=>{const j=E.sprites.indexOf(s);if(j>=0)E.sprites.splice(j,1);},lerp=(a,b,t)=>a+(b-a)*t;
   const mp=mpos(),hp=hpos(),F=[mp[0]-.8,mp[1]+.2,mp[2]+.5],T=[hp[0]+.2,hp[1]-.2,hp[2]+.5];
   const up=st==='bolt'||st==='drift';
@@ -1588,7 +1834,7 @@ function die(type){
 function mount(slot){if(slot&&E.canvas&&E3.ok)slot.appendChild(E.canvas);}
 function idle(){return!E.tw.length&&!E.tl.length;}
 function forceBg(k){E.forceBg=k||null;}   // test tool: show this background whatever the monster
-return{ensure,setup,vfxTest,forceBg,attack,letter,finale,ultimate,ultimate2,ult2Name,ultName,hurt,die,mount,E,monModel,heroModel,burst,idle};
+return{ensure,setup,vfxTest,forceBg,attack,letter,finale,ultimate,ultimate2,ultimate3,ult2Name,ult3Name,monUlt,ultName,hurt,die,mount,E,monModel,heroModel,burst,idle};
 })();
 /* ---------- battle ---------- */
 let B=null;
@@ -1630,7 +1876,7 @@ function answerB(idx){
   const ok=q.choices[idx].correct,w=q.t.w;
   B.sheet=false;B.busy=true;
   if(ok){
-    const crit=false,ult=(B.mana||0)>=mmax(B),dmg=ult?3:1;B.ult=ult;
+    const crit=false,ult=(B.mana||0)>=mmax(B);B.ult=ult;B.ultKind=ult?(g.inv.finisher>0?'fin':Math.random()<.5?'1':'2'):'';if(B.ultKind==='fin')g.inv.finisher--;const dmg=ult?(B.ultKind==='fin'?4:3):1;
     if(!ult)B.mana=Math.min(mmax(B),(B.mana||0)+1);B.skill=B.mana>=mmax(B);
     B.ultExtra='';if(ult){const hid=g.heroId;if(hid==='h6'&&B.php<B.pm){B.php++;B.ultExtra='heal';}else if(hid==='h5'){B.frozen=true;B.ultExtra='freeze';}}
     B.right++;B.crit=crit;const keep=(B.kind==='set'&&B.asked.size<B.pool.length)?1:0;B.dmg=Math.max(0,Math.min(dmg,B.hp-keep));B.hp=Math.max(keep,B.hp-dmg);B.anim=crit?'crit':'hit';
@@ -1657,10 +1903,11 @@ function answerB(idx){
     return;
   }
   saveStore();render();
-  let hT=.25;if(E3.ok&&!B.iced){try{hT=ENG.hurt(projOf(B.mon),(MBY[B.mon]||{}).t)||.9;}catch(e){}}
+  const mt=(MBY[B.mon]||{}).t,spc=(B.kind==='elite'&&B.wrongN%3===0)||(B.kind==='boss'&&B.wrongN%2===0);B.special=spc;
+  let hT=.25;if(E3.ok&&!B.iced){try{hT=(spc?ENG.monUlt(mt,B.kind==='boss'?'b':'e'):ENG.hurt(projOf(B.mon),mt,Math.random()<.5?2:1))||.9;}catch(e){}}
   syncBars(tk,Math.round(hT*1000));
   setTimeout(()=>{if(B!==tk||S.view!=='battle')return;B.anim='';B.sheet=true;B.busy=false;B.lockUntil=Date.now()+LOCK_MS;readSentence(tk,q.t.ex);render();
-    setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const nx=document.getElementById('nextB');if(nx&&nx.disabled&&!B.reading){nx.disabled=false;}},LOCK_MS+30);},E3.ok?1500:1000);
+    setTimeout(()=>{if(B!==tk||S.view!=='battle')return;const nx=document.getElementById('nextB');if(nx&&nx.disabled&&!B.reading){nx.disabled=false;}},LOCK_MS+30);},E3.ok?Math.max(1500,Math.round(hT*1000)+600):1000);
 }
 const LNAME={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'eff',g:'jee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'are',s:'ess',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
 // read the example sentence 0.5s after the feedback card appears; the continue button waits until it ends
@@ -1694,7 +1941,7 @@ function spellAttack(word,ex,tk,done){
   const throwL=k=>{if(thrown[k]||!alive())return;thrown[k]=1;SFX.hit();if(E3.ok){try{ENG.letter(L[k].toUpperCase(),k);}catch(e){}}
     if(k+1<n)T(HAS_TTS?1500:850,()=>throwL(k+1));else T(HAS_TTS?1500:900,finish);};
   const finish=()=>{if(fin||!alive())return;fin=true;timers.forEach(clearTimeout);
-    let wait=E3.ok?1250:650;if(E3.ok){try{if(tk.ult)wait=Math.round(ENG.ultimate(ex,G().heroId)*1000);else ENG.finale(word,false);}catch(e){}}SFX.crit&&SFX.crit();
+    let wait=E3.ok?1250:650;if(E3.ok){try{if(tk.ult){const hid=G().heroId;wait=Math.round((tk.ultKind==='fin'?ENG.ultimate3(ex,hid):tk.ultKind==='2'?ENG.ultimate2(ex,hid):ENG.ultimate(ex,hid))*1000);}else ENG.finale(word,false);}catch(e){}}SFX.crit&&SFX.crit();
     const t0=Date.now(),mw=E3.ok?wait:200;
     const poll=()=>{if(!alive())return;const el=Date.now()-t0;let idle=true;if(E3.ok){try{idle=ENG.idle();}catch(e){}}
       if(el>=mw&&(idle||el>12000))done();else T(120,poll);};
@@ -1785,7 +2032,7 @@ function stageHTML(b,opts){
     const g=G(),hero=HEROES.find(h=>h.id===g.heroId)||HEROES[0],ms=monSprite(b.mon),mana=b.mana||0,mm=mmax(b),cr=g.inv.crystal||0;
     const canPo=opts.live&&B===b&&b.q&&b.q.pick===null&&!b.busy&&(g.inv.potion||0)>0&&b.php<b.pm;
     const canCr=opts.live&&B===b&&b.q&&b.q.pick===null&&cr>0&&!b.q.gone;
-    const log=b.anim==='spell'||b.anim==='hit'||b.anim==='crit'?(b.ult?(()=>{let n='大絕招';try{n=ENG.ultName(G().heroId);}catch(e){}return n+'！整句魔法化成彈藥，全力轟出！怪物 -3 HP'+(b.ultExtra==='heal'?'，還回復 1 顆愛心 💖':b.ultExtra==='freeze'?'，怪物被冰凍，下次答錯不扣愛心 ❄️':'');})():'金色箭矢命中！怪物 -1 HP'):b.anim==='atk'?(b.iced?'怪物被冰凍住了，沒能反擊！愛心沒有減少 ❄️':b.healed?'怪物反擊！牠還回復了 1 HP':'怪物反擊！英雄受到傷害'):b.sheet?'':mana>=5?'魔力全滿！下一題答對，就放大絕招！':'選出正確的單字，用金色箭矢攻擊！';
+    const log=b.anim==='spell'||b.anim==='hit'||b.anim==='crit'?(b.ult?(()=>{let n='大絕招';try{const hid=G().heroId;n=b.ultKind==='fin'?'終極絕招・'+ENG.ult3Name(hid):b.ultKind==='2'?ENG.ult2Name(hid):ENG.ultName(hid);}catch(e){}return n+'！整句魔法化成彈藥，全力轟出！怪物 -'+(b.ultKind==='fin'?4:3)+' HP'+(b.ultExtra==='heal'?'，還回復 1 顆愛心 💖':b.ultExtra==='freeze'?'，怪物被冰凍，下次答錯不扣愛心 ❄️':'');})():'金色箭矢命中！怪物 -1 HP'):b.anim==='atk'?(b.iced?'怪物被冰凍住了，沒能反擊！愛心沒有減少 ❄️':b.healed?'怪物反擊！牠還回復了 1 HP':'怪物反擊！英雄受到傷害'):b.sheet?'':mana>=5?'魔力全滿！下一題答對，就放大絕招！':'選出正確的單字，用金色箭矢攻擊！';
     hud=`<div class="hud hl"><span class="hport"><img alt="" src="${HSPR[hero.id].u}"></span><div class="hbars"><div class="hn">Lv.${lvlOf(g.xp)} ${hero.zh}</div>
       <div class="bar hp"><i id="phpbar" style="width:${Math.round(b.sp/b.pm*100)}%"></i><span id="phptxt">❤ ${b.sp}/${b.pm}</span></div>
       <div class="bar mp${b.sm>=mm?' full':''}" id="mpwrap"><i id="mpbar" style="width:${Math.round(b.sm/mm*100)}%"></i><span id="mptxt">✦ 魔力 ${b.sm}/${mm}</span></div></div></div>
@@ -1959,8 +2206,10 @@ function viewTest(){
   return `<div class="tlab"><div class="tltop"><div class="qbar"><button class="x" data-act="goGame" aria-label="回到地圖"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><b class="tlt">🧪 測試工具 <small>不會影響遊戲進度</small></b></div>
   <section class="stage c3 tstage">${E3.ok?'<div class="c3d"></div>':'<p class="soft">這台裝置不支援 3D 畫面（WebGL），無法測試動畫。</p>'}<div class="tlname" id="tlname">${tlName()}</div></section></div>
   <section class="card tsec"><h3>主角動作</h3><div class="tgrid heroes">${HEROES.map(h=>`<button class="tlh${h.id===TL.hid?' on':''}" data-act="tl" data-k="hero" data-id="${h.id}"><img alt="" src="${(HSPR[h.id]||HSPR.h1).u}"><span>${h.zh}</span></button>`).join('')}</div>
-    <div class="trow">${b('attack','⚔️ 攻擊')}${b('hit','💥 受傷')}${b('win','🏆 勝利')}${b('ult','🌟 大絕招')}${b('ult2','🌠 第二大絕招')}</div><p class="soft">第二大絕招（${(()=>{try{return ENG.ult2Name(TL.hid);}catch(e){return '';}})()}）還在試做，只在測試工具裡，遊戲中不會出現。</p><p class="soft">待機動作會一直播放；攻擊會丟出單字字母，最後收尾一擊。</p></section>
-  <section class="card tsec"><h3>怪物攻擊（12 種屬性，含音效）</h3><div class="trow">${TYPES.map(t=>b('matk',t[2]+' '+t[1],`data-t="${t[0]}"`)).join('')}</div>
+    <div class="trow">${b('attack','⚔️ 攻擊')}${b('hit','💥 受傷')}${b('win','🏆 勝利')}${b('ult','🌟 大絕招')}${b('ult2','🌠 第二大絕招')}${b('ult3','🌌 終極絕招')}</div><p class="soft">第二大絕招：${(()=>{try{return ENG.ult2Name(TL.hid);}catch(e){return '';}})()}・終極絕招：${(()=>{try{return ENG.ult3Name(TL.hid);}catch(e){return '';}})()}（戰鬥中第一招和第二招隨機出現；有「終極卷軸」時改放終極絕招）</p><p class="soft">待機動作會一直播放；攻擊會丟出單字字母，最後收尾一擊。</p></section>
+  <section class="card tsec"><h3>怪物攻擊（12 種屬性，含音效）</h3><p class="soft">第一種攻擊：</p><div class="trow">${TYPES.map(t=>b('matk',t[2]+' '+t[1],`data-t="${t[0]}"`)).join('')}</div>
+    <p class="soft">第二種攻擊（戰鬥中兩種隨機出現）：</p><div class="trow">${TYPES.map(t=>b('matk2',t[2]+' '+t[1],`data-t="${t[0]}"`)).join('')}</div>
+    <p class="soft">怪物絕招（用目前場上怪物的屬性；菁英每答錯 3 次、魔王每答錯 2 次放一次）：</p><div class="trow">${b('mult','⭐ 菁英絕招','data-id="e"')}${b('mult','👑 魔王絕招','data-id="b"')}${b('mult','🌟 傳奇絕招','data-id="L"')}</div>
     <div class="trow">${b('die','💀 怪物倒下')}</div></section>
   ${typeof BGS!=='undefined'?`<section class="card tsec"><h3>場景（${Object.keys(BGS).length} 張）</h3><p class="soft">選一張場景固定顯示，用來檢查背景動畫、主角和怪物站的位置；選「依怪物屬性」恢復正常。</p>
     <div class="tgrid bgs"><button class="tlg${!TL.bg?' on':''}" data-act="tl" data-k="bg" data-id=""><span class="tlgauto">🔀</span><span>依怪物屬性</span></button>${Object.keys(BGS).map(k=>`<button class="tlg${TL.bg===k?' on':''}" data-act="tl" data-k="bg" data-id="${k}"><img alt="" src="${BGS[k].u}"><span>${BGS[k].zh}</span><small>${(BGS[k].types||[]).map(t=>t==='default'?'其他':((TYPES.find(x=>x[0]===t)||[])[1]||t)).join('、')}</small></button>`).join('')}</div></section>`:''}
@@ -1993,6 +2242,9 @@ function tlAct(k,ds){
     else if(k==='ult'){SFX.crit();ENG.ultimate(TL_SENT,TL.hid);}
     else if(k==='vfx'){ENG.vfxTest(ds.id);}
     else if(k==='ult2'){SFX.crit();ENG.ultimate2(TL_SENT,TL.hid);}
+    else if(k==='ult3'){SFX.crit();ENG.ultimate3(TL_SENT,TL.hid);}
+    else if(k==='matk2'){SFX.wrong();ENG.hurt('',ds.t,2);}
+    else if(k==='mult'){SFX.wrong();ENG.monUlt(tlType(),ds.id);}
     else if(k==='win'||k==='die'){ENG.die(tlType());SFX.win();tlTimer(3200,()=>{tlSetup();});}
   }catch(e){}
 }

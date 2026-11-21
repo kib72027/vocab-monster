@@ -10,7 +10,8 @@ const D=global.D,g=D.G(),A=(c,m)=>{if(!c){console.log('FAIL',m);process.exit(1)}
 // refund: sword2 = 30+60=90 (3*30), shield3 = 40*7=280 => 100+90+280=470
 A(g.coins===100+90+280&&!g.gear,'refund '+g.coins);
 act('shop');const clean=()=>app.innerHTML.replace(/data:image[^"]*/g,'');A(!clean().includes('undefined')&&!clean().includes('NaN'),'shop html');
-A((app.innerHTML.match(/data-act="tool"/g)||[]).length===3,'3 tools');
+A((app.innerHTML.match(/data-act="tool"/g)||[]).length===4&&clean().includes('終極卷軸'),'4 tools incl. the ultimate scroll');
+{const c0=g.coins;act('tool',{id:'finisher'});act('tool',{id:'finisher'});A((g.inv.finisher||0)===2&&g.coins===c0-160,'scroll is stackable, 80 coins each');}
 act('heroes');A(clean().includes('更換主角')&&(app.innerHTML.match(/data-act="pickHero"/g)||[]).length===10&&!clean().includes('undefined'),'heroes view');act('pickHero',{id:'h4'});A(D.G().heroId==='h4','pick hero');
 act('coll');A(!clean().includes('undefined')&&!clean().includes('NaN')&&(app.innerHTML.match(/class="rt( |")/g)||[]).length>=D.RMON.length,'codex all');act('cdx',{t:'fire'});A((app.innerHTML.match(/class="rt( |")/g)||[]).length===D.RMON.filter(m=>m.t==='fire').length,'codex fire');act('cdx',{t:'all'});
 g.coins=1000;act('citem',{s:'hat',id:'straw'});A(g.eq.hat==='straw'&&g.own.includes('hat:straw')&&g.coins===980,'buy hat');

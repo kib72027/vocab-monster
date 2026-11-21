@@ -61,7 +61,7 @@ def main(dry):
     # 2) legends: separate tables, rewritten every run
     leg=load(os.path.join(R,'assets','monsters','legend'),(440,320))
     js=re.sub(r'\n/\* legends \*/.*?/\* end legends \*/\n','\n',js,flags=re.S)
-    LM=[{'id':m['id'],'zh':m['zh'],'en':m['en'],'t':m['t'],'role':'L'} for m,_ in leg]
+    LM=[dict({'id':m['id'],'zh':m['zh'],'en':m['en'],'t':m['t'],'role':'L'},**({'f':0} if m.get('face')=='left' else {})) for m,_ in leg]
     LS=','.join(f"{m['id']}:{{u:\"data:image/webp;base64,{enc(im)}\",w:{im.width},h:{im.height}}}" for m,im in leg)
     js=js.rstrip('\n')+'\n/* legends */\nconst LMON='+json.dumps(LM,ensure_ascii=False)+';\nconst LSPR={'+LS+'};\n/* end legends */\n'
     if not dry:open(p,'w',encoding='utf-8').write(js)

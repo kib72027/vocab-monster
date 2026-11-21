@@ -44,3 +44,19 @@ No characters, no creatures, no weapons, no text, no numbers, no logo, no waterm
 - **16 格要是同一段動畫**：從小到大再消失，不要每格畫不一樣的東西。
 - 不用 11 張一次做完，**先做 1～4 號**（火、持續燃燒的火、冰、雷），這幾張最常出現。
 - 如果某張不滿意，可以只重做那一張。
+
+---
+
+## 第二批：怪物第二攻擊、怪物絕招、終極絕招用的特效
+
+遊戲已經寫好會用這些檔名；圖還沒放進來時會先用現有的特效代替，放進 `assets/vfx/` 再跑 `python3 tools/mkvfx.py` 就會自動換上（共用規則一樣貼在最後面）。
+
+| # | 檔名 | 用在哪裡 | 特效描述 |
+|---|---|---|---|
+| 12 | `explosion_big.png` | 傳奇絕招、終極絕招的最後一擊 | `A huge fantasy explosion: frames 1-3 a blinding white core, frames 4-9 a massive round blast of white, gold and orange fire with a bright shock ring spreading out, frames 10-14 the fireball breaks into billowing glowing smoke and flying sparks, frames 15-16 dark smoke fading.` |
+| 13 | `fire_pillar.png` | 火系怪物第二攻擊（腳下噴出火柱） | `A tall pillar of fire erupting straight up from the ground, the pillar fills most of the cell height: frames 1-3 a glowing crack and sparks on the ground at the bottom, frames 4-10 a thick roaring column of orange and yellow flame shoots up with a white-hot core, frames 11-16 the column thins, breaks into flame tongues and embers and fades.` |
+| 14 | `tornado.png` | 天空系怪物攻擊、怪物絕招（龍捲風） | `A swirling whirlwind tornado standing on the ground, narrow at the bottom and wide at the top, made of pale blue-white wind streaks, small leaves and dust, seamless looping animation: the funnel spins and sways. Frame 16 flows back into frame 1.` |
+| 15 | `tidal_wave.png` | 海洋系怪物攻擊、怪物絕招（大浪） | `A big curling ocean wave rushing from right to left, deep blue water with white foam on the crest: frames 1-4 the wave rises, frames 5-10 it curls over and crashes forward with spray, frames 11-16 it breaks into splashing foam and droplets and fades.` |
+| 16 | `poison_cloud.png` | 毒系怪物攻擊（毒霧） | `A toxic poison cloud: frames 1-4 a few purple and green bubbles burst, frames 5-12 a thick swirling cloud of glowing purple and lime-green gas with bubbles and skull-shaped wisps spreads out, frames 13-16 it thins and drifts away.` |
+| 17 | `sandstorm.png` | 沙漠系怪物攻擊（沙塵暴） | `A swirling sandstorm: a round whirling cloud of tan and brown sand and small pebbles spinning fast, dust streaks curving around, seamless looping animation. Frame 16 flows back into frame 1.` |
+| 18 | `laser_hit.png` | 機械系怪物雷射打中 | `A laser impact: frames 1-3 a bright red-white point flash, frames 4-10 a burst of red and orange energy with sharp sparks and a melting glow, frames 11-16 sparks scatter and the glow fades with a little smoke.` |
