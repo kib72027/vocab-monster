@@ -171,7 +171,7 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 
 ## 戰鬥背景
 - `assets/backgrounds/` 放圖片 AI 生成的背景圖（prompt 在 `docs/background-prompt.md`），`backgrounds.json` 設定每張圖給哪些怪物屬性用、石台高度 `py`（主角和怪物的腳會對到那裡）。
-- 執行 `python3 tools/mkbg.py` 產生 `src/part_bg.js`，再 `python3 build.py`。目前：森林神殿（森林／毒／沙漠）、火山城堡（火／龍／雷）、天空城堡（其他屬性）。
+- 執行 `python3 tools/mkbg.py` 產生 `src/part_bg.js`，再 `python3 build.py`。目前 8 張：森林神殿（森林／毒／沙漠）、火山城堡（火）、幽靈古堡（幽靈／骷髏）、冰雪城堡（冰）、雲端城堡（天空）、水晶龍堡（龍）、雷電城堡（雷）、天空城堡（海、機械和其他）。
 - 背景圖鋪滿戰鬥畫面（不變形、多的裁掉），必要時放大讓石台對準腳的位置。沒有背景圖時會改用程式畫的場景。
 - 背景動畫（`backgrounds.json` 的 `amb`，位置用圖的比例 0～1）：飄動的雲、瀑布／熔岩瀑布的水流和水霧、火山煙、魔法陣光暈呼吸，加上依主題的樹葉／火星／閃光。新增背景時照現有三張的格式量好位置即可。
 

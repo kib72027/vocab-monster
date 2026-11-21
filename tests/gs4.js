@@ -15,7 +15,7 @@ const src=fs.readFileSync('app2.js','utf8');
  localStorage._d[KEY]=JSON.stringify({missed:[...__played,...__unplayed],g:{def:{[a.id]:1},stars:{[a.id]:3},learned:{[a.id]:1}}});global.__a=a.id;global.__raw=raw;}
 const timers=[];global.setTimeout=f=>{timers.push(f);return 1};const flush=()=>{while(timers.length)timers.shift()()};
 global.requestAnimationFrame=f=>0;
-{const i=src.lastIndexOf('})();');eval(src.slice(0,i)+'global.D={G,get B(){return B},get S(){return S},RMON,RSPR,MPLAN,HANIM,HSPR,HEROES,store,LMON,LSPR};'+src.slice(i));}
+{const i=src.lastIndexOf('})();');eval(src.slice(0,i)+'global.BGS0=typeof BGS!=="undefined"?BGS:undefined;global.D={G,get B(){return B},get S(){return S},RMON,RSPR,MPLAN,HANIM,HSPR,HEROES,store,LMON,LSPR};'+src.slice(i));}
 const act=(a,ds={})=>click({target:{closest:()=>({dataset:Object.assign({act:a},ds),disabled:false})}});
 const D=global.D,A=(c,m)=>{if(!c){console.log('FAIL',m);process.exit(1)}};
 const clean=()=>app.innerHTML.replace(/data:image[^"]*/g,'');
@@ -60,9 +60,10 @@ act('goGame');A(!/等你復仇/.test(clean()),'no revenge card left');
 {act('goGame');A(/data-act="test"/.test(app.innerHTML),'home has test card');const g=D.G(),snap=JSON.stringify([g.xp,g.coins,g.heroId,g.stars,g.def,g.rcards]);
  act('test');A(D.S.view==='test','test view');const h=clean();A(!/undefined|NaN/.test(h),'test html clean');
  A((app.innerHTML.match(/data-k="hero"/g)||[]).length===10,'10 hero buttons');A((app.innerHTML.match(/data-k="mon"/g)||[]).length===D.RMON.length,'all monsters listed');
+ A((app.innerHTML.match(/data-k="bg"/g)||[]).length===Object.keys(global.BGS0||{}).length+1||typeof global.BGS0==='undefined','one scene button per background + auto');
  A((app.innerHTML.match(/data-k="matk"/g)||[]).length===12&&(app.innerHTML.match(/data-k="sndm"/g)||[]).length===12,'12 element attacks and sounds');
  const other=g.heroId==='h3'?'h4':'h3';act('tl',{k:'hero',id:other});act('tl',{k:'mon',id:'n050'});act('tl',{k:'next'});act('tl',{k:'prev'});
- for(const k of ['attack','hit','win','ult','die'])act('tl',{k});for(const t of ['hit','crit','wrong','impact','impact1','hurt','win','lose','coin','open','tap'])act('tl',{k:'snd',t});act('tl',{k:'sndm',t:'elec'});
+ act('tl',{k:'bg',id:Object.keys(global.BGS0||{x:1})[0]});act('tl',{k:'bg',id:''});for(const k of ['attack','hit','win','ult','die'])act('tl',{k});for(const t of ['hit','crit','wrong','impact','impact1','hurt','win','lose','coin','open','tap'])act('tl',{k:'snd',t});act('tl',{k:'sndm',t:'elec'});
  act('tl',{k:'auto'});act('tl',{k:'auto'});flush();A(D.S.view==='test','still in test view');
  A(JSON.stringify([g.xp,g.coins,g.heroId,g.stars,g.def,g.rcards])===snap,'test lab does not change progress');act('goGame');A(D.S.view==='game','back home');}
 console.log('GS4_OK');

@@ -552,6 +552,7 @@ function ambTex(){
   const mk=(rgb,key)=>{const c=cv(32,128),x=c.getContext('2d'),C=rgb.join(','),g=x.createLinearGradient(0,0,0,128);g.addColorStop(0,'rgba('+C+',0)');g.addColorStop(.3,'rgba('+C+',.85)');g.addColorStop(.7,'rgba('+C+',.85)');g.addColorStop(1,'rgba('+C+',0)');
     x.fillStyle=g;x.fillRect(0,0,32,128);x.globalCompositeOperation='destination-in';const h=x.createLinearGradient(0,0,32,0);h.addColorStop(0,'rgba(0,0,0,0)');h.addColorStop(.5,'rgba(0,0,0,1)');h.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=h;x.fillRect(0,0,32,128);E.tex[key]=mkTexA(c,rgb);};
   mk([255,255,255],'streak');mk([255,190,70],'lstreak');
+  {const c=cv(8,8),x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,8,8);E.tex.flat=mkTex(c);}   // plain quad for full-screen flashes
 }
 function ambInit(){
   E.amb=[];const A=E.bg&&E.bg.amb;if(!A)return;ambTex();
@@ -571,6 +572,10 @@ function ambUpdate(dt){
   if(A.fx==='leaves'){for(let i=n(1.1);i--;)P.push({k:'p',u:R(),v:-.03,vu:-.01+R()*.03,vv:.05+R()*.04,life:9,max:9,s:.018+R()*.01,a:.95,rot:R()*6,vr:(R()-.5)*3,sway:R()*6,tex:emojiTex('🍃')});
     for(let i=n(2.5);i--;)P.push({k:'p',u:R(),v:.3+R()*.6,vu:.008+R()*.01,vv:-.004,life:5,max:5,s:.006+R()*.006,a:.8,tex:G([255,250,200])});}
   if(A.fx==='embers')for(let i=n(11);i--;)P.push({k:'p',u:R(),v:1.02,vu:(R()-.5)*.02,vv:-(.06+R()*.08),life:3.5,max:3.5,s:.005+R()*.008,a:.95,flick:1,tex:G(R()<.5?[255,200,80]:[255,110,40])});
+  if(A.fx==='snow')for(let i=n(16);i--;)P.push({k:'p',u:R(),v:-.02,vu:(R()-.5)*.02,vv:.035+R()*.04,life:16,max:16,s:.004+R()*.006,a:.9,sway:R()*6,tex:G([255,255,255])});
+  if(A.fx==='wisps')for(let i=n(1.4);i--;)P.push({k:'p',u:.1+R()*.8,v:.35+R()*.55,vu:(R()-.5)*.01,vv:-.008-R()*.01,life:5,max:5,s:.012+R()*.012,a:.85,flick:1,sway:R()*6,tex:G(R()<.6?[200,140,255]:[150,220,255])});
+  if(A.fx==='storm'){for(let i=n(6);i--;)P.push({k:'p',u:.15+R()*.7,v:.95,vu:(R()-.5)*.03,vv:-(.04+R()*.07),life:2.5,max:2.5,s:.004+R()*.006,a:.95,flick:1,tex:G([255,235,110])});
+    E.bgFlash=Math.max(0,(E.bgFlash||0)-dt*2.2);if(R()<dt/2.6){E.bgFlash=.6;if(R()<.5)setTimeout(()=>{E.bgFlash=.45;},120);}}
   if(A.fx==='sparkles')for(let i=n(2.5);i--;)P.push({k:'p',u:R(),v:R()*.75,vu:0,vv:0,life:1.4,max:1.4,s:.014+R()*.012,a:1,tw:1,tex:starTex()});
 }
 function ambDraw(I){
@@ -578,6 +583,7 @@ function ambDraw(I){
   const X=u=>(u-.5)*2*T.sx*T.k,Y=v=>T.cy+(.5-v)*2*T.sy*T.k;
   // one image height in NDC is 2*sy*k vertically; the same pixel length horizontally is 2*sy*k*(H/W)
   const hw=s=>s*T.sy*T.k*T.H/T.W,hh=s=>s*T.sy*T.k,t=E.time;
+  if(A.fx==='storm'&&E.bgFlash>0)sprite(E.tex.flat,[0,0,0],1,1,0,E.bgFlash*.4,I,I);   // the sky lights up when lightning strikes
   if(A.circle){const c=A.circle,p=.28+.14*Math.sin(t*2.2);sprite(gtex([c[4],c[5],c[6]]),[X(c[0]),Y(c[1]),0],c[2]*2*T.sx*T.k*1.05,c[3]*2*T.sy*T.k*1.4,0,p,I,I);}
   E.amb.forEach(q=>{let a=q.a,s=q.s,u=q.u;
     if(q.k==='cloud'){const r=q.r,e=Math.min(1,(u-r[0]+.06)/.12,(r[1]+.06-u)/.12);a*=Math.max(0,e);sprite(q.tex,[X(u),Y(q.v),0],hw(s)*2,hh(s),0,a,I,I);return;}
@@ -656,7 +662,7 @@ function setup(monId,eq,hid,big){
   E.ring=ring;E.env=[ground,ring];
   // painted battle background (assets/backgrounds via tools/mkbg.py), chosen by the monster's element; replaces the drawn scenery
   E.bg=null;
-  if(typeof BGS!=='undefined'){const mt=((typeof MBY!=='undefined'&&MBY[monId])||{}).t,k=BGT[mt]||BGT['default'],B=BGS[k];
+  if(typeof BGS!=='undefined'){const mt=((typeof MBY!=='undefined'&&MBY[monId])||{}).t,k=(E.forceBg&&BGS[E.forceBg])?E.forceBg:(BGT[mt]||BGT['default']),B=BGS[k];
     if(B){if(!E.imgs['BG'+k]){const im=new Image();im.src=B.u;E.imgs['BG'+k]={im,tex:null};}E.bg={k,py:B.py,ia:B.w/B.h,amb:B.amb};E.env=[ring];}}
   ambInit();
   E.decor=[{t:'tree',x:-13,z:-16,s:2.6},{t:'tree',x:14,z:-18,s:2.9},{t:'tree',x:-19,z:-20,s:3},{t:'bush',x:-15,z:-14,s:1.2},{t:'bush',x:16.5,z:-15,s:1.1},
@@ -1336,7 +1342,8 @@ function die(type){
 }
 function mount(slot){if(slot&&E.canvas&&E3.ok)slot.appendChild(E.canvas);}
 function idle(){return!E.tw.length&&!E.tl.length;}
-return{ensure,setup,attack,letter,finale,ultimate,ultName,hurt,die,mount,E,monModel,heroModel,burst,idle};
+function forceBg(k){E.forceBg=k||null;}   // test tool: show this background whatever the monster
+return{ensure,setup,forceBg,attack,letter,finale,ultimate,ultName,hurt,die,mount,E,monModel,heroModel,burst,idle};
 })();
 /* ---------- battle ---------- */
 let B=null;
@@ -1683,13 +1690,13 @@ function viewShop(){
 }
 /* ---------- 測試工具 test lab: every hero action, every monster attack/sound, every monster sprite.
    Uses the real battle stage; never touches progress (no XP, coins, stars, hero choice). ---------- */
-const TL={hid:null,mon:null,auto:null,timers:[]};
+const TL={hid:null,mon:null,bg:null,auto:null,timers:[]};
 const TL_WORD='magic',TL_SENT='The brave hero saves the happy little town.';
 function tlTimer(ms,f){TL.timers.push(setTimeout(()=>{if(S.view==='test')f();},ms));}
-function tlStop(){TL.timers.forEach(clearTimeout);TL.timers=[];if(TL.auto){clearInterval(TL.auto);TL.auto=null;}}
-function tlSetup(){if(!TL.hid)TL.hid=G().heroId;if(!TL.mon)TL.mon=RMON[0].id;if(ENG.ensure()){try{ENG.setup(TL.mon,heroEq(),TL.hid,false);}catch(e){}}}
+function tlStop(){TL.timers.forEach(clearTimeout);TL.timers=[];if(TL.auto){clearInterval(TL.auto);TL.auto=null;}try{ENG.forceBg(null);}catch(e){}}   // never leak the forced background into real battles
+function tlSetup(){if(!TL.hid)TL.hid=G().heroId;if(!TL.mon)TL.mon=RMON[0].id;if(ENG.ensure()){try{ENG.forceBg(TL.bg);ENG.setup(TL.mon,heroEq(),TL.hid,false);}catch(e){}}}
 function tlType(){return (MBY[TL.mon]||{}).t||'fire';}
-function tlName(){const h=HEROES.find(x=>x.id===TL.hid)||HEROES[0],m=MBY[TL.mon]||RMON[0];return h.zh+' ('+h.id+') vs '+m.zh+' ('+m.id+' · '+((TYPES.find(t=>t[0]===m.t)||[])[1]||m.t)+')';}
+function tlName(){const h=HEROES.find(x=>x.id===TL.hid)||HEROES[0],m=MBY[TL.mon]||RMON[0];return h.zh+' ('+h.id+') vs '+m.zh+' ('+m.id+' · '+((TYPES.find(t=>t[0]===m.t)||[])[1]||m.t)+')'+(typeof BGS!=='undefined'?' · 場景：'+((BGS[TL.bg||BGT[m.t]||BGT['default']]||{}).zh||''):'');}
 function viewTest(){
   if(!TL.hid||!TL.mon)tlSetup();
   const b=(k,label,extra)=>`<button class="btn tlb" data-act="tl" data-k="${k}" ${extra||''}>${label}</button>`;
@@ -1700,6 +1707,8 @@ function viewTest(){
     <div class="trow">${b('attack','⚔️ 攻擊')}${b('hit','💥 受傷')}${b('win','🏆 勝利')}${b('ult','🌟 大絕招')}</div><p class="soft">待機動作會一直播放；攻擊會丟出單字字母，最後收尾一擊。</p></section>
   <section class="card tsec"><h3>怪物攻擊（12 種屬性，含音效）</h3><div class="trow">${TYPES.map(t=>b('matk',t[2]+' '+t[1],`data-t="${t[0]}"`)).join('')}</div>
     <div class="trow">${b('die','💀 怪物倒下')}</div></section>
+  ${typeof BGS!=='undefined'?`<section class="card tsec"><h3>場景（${Object.keys(BGS).length} 張）</h3><p class="soft">選一張場景固定顯示，用來檢查背景動畫、主角和怪物站的位置；選「依怪物屬性」恢復正常。</p>
+    <div class="tgrid bgs"><button class="tlg${!TL.bg?' on':''}" data-act="tl" data-k="bg" data-id=""><span class="tlgauto">🔀</span><span>依怪物屬性</span></button>${Object.keys(BGS).map(k=>`<button class="tlg${TL.bg===k?' on':''}" data-act="tl" data-k="bg" data-id="${k}"><img alt="" src="${BGS[k].u}"><span>${BGS[k].zh}</span><small>${(BGS[k].types||[]).map(t=>t==='default'?'其他':((TYPES.find(x=>x[0]===t)||[])[1]||t)).join('、')}</small></button>`).join('')}</div></section>`:''}
   <section class="card tsec"><h3>怪物圖（${RMON.length} 隻）</h3><div class="trow">${b('prev','◀ 上一隻')}${b('next','下一隻 ▶')}${b('auto',TL.auto?'⏸ 停止輪播':'▶ 自動輪播')}</div>
     <p class="soft">點一隻放到場上。格子底色是棋盤格，方便看出去背沒去乾淨（破圖、色邊、破洞）。</p>
     <div class="tgrid mons">${RMON.map(m=>`<button class="tlm${m.id===TL.mon?' on':''}" data-act="tl" data-k="mon" data-id="${m.id}" title="${m.zh}"><img alt="" src="${RSPR[m.id].u}"><span>${m.id.slice(1)} ${m.zh}</span></button>`).join('')}</div></section>
@@ -1710,6 +1719,7 @@ function viewTest(){
 function tlAct(k,ds){
   if(k==='hero'){tlStop();TL.hid=ds.id;tlSetup();render();return;}
   if(k==='mon'){if(TL.auto){clearInterval(TL.auto);TL.auto=null;}TL.mon=ds.id;tlSetup();render();return;}
+  if(k==='bg'){TL.bg=ds.id||null;tlSetup();render();return;}
   if(k==='prev'||k==='next'){const i=RMON.findIndex(m=>m.id===TL.mon),n=RMON.length;TL.mon=RMON[(i+(k==='next'?1:n-1))%n].id;tlSetup();render();return;}
   if(k==='auto'){if(TL.auto){clearInterval(TL.auto);TL.auto=null;render();return;}
     TL.auto=setInterval(()=>{if(S.view!=='test'){tlStop();return;}const i=RMON.findIndex(m=>m.id===TL.mon);TL.mon=RMON[(i+1)%RMON.length].id;tlSetup();
