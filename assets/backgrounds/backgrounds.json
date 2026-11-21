@@ -1,8 +1,18 @@
 {
-  "_note": "Battle backgrounds. py = height of the platform centre (0 = top, 1 = bottom): the fighters' feet are placed there. types = monster element types that fight on this background; 'default' is used for every other type.",
+  "_note": "Battle backgrounds. py = height of the platform centre (0 = top, 1 = bottom): the fighters' feet are placed there. types = monster element types that fight on this background; 'default' is used for every other type. amb = ambient animation, all positions as fractions of the image (u = left->right, v = top->bottom): clouds = regions [u0,u1,v0,v1,count] where clouds drift; falls = [u, v_top, v_bottom, half_width, 'water'|'lava']; smoke = [u,v] sources; circle = [u, v, half_width, half_height, r,g,b] magic-circle glow; fx = 'leaves' | 'embers' | 'sparkles'.",
   "backgrounds": [
-    {"key": "forest",  "file": "forest.jpg",  "py": 0.76, "types": ["forest", "poison", "desert"]},
-    {"key": "volcano", "file": "volcano.jpg", "py": 0.76, "types": ["fire", "dragon", "elec"]},
-    {"key": "castle",  "file": "castle.jpg",  "py": 0.68, "types": ["default"]}
+    {"key": "forest",  "file": "forest.jpg",  "py": 0.76, "types": ["forest", "poison", "desert"],
+     "amb": {"clouds": [[0.45, 1.0, 0.04, 0.30, 5]],
+             "falls": [[0.737, 0.33, 0.60, 0.032, "water"], [0.72, 0.62, 0.68, 0.025, "water"], [0.942, 0.27, 0.55, 0.016, "water"]],
+             "circle": [0.505, 0.755, 0.185, 0.048, 150, 235, 110], "fx": "leaves"}},
+    {"key": "volcano", "file": "volcano.jpg", "py": 0.76, "types": ["fire", "dragon", "elec"],
+     "amb": {"clouds": [],
+             "falls": [[0.155, 0.38, 0.60, 0.028, "lava"], [0.31, 0.30, 0.55, 0.012, "lava"], [0.745, 0.45, 0.60, 0.018, "lava"], [0.885, 0.20, 0.36, 0.016, "lava"]],
+             "smoke": [[0.22, 0.10]],
+             "circle": [0.51, 0.76, 0.17, 0.05, 255, 170, 60], "fx": "embers"}},
+    {"key": "castle",  "file": "castle.jpg",  "py": 0.68, "types": ["default"],
+     "amb": {"clouds": [[0.0, 0.30, 0.02, 0.40, 4], [0.70, 1.0, 0.02, 0.40, 4], [0.0, 0.12, 0.55, 0.95, 2], [0.88, 1.0, 0.55, 0.95, 2]],
+             "falls": [[0.345, 0.43, 0.60, 0.02, "water"], [0.655, 0.47, 0.62, 0.02, "water"], [0.165, 0.74, 0.98, 0.022, "water"], [0.945, 0.58, 0.83, 0.018, "water"]],
+             "circle": [0.50, 0.665, 0.135, 0.035, 140, 230, 255], "fx": "sparkles"}}
   ]
 }

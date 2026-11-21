@@ -44,6 +44,7 @@ def main(dry):
     RM=json.loads(re.search(r'const RMON=(\[.*?\]);',js).group(1));ids={m['id']:i for i,m in enumerate(RM)}
     for m,im in new:
         e={'id':m['id'],'zh':m['zh'],'en':m['en'],'t':m['t'],'role':m.get('role','x')}
+        if m.get('face')=='left':e['f']=0   # art already faces left: engine must not mirror it
         if m['id'] in ids:RM[ids[m['id']]]=e
         else:RM.append(e)
         ent=f"{m['id']}:{{u:\"data:image/webp;base64,{enc(im)}\",w:{im.width},h:{im.height}}}"

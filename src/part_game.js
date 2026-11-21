@@ -544,6 +544,49 @@ function scenery(){
   spr(192,128,(x,w,h)=>{soft(x,w/2,h*.9,w*.42,'40,50,40',.3);x.fillStyle=lin(x,h*.2,h*.9,[[0,'#B9B4AE'],[1,'#8A847E']]);x.beginPath();x.ellipse(w*.5,h*.6,w*.4,h*.32,0,0,2*PI);x.fill();x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(w*.4,h*.45,w*.18,h*.1,-.3,0,2*PI);x.fill();
     x.fillStyle='rgba(110,170,90,.7)';for(let i=0;i<10;i++){x.beginPath();x.arc(w*(.25+R()*.5),h*(.82+R()*.08),3+R()*4,0,2*PI);x.fill();}},'rock',[150,145,140]);
 }
+// ---- ambient animation on top of a background image (clouds, flowing falls, mist, smoke, leaves/embers/sparkles,
+// a breathing glow on the magic circle). Positions live in image space (u,v = 0..1) so they stay on the painted
+// sky / waterfalls whatever the screen size; sizes are in image heights. Drawn behind the fighters. ----
+function ambTex(){
+  if(E.tex.streak)return;
+  const mk=(rgb,key)=>{const c=cv(32,128),x=c.getContext('2d'),C=rgb.join(','),g=x.createLinearGradient(0,0,0,128);g.addColorStop(0,'rgba('+C+',0)');g.addColorStop(.3,'rgba('+C+',.85)');g.addColorStop(.7,'rgba('+C+',.85)');g.addColorStop(1,'rgba('+C+',0)');
+    x.fillStyle=g;x.fillRect(0,0,32,128);x.globalCompositeOperation='destination-in';const h=x.createLinearGradient(0,0,32,0);h.addColorStop(0,'rgba(0,0,0,0)');h.addColorStop(.5,'rgba(0,0,0,1)');h.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=h;x.fillRect(0,0,32,128);E.tex[key]=mkTexA(c,rgb);};
+  mk([255,255,255],'streak');mk([255,190,70],'lstreak');
+}
+function ambInit(){
+  E.amb=[];const A=E.bg&&E.bg.amb;if(!A)return;ambTex();
+  (A.clouds||[]).forEach(r=>{for(let i=0;i<r[4];i++)ambCloud(r,r[0]+Math.random()*(r[1]-r[0]));});
+}
+function ambCloud(r,u){E.amb.push({k:'cloud',r,u:u==null?r[1]+.04:u,v:r[2]+Math.random()*(r[3]-r[2]),vu:-(.006+Math.random()*.008),vv:0,s:.07+Math.random()*.07,life:1e9,a:.55+Math.random()*.3,tex:E.tex.cloud});}
+function ambUpdate(dt){
+  const A=E.bg&&E.bg.amb;if(!A||!E.amb)return;const R=Math.random,P=E.amb,G=gtex;
+  for(let i=P.length-1;i>=0;i--){const p=P[i];p.u+=p.vu*dt;p.v+=p.vv*dt;p.life-=dt;if(p.gs)p.s+=p.gs*dt;if(p.vr)p.rot+=p.vr*dt;
+    if(p.k==='cloud'&&p.u<p.r[0]-.06){P.splice(i,1);ambCloud(p.r);continue;}
+    if(p.life<=0)P.splice(i,1);}
+  const n=(rate)=>{let k=Math.floor(rate*dt);if(R()<rate*dt-k)k++;return k;};
+  (A.falls||[]).forEach(f=>{const lava=f[4]==='lava',len=f[2]-f[1],d=.55+len*.8;
+    for(let i=n(26*Math.max(.5,f[3]/.02));i--;)P.push({k:'p',u:f[0]+(R()-.5)*2*f[3]*.85,v:f[1]-.02,vu:0,vv:len/d,life:d,max:d,s:.022+R()*.02,ar:.32,a:.35+R()*.35,tex:E.tex[lava?'lstreak':'streak']});
+    for(let i=n(7);i--;)P.push({k:'p',u:f[0]+(R()-.5)*3*f[3],v:f[2]-.01,vu:(R()-.5)*.02,vv:-.01-R()*.015,life:1.3,max:1.3,s:.02+R()*.02,gs:.03,a:lava?.35:.4,tex:G(lava?[255,150,60]:[235,245,255])});});
+  (A.smoke||[]).forEach(s=>{for(let i=n(3);i--;)P.push({k:'p',u:s[0]+(R()-.5)*.02,v:s[1],vu:.006+R()*.01,vv:-.012-R()*.01,life:4,max:4,s:.03,gs:.03,a:.35,tex:G([70,55,60])});});
+  if(A.fx==='leaves'){for(let i=n(1.1);i--;)P.push({k:'p',u:R(),v:-.03,vu:-.01+R()*.03,vv:.05+R()*.04,life:9,max:9,s:.018+R()*.01,a:.95,rot:R()*6,vr:(R()-.5)*3,sway:R()*6,tex:emojiTex('🍃')});
+    for(let i=n(2.5);i--;)P.push({k:'p',u:R(),v:.3+R()*.6,vu:.008+R()*.01,vv:-.004,life:5,max:5,s:.006+R()*.006,a:.8,tex:G([255,250,200])});}
+  if(A.fx==='embers')for(let i=n(11);i--;)P.push({k:'p',u:R(),v:1.02,vu:(R()-.5)*.02,vv:-(.06+R()*.08),life:3.5,max:3.5,s:.005+R()*.008,a:.95,flick:1,tex:G(R()<.5?[255,200,80]:[255,110,40])});
+  if(A.fx==='sparkles')for(let i=n(2.5);i--;)P.push({k:'p',u:R(),v:R()*.75,vu:0,vv:0,life:1.4,max:1.4,s:.014+R()*.012,a:1,tw:1,tex:starTex()});
+}
+function ambDraw(I){
+  const A=E.bg&&E.bg.amb,T=E.bgT;if(!A||!T||!E.amb)return;
+  const X=u=>(u-.5)*2*T.sx*T.k,Y=v=>T.cy+(.5-v)*2*T.sy*T.k;
+  // one image height in NDC is 2*sy*k vertically; the same pixel length horizontally is 2*sy*k*(H/W)
+  const hw=s=>s*T.sy*T.k*T.H/T.W,hh=s=>s*T.sy*T.k,t=E.time;
+  if(A.circle){const c=A.circle,p=.28+.14*Math.sin(t*2.2);sprite(gtex([c[4],c[5],c[6]]),[X(c[0]),Y(c[1]),0],c[2]*2*T.sx*T.k*1.05,c[3]*2*T.sy*T.k*1.4,0,p,I,I);}
+  E.amb.forEach(q=>{let a=q.a,s=q.s,u=q.u;
+    if(q.k==='cloud'){const r=q.r,e=Math.min(1,(u-r[0]+.06)/.12,(r[1]+.06-u)/.12);a*=Math.max(0,e);sprite(q.tex,[X(u),Y(q.v),0],hw(s)*2,hh(s),0,a,I,I);return;}
+    const f=q.life/q.max;a*=Math.min(1,f*3,(1-f)*6+.2);
+    if(q.flick)a*=.6+.4*Math.sin(t*20+u*50);
+    if(q.tw)s*=Math.sin(Math.PI*(1-f));
+    if(q.sway)u+=.012*Math.sin(t*2+q.sway);
+    sprite(q.tex,[X(u),Y(q.v),0],hw(s)*(q.ar||1),hh(s),q.rot||0,a,I,I);});
+}
 function arenaTexs(){
   if(E.tex.arena)return;
   {const cg=cv(128,128),xg=cg.getContext('2d'),gg=xg.createRadialGradient(64,64,0,64,64,64);gg.addColorStop(0,'rgba(255,250,215,1)');gg.addColorStop(.3,'rgba(255,205,70,.75)');gg.addColorStop(1,'rgba(255,170,30,0)');xg.fillStyle=gg;xg.fillRect(0,0,128,128);E.tex.gold=mkTexA(cg,[255,205,70]);}
@@ -600,7 +643,7 @@ function setup(monId,eq,hid,big){
   E.big=!!big;
   const m=(typeof RSPR!=='undefined'&&RSPR[monId])?{root:Gp(),sc:1}:monModel(monId),h=heroModel(eq);
   const SP=SPR(monId);if(SP&&!E.imgs[monId]){const im=new Image();im.src=SP.u;E.imgs[monId]={im,tex:null};}
-  const mon={img:SP?monId:null,root:SP?Gp():m.root,base:[E.big?3.4:3.0,0,.1],ry:-.8,sc:m.sc,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},id:monId};
+  const mon={nf:((typeof MBY!=='undefined'&&MBY[monId])||{}).f===0,img:SP?monId:null,root:SP?Gp():m.root,base:[E.big?3.4:3.0,0,.1],ry:-.8,sc:m.sc,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},id:monId};
   const HA0=(typeof HANIM!=='undefined')&&hid&&HANIM[hid];if(HA0&&!HA0._ld){HA0._ld=1;['idle','attack','hit','win'].forEach(k=>HA0[k].forEach(f=>{const im=new Image();im.src=f.u;f.im=im;f.tex=null;if(im.decode)im.decode().catch(()=>{});}));}
   const HS=(typeof HSPR!=='undefined')&&hid&&HSPR[hid];if(HS&&!E.imgs['H'+hid]){const im=new Image();im.src=HS.u;E.imgs['H'+hid]={im,tex:null};}
   const hero={himg:HS?hid:null,root:HS?Gp():h.root,base:[-2.75,0,.4],ry:.8,sc:1,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},armR:HS?{r:[0,0,0]}:h.armR,hand:h.hand,head:h.head};
@@ -614,7 +657,8 @@ function setup(monId,eq,hid,big){
   // painted battle background (assets/backgrounds via tools/mkbg.py), chosen by the monster's element; replaces the drawn scenery
   E.bg=null;
   if(typeof BGS!=='undefined'){const mt=((typeof MBY!=='undefined'&&MBY[monId])||{}).t,k=BGT[mt]||BGT['default'],B=BGS[k];
-    if(B){if(!E.imgs['BG'+k]){const im=new Image();im.src=B.u;E.imgs['BG'+k]={im,tex:null};}E.bg={k,py:B.py,ia:B.w/B.h};E.env=[ring];}}
+    if(B){if(!E.imgs['BG'+k]){const im=new Image();im.src=B.u;E.imgs['BG'+k]={im,tex:null};}E.bg={k,py:B.py,ia:B.w/B.h,amb:B.amb};E.env=[ring];}}
+  ambInit();
   E.decor=[{t:'tree',x:-13,z:-16,s:2.6},{t:'tree',x:14,z:-18,s:2.9},{t:'tree',x:-19,z:-20,s:3},{t:'bush',x:-15,z:-14,s:1.2},{t:'bush',x:16.5,z:-15,s:1.1},
     {t:'bush',x:-8,z:-5,s:1.0},{t:'bush',x:8.6,z:-4.6,s:1.1},{t:'rock',x:-5.8,z:1.4,s:.55},{t:'rock',x:6.3,z:1.0,s:.5},
     {t:'flowers',x:-4.3,z:3.5,s:.8},{t:'flowers',x:4.6,z:3.8,s:.8},{t:'flowers',x:.7,z:5.1,s:.7},{t:'flowers',x:-7.5,z:.4,s:.7},{t:'flowers',x:8.2,z:.2,s:.7}].sort((a,b)=>a.z-b.z);
@@ -650,6 +694,7 @@ const ease=u=>u<0?0:u>1?1:u*u*(3-2*u);
 const cl=u=>u<0?0:u>1?1:u;
 function update(dt){
   const t=E.time;
+  ambUpdate(dt);
   if(E.mon&&E.tex.glow&&Math.random()<dt*5)E.parts.push({x:-10+Math.random()*20,y:.4+Math.random()*4.5,z:-5+Math.random()*7,vx:.12+Math.random()*.2,vy:.04+Math.random()*.1,vz:0,g:0,life:4,max:4,size:.05+Math.random()*.06,tex:E.tex.glow,rot:0,vr:0,al:.65});   // drifting pollen / light motes
   // idle
   [E.mon,E.hero].forEach((o,i)=>{if(!o)return;o.off.sqi=1+.03*Math.sin(t*2.3+i);});
@@ -678,7 +723,7 @@ function draw(){
       let sx=ca>ia?1:ia/ca,sy=ca>ia?ca/ia:1,k=1,cy=0;
       for(;k<1.8;k+=.02){cy=fy-(.5-E.bg.py)*2*sy*k;if(Math.abs(cy)<=sy*k-1)break;}
       cy=Math.max(1-sy*k,Math.min(sy*k-1,cy));
-      gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);sprite(c.tex,[0,cy,0],sx*k,sy*k,0,1,I,I);gl.disable(gl.BLEND);gl.enable(gl.DEPTH_TEST);}}
+      gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);sprite(c.tex,[0,cy,0],sx*k,sy*k,0,1,I,I);E.bgT={sx,sy,k,cy,ia,W,H};ambDraw(I);gl.disable(gl.BLEND);gl.enable(gl.DEPTH_TEST);}}
   if(!BGOK&&E.tex.backdrop){gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);sprite(E.tex.backdrop,[0,10,-75],92,20.5,0,1,V,Pr);gl.disable(gl.BLEND);gl.enable(gl.DEPTH_TEST);}
   gl.useProgram(E.pg);const u=E.u;gl.uniformMatrix4fv(u.uVP,false,VP);gl.uniform3f(u.uL,-.45,.8,.55);gl.uniform3fv(u.uEye,eye);
   const mM=nodeMatM(E.mon),hM=nodeMatM(E.hero);
@@ -724,8 +769,8 @@ function draw(){
       if(false){const q=(E.time-o.pe.t)/.25;if(q<1&&o.pe.f.tex)sprite(o.pe.f.tex,hp,w/2,h/2,rot,1-ease(q),V,Pr,E.flash.hero);else o.pe=null;}}}
   if(E.mon.img){const o=E.mon,c=E.imgs[o.img],S=SPR(o.img);
     if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
-    if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,h0=Math.min(E.big?4.3:3.5,3.9/asp);
-      const h=h0*k*sq,w=-h0*asp*k*(1+(1-sq)*.6),rot=-f.rz*.6-(o.idz||0);
+    if(c&&c.tex){const f=o.off,sq=f.sq*(f.sqi||1),k=Math.max(.001,f.sc),asp=S.w/S.h,M=E.big?3.45:3.0,h0=Math.min(E.big?4.2:3.6,(E.big?5.2:4.6)/asp,M/Math.sqrt(asp));   // same visual area (sqrt(w*h)=M) for every monster: slimes, golems and long dragons look equally heavy next to the hero
+      const h=h0*k*sq,w=(o.nf?1:-1)*h0*asp*k*(1+(1-sq)*.6),rot=-f.rz*.6-(o.idz||0);   // mirror art drawn facing right so every monster faces the hero (o.nf: already faces left)
       sprite(c.tex,[o.base[0]+f.x+(o.jx||0)+PSG*Math.sin(rot)*h/2,o.base[1]+f.y+(o.bob||0)+Math.cos(rot)*h/2+.02,o.base[2]+.2],w/2,h/2,rot,f.al==null?1:f.al,V,Pr,E.flash.mon);}}
   gl.enable(gl.DEPTH_TEST);
   E.sprites.forEach(s=>sprite(s.tex,s.pos,s.w,s.h,s.rot,s.a,V,Pr));
@@ -1501,7 +1546,7 @@ function stageHTML(b,opts){
   }
   const cls=['stage',b.kind==='boss'?'boss':'',b.anim,opts.beaten?'beaten':'',b.kind==='revenge'?'rev':'',use3?'c3':''].join(' ');
   return `<div class="${cls} ${b.k}">${use3?hud:`<div class="nameplate">${b.kind==='boss'?'<b>魔王</b>':b.kind==='elite'?'<b>精英</b>':b.kind==='revenge'?'<b class="rv">復仇</b>':''}${b.name}</div>`}
-  ${use3?'<div class="c3d"></div>':`<div class="mon-wrap"><div class="mon">${monSvg(b.mon)}</div></div>
+  ${use3?'<div class="c3d"></div>':`<div class="mon-wrap"><div class="mon${(MBY[b.mon]||{}).f===0?' nf':''}">${monSvg(b.mon)}</div></div>
   ${opts.noHero?'':`<div class="hbat">${heroImg()}</div>`}`}
   ${opts.noHp||use3?'':`<div class="mhp" aria-label="怪物生命"><i id="mhpbar" style="width:${pct}%"></i><span>HP ${Math.max(0,b.hp)}/${b.maxhp}</span></div>`}
   <div class="fx" aria-hidden="true">${fx}</div></div>`;
