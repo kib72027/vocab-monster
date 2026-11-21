@@ -580,7 +580,7 @@ function ambUpdate(dt){
 }
 function ambDraw(I){
   const A=E.bg&&E.bg.amb,T=E.bgT;if(!A||!T||!E.amb)return;
-  const X=u=>(u-.5)*2*T.sx*T.k,Y=v=>T.cy+(.5-v)*2*T.sy*T.k;
+  const X=u=>T.cx+(u-.5)*2*T.sx*T.k,Y=v=>T.cy+(.5-v)*2*T.sy*T.k;
   // one image height in NDC is 2*sy*k vertically; the same pixel length horizontally is 2*sy*k*(H/W)
   const hw=s=>s*T.sy*T.k*T.H/T.W,hh=s=>s*T.sy*T.k,t=E.time;
   if(A.fx==='storm'&&E.bgFlash>0)sprite(E.tex.flat,[0,0,0],1,1,0,E.bgFlash*.4,I,I);   // the sky lights up when lightning strikes
@@ -663,7 +663,7 @@ function setup(monId,eq,hid,big){
   // painted battle background (assets/backgrounds via tools/mkbg.py), chosen by the monster's element; replaces the drawn scenery
   E.bg=null;
   if(typeof BGS!=='undefined'){const mt=((typeof MBY!=='undefined'&&MBY[monId])||{}).t,k=(E.forceBg&&BGS[E.forceBg])?E.forceBg:(BGT[mt]||BGT['default']),B=BGS[k];
-    if(B){if(!E.imgs['BG'+k]){const im=new Image();im.src=B.u;E.imgs['BG'+k]={im,tex:null};}E.bg={k,py:B.py,ia:B.w/B.h,amb:B.amb};E.env=[ring];}}
+    if(B){if(!E.imgs['BG'+k]){const im=new Image();im.src=B.u;E.imgs['BG'+k]={im,tex:null};}E.bg={k,py:B.py,pu:B.pu==null?.5:B.pu,pw:B.pw||.35,ia:B.w/B.h,amb:B.amb};E.env=[ring];}}
   ambInit();
   E.decor=[{t:'tree',x:-13,z:-16,s:2.6},{t:'tree',x:14,z:-18,s:2.9},{t:'tree',x:-19,z:-20,s:3},{t:'bush',x:-15,z:-14,s:1.2},{t:'bush',x:16.5,z:-15,s:1.1},
     {t:'bush',x:-8,z:-5,s:1.0},{t:'bush',x:8.6,z:-4.6,s:1.1},{t:'rock',x:-5.8,z:1.4,s:.55},{t:'rock',x:6.3,z:1.0,s:.5},
@@ -726,10 +726,13 @@ function draw(){
   let BGOK=false;
   if(E.bg){const c=E.imgs['BG'+E.bg.k];if(c&&!c.tex&&c.im.complete&&c.im.naturalWidth)c.tex=mkTex(c.im);
     if(c&&c.tex){BGOK=true;const I=m4.id(),ca=W/H,ia=E.bg.ia,b=E.hero.base,pw=VP[3]*b[0]+VP[11]*b[2]+VP[15],fy=(VP[1]*b[0]+VP[9]*b[2]+VP[13])/pw;
-      let sx=ca>ia?1:ia/ca,sy=ca>ia?ca/ia:1,k=1,cy=0;
-      for(;k<1.8;k+=.02){cy=fy-(.5-E.bg.py)*2*sy*k;if(Math.abs(cy)<=sy*k-1)break;}
+      // the flat ground (pu ± pw of the image width) must reach under both fighters' feet: zoom in on narrow platforms
+      const nx=(x,z)=>(VP[0]*x+VP[8]*z+VP[12])/(VP[3]*x+VP[11]*z+VP[15]),mb=E.mon.base,hx=nx(b[0]-.55,b[2]),mx=nx(mb[0]+.55,mb[2]);
+      let sx=ca>ia?1:ia/ca,sy=ca>ia?ca/ia:1,k=Math.min(2.2,Math.max(1,(mx-hx)/(4*E.bg.pw*sx))),cy=0;
+      for(;k<2.4;k+=.02){cy=fy-(.5-E.bg.py)*2*sy*k;if(Math.abs(cy)<=sy*k-1)break;}
       cy=Math.max(1-sy*k,Math.min(sy*k-1,cy));
-      gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);sprite(c.tex,[0,cy,0],sx*k,sy*k,0,1,I,I);E.bgT={sx,sy,k,cy,ia,W,H};ambDraw(I);gl.disable(gl.BLEND);gl.enable(gl.DEPTH_TEST);}}
+      let cx=(hx+mx)/2-(E.bg.pu-.5)*2*sx*k;cx=Math.max(1-sx*k,Math.min(sx*k-1,cx));
+      gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);sprite(c.tex,[cx,cy,0],sx*k,sy*k,0,1,I,I);E.bgT={sx,sy,k,cx,cy,ia,W,H};ambDraw(I);gl.disable(gl.BLEND);gl.enable(gl.DEPTH_TEST);}}
   if(!BGOK&&E.tex.backdrop){gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);sprite(E.tex.backdrop,[0,10,-75],92,20.5,0,1,V,Pr);gl.disable(gl.BLEND);gl.enable(gl.DEPTH_TEST);}
   gl.useProgram(E.pg);const u=E.u;gl.uniformMatrix4fv(u.uVP,false,VP);gl.uniform3f(u.uL,-.45,.8,.55);gl.uniform3fv(u.uEye,eye);
   const mM=nodeMatM(E.mon),hM=nodeMatM(E.hero);

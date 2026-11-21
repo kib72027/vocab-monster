@@ -1,5 +1,5 @@
 {
- "_note": "Battle backgrounds. py = height of the platform centre (0 = top, 1 = bottom): the fighters' feet are placed there. types = monster element types that fight on this background; 'default' is used for every other type. amb = ambient animation, all positions as fractions of the image (u = left->right, v = top->bottom): clouds = regions [u0,u1,v0,v1,count] where clouds drift; falls = [u, v_top, v_bottom, half_width, 'water'|'lava']; smoke = [u,v] sources; circle = [u, v, half_width, half_height, r,g,b] magic-circle glow; fx = 'leaves' | 'embers' | 'sparkles' | 'snow' | 'wisps' | 'storm'.",
+ "_note": "Battle backgrounds. py = height of the platform centre (0 = top, 1 = bottom): the fighters' feet are placed there. pu = platform centre left->right, pw = half-width of the flat ground at height py (both as fractions of the image width): the image is zoomed until this ground reaches under both fighters, so they never stand over a cliff or the sky. types = monster element types that fight on this background; 'default' is used for every other type. amb = ambient animation, all positions as fractions of the image (u = left->right, v = top->bottom): clouds = regions [u0,u1,v0,v1,count] where clouds drift; falls = [u, v_top, v_bottom, half_width, 'water'|'lava']; smoke = [u,v] sources; circle = [u, v, half_width, half_height, r,g,b] magic-circle glow; fx = 'leaves' | 'embers' | 'sparkles' | 'snow' | 'wisps' | 'storm'.",
  "backgrounds": [
   {
    "key": "forest",
@@ -54,7 +54,9 @@
     ],
     "fx": "leaves"
    },
-   "zh": "森林神殿"
+   "zh": "森林神殿",
+   "pu": 0.5,
+   "pw": 0.35
   },
   {
    "key": "volcano",
@@ -112,7 +114,9 @@
     ],
     "fx": "embers"
    },
-   "zh": "火山城堡"
+   "zh": "火山城堡",
+   "pu": 0.52,
+   "pw": 0.32
   },
   {
    "key": "castle",
@@ -193,7 +197,9 @@
     ],
     "fx": "sparkles"
    },
-   "zh": "天空城堡"
+   "zh": "天空城堡",
+   "pu": 0.5,
+   "pw": 0.35
   },
   {
    "key": "haunted",
@@ -261,7 +267,9 @@
     ],
     "fx": "wisps"
    },
-   "zh": "幽靈古堡"
+   "zh": "幽靈古堡",
+   "pu": 0.5,
+   "pw": 0.19
   },
   {
    "key": "icecastle",
@@ -321,7 +329,9 @@
     ],
     "fx": "snow"
    },
-   "zh": "冰雪城堡"
+   "zh": "冰雪城堡",
+   "pu": 0.5,
+   "pw": 0.33
   },
   {
    "key": "skycastle",
@@ -381,7 +391,9 @@
     ],
     "fx": "sparkles"
    },
-   "zh": "雲端城堡"
+   "zh": "雲端城堡",
+   "pu": 0.495,
+   "pw": 0.185
   },
   {
    "key": "crystal",
@@ -434,7 +446,9 @@
     ],
     "fx": "sparkles"
    },
-   "zh": "水晶龍堡"
+   "zh": "水晶龍堡",
+   "pu": 0.525,
+   "pw": 0.14
   },
   {
    "key": "thunder",
@@ -472,7 +486,9 @@
     ],
     "fx": "storm"
    },
-   "zh": "雷電城堡"
+   "zh": "雷電城堡",
+   "pu": 0.5,
+   "pw": 0.17
   }
  ]
 }
