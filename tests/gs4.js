@@ -40,6 +40,7 @@ for(const h of D.HEROES){const H=D.HANIM[h.id];
 // home: monster count text, revenge counts only the fought lesson's words
 act('goGame');A(clean().includes('收集 '+D.RMON.length+' 隻怪物'),'home shows the monster count');
 // legends: stored for later, not part of the collection yet
+act('goGame');act('coll');A((app.innerHTML.match(/class="rt legend locked"/g)||[]).length===4,'codex shows 4 locked legends');act('cdx',{t:'tL'});A((app.innerHTML.match(/rt legend/g)||[]).length===4&&!/rt locked role-/.test(app.innerHTML),'legend tab shows only legends');act('goGame');
 A(D.LMON.length===4&&D.LMON.every(m=>D.LSPR[m.id]&&D.LSPR[m.id].w>0&&!D.RMON.some(r=>r.id===m.id)),'4 legends stored apart');
 A(/4 個字等你復仇/.test(clean()),'revenge card counts 4 (fought lesson only): '+(clean().match(/\d+ 個字等你復仇[^<]*/)||['none'])[0]);
 act('revenge');A(D.S.view==='battle'&&D.B.kind==='revenge','revenge battle starts');
@@ -57,7 +58,8 @@ act('goGame');A(!/等你復仇/.test(clean()),'no revenge card left');
  D.store.missed.push(...w(s1),...w(s2));act('goGame');const t=clean().match(/(\d+) 個字等你復仇（每次 10 個）/);
  A(t&&+t[1]>10,'card shows 每次 10 個');act('revenge');A(D.B.maxhp===10,'revenge capped at 10, got '+D.B.maxhp);}
 // test lab: shows every hero / monster / sound button, never changes progress
-{act('goGame');A(/data-act="test"/.test(app.innerHTML),'home has test card');const g=D.G(),snap=JSON.stringify([g.xp,g.coins,g.heroId,g.stars,g.def,g.rcards]);
+{act('goGame');A(/data-act="test"/.test(app.innerHTML),'home has test button');act('test');A(D.S.view!=='test'&&/id="tpwin"/.test(app.innerHTML),'test lab asks for a password');
+ act('testgo',{pw:'0000'});A(D.S.view!=='test'&&/tpwbad/.test(app.innerHTML),'wrong password refused');act('testno');A(!/tpwin/.test(app.innerHTML),'cancel closes the dialog');act('test');act('testgo',{pw:'2580'});A(D.S.view==='test','right password opens the test lab');act('goGame');const g=D.G(),snap=JSON.stringify([g.xp,g.coins,g.heroId,g.stars,g.def,g.rcards]);
  act('test');A(D.S.view==='test','test view');const h=clean();A(!/undefined|NaN/.test(h),'test html clean');
  A((app.innerHTML.match(/data-k="hero"/g)||[]).length===10,'10 hero buttons');A((app.innerHTML.match(/data-k="mon"/g)||[]).length===D.RMON.length,'all monsters listed');
  A((app.innerHTML.match(/data-k="bg"/g)||[]).length===Object.keys(global.BGS0||{}).length+1||typeof global.BGS0==='undefined','one scene button per background + auto');

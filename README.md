@@ -70,7 +70,7 @@ Open `index.html` in any modern browser (Chrome / Safari / Edge; desktop, phone,
   Roles: `n` normal lesson monster (40), `e` elite (18), `b` boss (9), `r` rare (chest only, 8), `x` spare (chest only, 38).
 - All monster art lives in `assets/monsters/`: `set-1/` (the original 80), `set-2/`, `set-3/` (extra monsters) and `legend/`. Each set has its sheets, a `cut/` folder with the cut-outs, and (set-2 onward) a `monsters.json`.
 - n081–n113 come from `assets/monsters/set-2/sheet-2..6.jpg`, n114–n125 from `assets/monsters/set-3/` (each set's `monsters.json` lists which cells; look-alikes of existing monsters were skipped) via `tools/nmadd.py`. A new set = a new folder `set-4/` with sheets + `monsters.json`, then run `tools/nmadd.py`.
-- **Legends (傳奇)**: 4 monsters in `LMON`/`LSPR` from `assets/monsters/legend/` (`legends.json`), harder to get than bosses. Not used by the game yet — how players earn them is still to be decided.
+- **Legends (傳奇)**: 4 monsters in `LMON`/`LSPR` from `assets/monsters/legend/` (`legends.json`), harder to get than bosses. Shown in the codex as locked silhouettes (👑 傳奇 tab; owned ones will live in `g.lcards`); how players earn them is still to be decided.
   Element types: fire, ice, elec, poison, forest, sea, desert, sky, ghost, mech, skel, dragon (`TYPES`).
 - `MPLAN = {normal:[40 ids], elite:[18 ids], boss:[9 ids]}` assigns monsters. Lesson *i* uses `MPLAN.normal[i]`; the *w*-th week uses `MPLAN.elite[w]`; the *j*-th two-week block uses `MPLAN.boss[j]`.
 - Art: full-body transparent WebP cut-outs (`RSPR[id] = {u: dataURI, w, h}`), cut by `tools/nmcut2.py` from 5 redrawn 4×4 sheets (`assets/monsters/set-1/monster-sheet-1..5.jpg`, magenta background; sheet *k* = `n{16(k-1)+1}`…`n{16k}`, row by row). The old 96-monster art (6 sheets) was removed. Heroes: `HSPR` (10 heroes). `MON`/`MSPR` are the legacy 11 procedural monsters (no longer used for battles).
@@ -177,7 +177,7 @@ The photos of the workbook story pages (used to match Weeks 7-10) are **not** in
 - 背景動畫（`backgrounds.json` 的 `amb`，位置用圖的比例 0～1）：飄動的雲、瀑布／熔岩瀑布的水流和水霧、火山煙、魔法陣光暈呼吸，加上依主題的樹葉／火星／閃光。新增背景時照現有三張的格式量好位置即可。
 
 ## 測試工具（家長／老師用）
-- 首頁最下面的「🧪 測試工具」：用真正的戰鬥畫面，選任一位主角看攻擊、受傷、勝利、大絕招；觸發 12 種屬性的怪物攻擊（含出招音和命中音）；把 80 隻怪物逐一放上場（或自動輪播）檢查破圖，怪物格子用棋盤格底色方便看出去背問題；單獨播放每個音效和朗讀。
+- 首頁右上角的「🧪 測試」按鈕，要輸入密碼（預設 2580，改 `part_game.js` 的 `TEST_PW`）。進去後上方的戰鬥畫面會固定不動：用真正的戰鬥畫面，選任一位主角看攻擊、受傷、勝利、大絕招；觸發 12 種屬性的怪物攻擊（含出招音和命中音）；把 80 隻怪物逐一放上場（或自動輪播）檢查破圖，怪物格子用棋盤格底色方便看出去背問題；單獨播放每個音效和朗讀。
 - 完全不影響進度（不加經驗、金幣，不改主角選擇）。前一個動作還沒播完就按新按鈕，會中斷並重新開始。
 - 程式在 `src/part_game.js` 的 `viewTest()` / `tlAct()`；`tests/gs4.js` 會檢查它不改進度。
 

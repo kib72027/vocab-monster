@@ -496,6 +496,9 @@ mark{background:var(--sun);color:var(--on-sun);border-radius:6px;padding:0 .2em}
 .ctab small{opacity:.65;font-weight:700}.ctab[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
 .chd{margin:14px 0 8px;font:700 18px var(--font-display);display:flex;gap:8px;align-items:baseline}.chd small{font-size:13px;color:var(--muted);font-weight:700}
 .rgrid2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rt.legend{border-color:#E8B53A;box-shadow:0 0 0 2px rgba(232,181,58,.35),0 4px 14px rgba(232,181,58,.25)}
+.rt.legend .rtart img.sil{filter:brightness(0) opacity(.55)}
+.rtb.L{background:linear-gradient(90deg,#F6C445,#E88A3A);color:#3A2200}.lnote{margin:-4px 0 8px}
 .rt{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px 8px;border-radius:18px;border:2px solid rgba(255,255,255,.7);background:linear-gradient(160deg,var(--c1),var(--c2));box-shadow:0 2px 0 rgba(22,50,79,.12),var(--shadow);min-width:0;color:#1B2A4A}
 .rtt{font:800 11px var(--font-body);opacity:.75;align-self:flex-start;background:rgba(255,255,255,.55);border-radius:999px;padding:1px 7px}
 .rtart{width:100%;display:flex;align-items:center;justify-content:center;min-height:80px}.rtart img{width:100%;height:auto;display:block;border-radius:14px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
@@ -597,7 +600,12 @@ button.sk{cursor:pointer;pointer-events:auto}button.sk:disabled{filter:grayscale
 .tlh img{height:56px;width:auto;max-width:100%;object-fit:contain}
 .tlm img{width:100%;height:70px;object-fit:contain;background:repeating-conic-gradient(#cfd5e1 0 25%,#fff 0 50%) 0 0/16px 16px;border-radius:8px}
 .tlm span{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.tcard{margin-top:18px}.tcard .btn{width:100%}
+.tltop{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;gap:10px;padding:8px 0 6px;margin-top:-8px}
+.tltop .stage.c3.tstage{height:min(42vh,400px);min-height:200px}
+.tpwbg{position:fixed;inset:0;z-index:60;background:rgba(10,20,40,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.tpw{width:min(340px,100%);display:flex;flex-direction:column;gap:10px;text-align:center}
+.tpw input{font-size:24px;letter-spacing:.3em;text-align:center;padding:10px;border-radius:12px;border:2px solid var(--line-strong);background:var(--paper);color:var(--ink)}
+.tpw .btnrow{display:flex;gap:8px}.tpw .btnrow .btn{flex:1}.tpwbad{color:#D64545;font-weight:700;margin:0}
 .tgrid.bgs{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 .tlg{display:flex;flex-direction:column;align-items:center;gap:3px;border:2px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink);padding:6px;font:800 13px var(--font-body);cursor:pointer;min-width:0}
 .tlg.on{border-color:var(--k5);box-shadow:0 0 0 3px var(--k5s)}.tlg img{width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:9px}.tlg small{font:600 11px var(--font-body);color:var(--muted)}
@@ -2575,15 +2583,16 @@ function viewGame(){
   const rvn=revengeWords().length;
   const rev=rvn?`<button class="mcard revcard" data-act="revenge"><span class="mart">👻</span><span class="mname">復仇怪</span><span class="mles">答錯的單字變成怪物回來了</span><span class="mnum">${rvn} 個字等你復仇${rvn>REV_MAX?`（每次 ${REV_MAX} 個）`:''}</span></button>`:'';
   return `<div class="ghead"><div class="gtitle"><span class="glogo">⚔️</span><div><b>單字打怪王</b><span>答對攻擊、答錯被反擊</span></div></div>
-    <div class="gnav"><button class="link" data-act="snd" aria-label="音效">${g.snd?'🔊 音效':'🔇 靜音'}</button><button class="link" data-act="practice">練習模式</button></div></div>
+    <div class="gnav"><button class="link" data-act="snd" aria-label="音效">${g.snd?'🔊 音效':'🔇 靜音'}</button><button class="link" data-act="practice">練習模式</button><button class="link" data-act="test" aria-label="測試工具（家長／老師用）">🧪 測試</button></div></div>
   <section class="card gplayer"><div class="prow"><div class="heroav"><div class="heroimg">${heroImg()}</div><div class="lvbadge sm">Lv.${lv}</div></div>
     <div class="pinfo"><div class="xprow"><b>經驗值</b><span>${g.xp-a}/${b-a}</span></div><div class="gtrack"><i style="width:${pct}%"></i></div>
     <div class="pstats"><span>${HEART.replace('%c','')} ${pmax()}</span><span>📚 學會 ${learnedTotal()}/${ALL.length} 字</span><span>🪙 ${g.coins}</span>${g.inv.potion?`<span>🧪 ${g.inv.potion}</span>`:''}${g.inv.crystal?`<span>🔮 ${g.inv.crystal}</span>`:''}<span>🔥 連續 ${sn} 天</span></div></div></div>
     <div class="daily"><div class="xprow"><b>🎯 今日目標：答對 ${GOAL} 題</b><span>${Math.min(g.today,GOAL)}/${GOAL}${g.today>=GOAL?' ✓':''}</span></div><div class="gtrack d"><i style="width:${gp}%"></i></div></div>
     <div class="rsel"><div class="xprow"><b>🎁 額外寶箱獎勵</b></div><div class="seg s3">${rtypes.map(r=>`<button data-act="setReward" data-r="${r[0]}" aria-pressed="${g.reward===r[0]}">${r[1]}<small>${r[2]}</small></button>`).join('')}</div></div>
     <div class="btnrow"><button class="btn" data-act="coll">📖 怪物圖鑑</button><button class="btn" data-act="heroes">🦸 更換主角</button><button class="btn" data-act="shop">🛒 道具商店</button></div></section>
-  <section class="mapsec"><div class="sec-h"><h2>選一隻怪物開打</h2></div>${rev?`<div class="mgrid">${rev}</div>`:''}<p class="soft">每週：打完全部課文（2★以上）→ 挑戰精英怪；每兩週：兩位精英都通過 → 挑戰魔王。</p>${cards}</section>
-  <section class="tcard"><button class="btn" data-act="test">🧪 測試工具（家長／老師用：主角動作、音效、怪物圖）</button></section>`;
+  <section class="mapsec"><div class="sec-h"><h2>選一隻怪物開打</h2></div>${rev?`<div class="mgrid">${rev}</div>`:''}<p class="soft">每週：打完全部課文（2★以上）→ 挑戰精英怪；每兩週：兩位精英都通過 → 挑戰魔王。</p>${cards}</section>${S.tpw?`<div class="tpwbg"><form class="card tpw" onsubmit="return false"><h3>🧪 測試工具</h3><p class="soft">家長／老師用，請輸入密碼</p>
+    <input id="tpwin" type="password" inputmode="numeric" autocomplete="off" aria-label="密碼">${S.tpw==='bad'?'<p class="tpwbad">密碼不對，再試一次</p>':''}
+    <div class="btnrow"><button type="button" class="btn" data-act="testno">取消</button><button type="submit" class="btn primary" data-act="testgo">進入</button></div></form></div>`:''}`;
 }
 function viewReward(){
   const r=B.res,bn=r.bonus;let rv='';
@@ -2623,16 +2632,21 @@ function viewColl(){
   const tabs=[['all','全部',null]].concat(TIERT).concat(TYPES.map(t=>[t[0],t[2]+' '+t[1],m=>m.t===t[0]])).map(t=>{
     const n=t[2]?` ${RMON.filter(m=>t[2](m)&&own(m)).length}/${RMON.filter(t[2]).length}`:'';
     return `<button class="ctab" data-act="cdx" data-t="${t[0]}" aria-pressed="${tab===t[0]}">${t[1]}<small>${n}</small></button>`;}).join('');
-  let html='';
+  // legends (傳奇): shown as dark silhouettes; how to earn them is not decided yet (g.lcards will hold the ones owned)
+  const LG=typeof LMON!=='undefined'?LMON:[],lown=m=>!!(g.lcards||{})[m.id];
+  const ltile=m=>{const T=TYPES.find(t=>t[0]===m.t)||TYPES[0],o=lown(m);return `<div class="rt legend${o?'':' locked'}" style="--c1:${T[3]};--c2:${T[4]}"><span class="rtt">${T[2]} ${T[1]}</span><div class="rtart"><img alt="" src="${LSPR[m.id].u}"${o?'':' class="sil"'}></div><div class="rtn">${o?m.zh:'？？？'}</div><div class="rtb L">傳奇</div></div>`;};
+  const lsec=LG.length?`<h3 class="chd">👑 傳奇 <small>${LG.filter(lown).length}/${LG.length}</small></h3><p class="soft lnote">比魔王更難遇到的傳說怪物，取得方式即將公開！</p><div class="rgrid2">${LG.map(ltile).join('')}</div>`:'';
+  const ltab=LG.length?`<button class="ctab" data-act="cdx" data-t="tL" aria-pressed="${tab==='tL'}">👑 傳奇<small> ${LG.filter(lown).length}/${LG.length}</small></button>`:'';
+  let html=tab==='all'||tab==='tL'?lsec:'';
   const tt=TIERT.find(t=>t[0]===tab);
   if(tt){const list=RMON.filter(tt[2]);html+=`<h3 class="chd">${tt[1]} <small>${list.filter(own).length}/${list.length}</small></h3><div class="rgrid2">${list.map(m=>rtile(m.id,own(m),g.rcards[m.id]||0)).join('')}</div>`;}
-  else TYPES.filter(t=>tab==='all'||tab===t[0]).forEach(t=>{
+  else if(tab!=='tL')TYPES.filter(t=>tab==='all'||tab===t[0]).forEach(t=>{
     const list=RMON.filter(m=>m.t===t[0]);
     html+=`<h3 class="chd">${t[2]} ${t[1]} <small>${list.filter(own).length}/${list.length}</small></h3><div class="rgrid2">${list.map(m=>rtile(m.id,own(m),g.rcards[m.id]||0)).join('')}</div>`;
   });
   return `<div class="cview2 codex"><div class="btop"><button class="x" data-act="goGame" aria-label="返回"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><h2 class="vt">怪物圖鑑</h2><span class="lvpill">${have}/${total}</span></div>
   <p class="soft">打贏怪物並拿到 2 顆星以上，就會收服牠；沒打到的怪物，可以從寶箱抽到。精英怪和魔王要先通過前面的課文。</p>
-  <div class="ctabs" role="tablist">${tabs}</div>${html}</div>`;
+  <div class="ctabs" role="tablist">${tabs}${ltab}</div>${html}</div>`;
 }
 function viewHeroes(){
   const g=G();
@@ -2661,12 +2675,15 @@ function tlStop(){TL.timers.forEach(clearTimeout);TL.timers=[];if(TL.auto){clear
 function tlSetup(){if(!TL.hid)TL.hid=G().heroId;if(!TL.mon)TL.mon=RMON[0].id;if(ENG.ensure()){try{ENG.forceBg(TL.bg);ENG.setup(TL.mon,heroEq(),TL.hid,false);}catch(e){}}}
 function tlType(){return (MBY[TL.mon]||{}).t||'fire';}
 function tlName(){const h=HEROES.find(x=>x.id===TL.hid)||HEROES[0],m=MBY[TL.mon]||RMON[0];return h.zh+' ('+h.id+') vs '+m.zh+' ('+m.id+' · '+((TYPES.find(t=>t[0]===m.t)||[])[1]||m.t)+')'+(typeof BGS!=='undefined'?' · 場景：'+((BGS[TL.bg||BGT[m.t]||BGT['default']]||{}).zh||''):'');}
+// the test lab is for parents/teachers: a password keeps kids out (asked once per visit). Change it here.
+const TEST_PW='2580';
+function tpwTry(v){if(String(v||'').trim()===TEST_PW){S.tpw=false;S.tpOK=true;S.view='test';tlStop();tlSetup();render();window.scrollTo&&window.scrollTo(0,0);}else{S.tpw='bad';render();}}
 function viewTest(){
   if(!TL.hid||!TL.mon)tlSetup();
   const b=(k,label,extra)=>`<button class="btn tlb" data-act="tl" data-k="${k}" ${extra||''}>${label}</button>`;
   const SND=[['hit','命中（主角）'],['crit','收尾／大絕招'],['wrong','答錯提示'],['impact','怪物打中'],['impact1','怪物打中（小）'],['hurt','答錯（平面版）'],['win','勝利'],['lose','失敗'],['coin','金幣'],['open','寶箱／升級'],['tap','按鈕']];
-  return `<div class="tlab"><div class="qbar"><button class="x" data-act="goGame" aria-label="回到地圖"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><b class="tlt">🧪 測試工具 <small>不會影響遊戲進度</small></b></div>
-  <section class="stage c3 tstage">${E3.ok?'<div class="c3d"></div>':'<p class="soft">這台裝置不支援 3D 畫面（WebGL），無法測試動畫。</p>'}<div class="tlname" id="tlname">${tlName()}</div></section>
+  return `<div class="tlab"><div class="tltop"><div class="qbar"><button class="x" data-act="goGame" aria-label="回到地圖"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><b class="tlt">🧪 測試工具 <small>不會影響遊戲進度</small></b></div>
+  <section class="stage c3 tstage">${E3.ok?'<div class="c3d"></div>':'<p class="soft">這台裝置不支援 3D 畫面（WebGL），無法測試動畫。</p>'}<div class="tlname" id="tlname">${tlName()}</div></section></div>
   <section class="card tsec"><h3>主角動作</h3><div class="tgrid heroes">${HEROES.map(h=>`<button class="tlh${h.id===TL.hid?' on':''}" data-act="tl" data-k="hero" data-id="${h.id}"><img alt="" src="${(HSPR[h.id]||HSPR.h1).u}"><span>${h.zh}</span></button>`).join('')}</div>
     <div class="trow">${b('attack','⚔️ 攻擊')}${b('hit','💥 受傷')}${b('win','🏆 勝利')}${b('ult','🌟 大絕招')}</div><p class="soft">待機動作會一直播放；攻擊會丟出單字字母，最後收尾一擊。</p></section>
   <section class="card tsec"><h3>怪物攻擊（12 種屬性，含音效）</h3><div class="trow">${TYPES.map(t=>b('matk',t[2]+' '+t[1],`data-t="${t[0]}"`)).join('')}</div>
@@ -2703,6 +2720,7 @@ function tlAct(k,ds){
   }catch(e){}
 }
 function afterGameRender(){
+  if(S.tpw){const i=document.getElementById('tpwin');if(i&&i.focus){i.focus();i.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();tpwTry(i.value);}};}}
   if(S.view==='test'){if(E3.ok){const sl=app.querySelector('.c3d');if(sl)ENG.mount(sl);}return;}
   if(S.view==='battle'&&B){
     if(E3.ok){const sl=app.querySelector('.c3d');if(sl)ENG.mount(sl);}
@@ -2753,7 +2771,9 @@ app.addEventListener('click',e=>{
     case 'setReward':G().reward=b.dataset.r;saveStore();SFX.tap();render();break;
     case 'snd':{const g=G();g.snd=!g.snd;saveStore();ac();SFX.tap();render();break;}
     case 'coll':S.view='coll';render();top();break;
-    case 'test':ac();S.view='test';tlStop();tlSetup();render();top();break;
+    case 'test':ac();if(S.tpOK){S.view='test';tlStop();tlSetup();render();top();}else{S.tpw=true;render();}break;
+    case 'testgo':{const i=document.getElementById('tpwin');tpwTry(b.dataset.pw!=null?b.dataset.pw:i&&i.value);break;}
+    case 'testno':S.tpw=false;render();break;
     case 'tl':ac();tlAct(b.dataset.k,b.dataset);break;
     case 'heroes':S.view='heroes';render();top();break;
     case 'pickHero':G().heroId=b.dataset.id;saveStore();SFX.tap();render();break;
