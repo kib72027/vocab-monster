@@ -61,7 +61,7 @@ act('goGame');A(!/等你復仇/.test(clean()),'no revenge card left');
 {act('goGame');A(/data-act="test"/.test(app.innerHTML),'home has test button');act('test');A(D.S.view!=='test'&&/id="tpwin"/.test(app.innerHTML),'test lab asks for a password');
  act('testgo',{pw:'0000'});A(D.S.view!=='test'&&/tpwbad/.test(app.innerHTML),'wrong password refused');act('testno');A(!/tpwin/.test(app.innerHTML),'cancel closes the dialog');act('test');act('testgo',{pw:'0828'});A(D.S.view==='test','right password opens the test lab');act('goGame');const g=D.G(),snap=JSON.stringify([g.xp,g.coins,g.heroId,g.stars,g.def,g.rcards]);
  act('test');A(D.S.view==='test','test view');const h=clean();A(!/undefined|NaN/.test(h),'test html clean');
- A((app.innerHTML.match(/data-k="hero"/g)||[]).length===10,'10 hero buttons');A((app.innerHTML.match(/data-k="mon"/g)||[]).length===D.RMON.length,'all monsters listed');
+ A((app.innerHTML.match(/data-k="hero"/g)||[]).length===10,'10 hero buttons');A((app.innerHTML.match(/data-k="mon"/g)||[]).length===D.RMON.length+D.LMON.length,'all monsters + legends listed');
  A((app.innerHTML.match(/data-k="bg"/g)||[]).length===Object.keys(global.BGS0||{}).length+1||typeof global.BGS0==='undefined','one scene button per background + auto');
  A((app.innerHTML.match(/data-k="matk"/g)||[]).length===12&&(app.innerHTML.match(/data-k="sndm"/g)||[]).length===12,'12 element attacks and sounds');
  const other=g.heroId==='h3'?'h4':'h3';act('tl',{k:'hero',id:other});act('tl',{k:'mon',id:'n050'});act('tl',{k:'next'});act('tl',{k:'prev'});

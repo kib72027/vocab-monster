@@ -448,13 +448,14 @@ function ensure(){
     return true;
   }catch(e){E3.ok=false;E3.err=String(e&&e.message||e);return false;}
 }
-const SPR=id=>(typeof MSPR!=='undefined'&&MSPR[id])||(typeof RSPR!=='undefined'&&RSPR[id])||null;
+const SPR=id=>(typeof MSPR!=='undefined'&&MSPR[id])||(typeof RSPR!=='undefined'&&RSPR[id])||(typeof LSPR!=='undefined'&&LSPR[id])||null;
+const MINFO=id=>(typeof MBY!=='undefined'&&MBY[id])||(typeof LMON!=='undefined'&&LMON.find(m=>m.id===id))||{};
 function mon0(id){return E.big?3.3:2.8;}
 function setup(monId,eq,hid,big){
   E.big=!!big;
-  const m=(typeof RSPR!=='undefined'&&RSPR[monId])?{root:Gp(),sc:1}:monModel(monId),h=heroModel(eq);
+  const m=SPR(monId)?{root:Gp(),sc:1}:monModel(monId),h=heroModel(eq);
   const SP=SPR(monId);if(SP&&!E.imgs[monId]){const im=new Image();im.src=SP.u;E.imgs[monId]={im,tex:null};}
-  const mon={nf:((typeof MBY!=='undefined'&&MBY[monId])||{}).f===0,img:SP?monId:null,root:SP?Gp():m.root,base:[E.big?3.4:3.0,0,.1],ry:-.8,sc:m.sc,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},id:monId};
+  const mon={nf:MINFO(monId).f===0,img:SP?monId:null,root:SP?Gp():m.root,base:[E.big?3.4:3.0,0,.1],ry:-.8,sc:m.sc,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},id:monId};
   const HA0=(typeof HANIM!=='undefined')&&hid&&HANIM[hid];if(HA0&&!HA0._ld){HA0._ld=1;['idle','attack','hit','win'].forEach(k=>HA0[k].forEach(f=>{const im=new Image();im.src=f.u;f.im=im;f.tex=null;if(im.decode)im.decode().catch(()=>{});}));}
   const HS=(typeof HSPR!=='undefined')&&hid&&HSPR[hid];if(HS&&!E.imgs['H'+hid]){const im=new Image();im.src=HS.u;E.imgs['H'+hid]={im,tex:null};}
   const hero={himg:HS?hid:null,root:HS?Gp():h.root,base:[-2.75,0,.4],ry:.8,sc:1,off:{x:0,y:0,sq:1,rz:0,ry:0,sc:1},armR:HS?{r:[0,0,0]}:h.armR,hand:h.hand,head:h.head};
@@ -467,7 +468,7 @@ function setup(monId,eq,hid,big){
   E.ring=ring;E.env=[ground,ring];
   // painted battle background (assets/backgrounds via tools/mkbg.py), chosen by the monster's element; replaces the drawn scenery
   E.bg=null;
-  if(typeof BGS!=='undefined'){const mt=((typeof MBY!=='undefined'&&MBY[monId])||{}).t,k=(E.forceBg&&BGS[E.forceBg])?E.forceBg:(BGT[mt]||BGT['default']),B=BGS[k];
+  if(typeof BGS!=='undefined'){const mt=MINFO(monId).t,k=(E.forceBg&&BGS[E.forceBg])?E.forceBg:(BGT[mt]||BGT['default']),B=BGS[k];
     if(B){if(!E.imgs['BG'+k]){const im=new Image();im.src=B.u;E.imgs['BG'+k]={im,tex:null};}E.bg={k,py:B.py,pu:B.pu==null?.5:B.pu,pw:B.pw||.35,ia:B.w/B.h,amb:B.amb};E.env=[ring];}}
   ambInit();
   E.decor=[{t:'tree',x:-13,z:-16,s:2.6},{t:'tree',x:14,z:-18,s:2.9},{t:'tree',x:-19,z:-20,s:3},{t:'bush',x:-15,z:-14,s:1.2},{t:'bush',x:16.5,z:-15,s:1.1},
@@ -597,7 +598,7 @@ function nodeMatM(o){const f=o.off,k=o.sc*f.sc,sq=f.sq*(o.off.sqi||1),bob=o.bob|
 function frame(now){
   requestAnimationFrame(frame);
   if(!E.canvas||!E.canvas.isConnected||!E.mon)return;
-  const dt=Math.min(.05,(now-E.last)/1000);E.last=now;E.time+=dt;
+  let dt=Math.min(.05,(now-E.last)/1000);E.last=now;if(E.hs>0){E.hs-=dt;dt*=.12;}E.time+=dt;   // hit-stop: time nearly freezes for a moment on a big hit
   const c=E.canvas,dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(2,Math.round(c.clientWidth*dpr)),h=Math.max(2,Math.round(c.clientHeight*dpr));
   if(c.width!==w||c.height!==h){c.width=w;c.height=h;}
   E.W=c.width;E.H=c.height;
@@ -718,13 +719,27 @@ function sigBase(sentence,th,hid){
   const m=E.mon,gl=utex(hid,th),rm=s=>{const j=E.sprites.indexOf(s);if(j>=0)E.sprites.splice(j,1);};
   const words=String(sentence||'').replace(/[“”"]/g,'').split(/\s+/).filter(Boolean).slice(0,9);if(!words.length)words.push('!');
   const n=words.length,T=words.map((w,k)=>sentTex(w,th.hues[k%th.hues.length],th.gl,th.lo)),sps=T.map(t=>({tex:t.tex,pos:mpos(),w:0,h:0,rot:0,a:0}));
-  const ban=sentTex(th.n+'！',th.hues[0],th.gl,th.lo),bsp={tex:ban.tex,pos:mpos(),w:0,h:0,rot:0,a:0};
-  return{m,gl,rm,n,T,sps,ban,bsp,wsz:.56,hid,th};}
-function sigBanner(K,tot){E.sprites.push(K.bsp);tween(tot,u=>{const t=u*tot,c=mpos();K.bsp.pos=[c[0]-.1,c[1]+2.6,c[2]+.9];const bk=ease(cl(t/.35)),bf=t>1.6?Math.max(0,1-(t-1.6)/.5):1;K.bsp.h=.95*bk;K.bsp.w=K.bsp.h*K.ban.asp;K.bsp.a=bf;});}
-function sigWords(K,fn,tot){K.sps.forEach(s=>E.sprites.push(s));
-  tween(tot,u=>{const t=u*tot,c=mpos();for(let k=0;k<K.n;k++){const r=fn(k,t,c),s=K.sps[k];if(!r){s.a=0;continue;}s.pos=r.pos;s.a=r.a===undefined?1:r.a;s.rot=r.rot||0;const g=(r.sc===undefined?1:r.sc)*K.wsz;s.h=g;s.w=g*K.T[k].asp;}});}
+  const ban={tex:null,asp:1},bsp={tex:null,pos:mpos(),w:0,h:0,rot:0,a:0};   // no name banner: the stage shows English only
+  const K={m,gl,rm,n,T,sps,ban,bsp,wsz:.56,hid,th,star:ustar(hid,th)};E.ulgl=gl;E.ulstar=K.star;sigCharge(K);return K;}
+// charge-up shared by every ultimate: motes of light spiral up around the hero (no aura sprite: it would be drawn over the hero and wash him out)
+function sigCharge(K){
+  tween(1.3,u=>{const p=hpos();
+    if(u<.8)for(let j=0;j<2;j++){const a=Math.random()*PI*2,R=.7+Math.random()*.5;E.parts.push({x:p[0]+Math.cos(a)*R,y:.2+Math.random()*.6,z:p[2]+Math.sin(a)*R*.6,vx:-Math.cos(a)*.35,vy:1.6+Math.random()*1.4,vz:0,g:0,dr:.6,life:.8,max:.8,size:.14+Math.random()*.14,gs:-.1,tex:Math.random()<.5?K.star:K.gl,rot:0,vr:2});}});
+}
+function sigBanner(K,tot){return;E.sprites.push(K.bsp);tween(tot,u=>{const t=u*tot,c=mpos();K.bsp.pos=[c[0]-.1,c[1]+2.6,c[2]+.9];const bk=ease(cl(t/.35)),bf=t>1.6?Math.max(0,1-(t-1.6)/.5):1;K.bsp.h=.95*bk;K.bsp.w=K.bsp.h*K.ban.asp;K.bsp.a=bf;});}
+function sigWords(K,fn,tot){const halo=K.sps.map(()=>({tex:K.gl,pos:mpos(),w:0,h:0,rot:0,a:0})),last=K.sps.map(()=>null);
+  halo.forEach(h=>E.sprites.push(h));K.sps.forEach(s=>E.sprites.push(s));
+  tween(tot,u=>{const t=u*tot,c=mpos();for(let k=0;k<K.n;k++){const r=fn(k,t,c),s=K.sps[k],H=halo[k];if(!r){s.a=0;H.a=0;last[k]=null;continue;}s.pos=r.pos;s.a=r.a===undefined?1:r.a;s.rot=r.rot||0;const g=(r.sc===undefined?1:r.sc)*K.wsz;s.h=g;s.w=g*K.T[k].asp;
+      H.pos=[r.pos[0],r.pos[1],r.pos[2]-.05];H.w=s.w*1.15+g*.8;H.h=g*2.1;H.a=.38*s.a*(.85+.15*Math.sin(t*7+k));
+      const L=last[k];if(L&&s.a>.2){const d=Math.hypot(r.pos[0]-L[0],r.pos[1]-L[1]);if(d>.04&&Math.random()<Math.min(1,d*6))E.parts.push({x:r.pos[0]+(Math.random()-.5)*s.w*.6,y:r.pos[1]+(Math.random()-.5)*g*.5,z:r.pos[2]-.08,vx:(L[0]-r.pos[0])*4,vy:(L[1]-r.pos[1])*4+.2,vz:0,g:0,dr:2.5,life:.45,max:.45,size:.12+Math.random()*.12,gs:-.15,tex:Math.random()<.6?K.star:K.gl,rot:Math.random()*6,vr:3});}
+      last[k]=r.pos.slice();}});
+  at(tot+.05,()=>halo.forEach(K.rm));}
 function sigLine(ray,pos,ang,len,hh,dur,gl){const sp={tex:ray,pos:pos,w:0,h:hh,rot:ang,a:1};E.sprites.push(sp);tween(dur,v=>{sp.w=len*(.3+.8*ease(v));sp.a=1-v*v;sp.h=hh*(1-v*.5);});at(dur+.04,()=>{const j=E.sprites.indexOf(sp);if(j>=0)E.sprites.splice(j,1);});}
-function sigRing(t,R,dur){const rg=E.ring;if(rg)tween(dur,u=>{rg.p=[t[0],.05,t[2]];const r=.3+R*u;rg.s=[r,.01,r];rg.a=.95*(1-u);});}
+function hitstop(d){E.hs=Math.max(E.hs||0,d);}
+function sigRing(t,R,dur){hitstop(.11);const G=E.ulgl||E.tex.gold,ST=E.ulstar||G,wave={tex:G,pos:[t[0],t[1]+.3,t[2]+.4],w:0,h:0,rot:0,a:0};E.sprites.push(wave);
+  tween(.9,u=>{const e=1-Math.pow(1-u,3);wave.w=wave.h=1.5+7.5*e;wave.a=.55*(1-u)*(1-u);});at(.95,()=>{const j=E.sprites.indexOf(wave);if(j>=0)E.sprites.splice(j,1);});
+  at(.15,()=>{for(let j=0;j<22;j++){const a=Math.random()*PI*2,v=.6+Math.random()*1.6;E.parts.push({x:t[0]+(Math.random()-.5)*1.4,y:t[1]+(Math.random()-.2)*1.6,z:t[2]+.5,vx:Math.cos(a)*v,vy:.4+Math.random()*1.0,vz:0,g:-.3,dr:1.2,life:1.4+Math.random()*.6,max:2,size:.12+Math.random()*.16,gs:-.05,tex:Math.random()<.55?ST:G,rot:Math.random()*6,vr:1.5});}});
+  const rg=E.ring;if(rg)tween(dur,u=>{rg.p=[t[0],.05,t[2]];const r=.3+R*u;rg.s=[r,.01,r];rg.a=.95*(1-u);});}
 // --- 勇者：聖光審判 (giant light sword drops through the sentence) ---
 function sigH1(sentence,th){const K=sigBase(sentence,th,'h1'),{m,gl,rm,n}=K,TOT=4.4,HT=2.2,ray=uslash('h1',th);
   const sw={tex:tSword(),pos:mpos(),w:0,h:0,rot:0,a:0};
@@ -945,11 +960,11 @@ function ultimate(sentence,hid){ // 大絕招 (per hero): the sentence's words a
   const gb=(p,nn,sp,life,size)=>goldBurst(p,nn,sp,life,size,gl),rm=s=>{const j=E.sprites.indexOf(s);if(j>=0)E.sprites.splice(j,1);};
   const words=String(sentence||'').replace(/[“”"]/g,'').split(/\s+/).filter(Boolean).slice(0,9),n=words.length||1;if(!words.length)words.push('!');
   const T=words.map((w,k)=>sentTex(w,th.hues[k%th.hues.length],th.gl,th.lo)),sps=T.map(t=>({tex:t.tex,pos:mpos(),w:0,h:0,rot:0,a:0}));
-  const ban=sentTex(th.n+'！',th.hues[0],th.gl,th.lo),bsp={tex:ban.tex,pos:mpos(),w:0,h:0,rot:0,a:0};
+  const ban={tex:null,asp:1},bsp={tex:null,pos:mpos(),w:0,h:0,rot:0,a:0};
   const orbs=(th.orb||[]).map(e=>({tex:emojiTex(e),pos:mpos(),w:0,h:0,rot:0,a:0})),pil={tex:gl,pos:mpos(),w:0,h:0,rot:0,a:0};
   swing(.8);const s0=hpos(),from=[s0[0]+.9,s0[1]+.6,s0[2]+.9];
   at(.05,()=>{flare(from,3,.5,gl);gb(from,22,3.5,.5,.32);});
-  at(.1,()=>{if(th.pillar)E.sprites.push(pil);sps.forEach(s=>E.sprites.push(s));orbs.forEach(s=>E.sprites.push(s));E.sprites.push(bsp);});
+  at(.1,()=>{if(th.pillar)E.sprites.push(pil);sps.forEach(s=>E.sprites.push(s));orbs.forEach(s=>E.sprites.push(s));});
   const FALL={rain:.42,meteor:.5,arrows:.42,dash:.36,dive:.34,volley:.42,soft:.95}[FM]||.42,ST=FM==='soft'?.2:.14,HIT=3.6,TOTAL=HIT+n*ST+FALL;
   const orbP=(k,t,c)=>{const o=th.orbit,a0=k/n*PI*2;
     if(o==='vortex'){const q=t*5.2+a0,R=1.5+.35*Math.sin(t*3+k),y=(.5+.5*Math.sin(t*2.2+a0))*2.4;return[c[0]+Math.cos(q)*R*1.1,c[1]+y,c[2]+Math.sin(q)*R*.9+.4];}
