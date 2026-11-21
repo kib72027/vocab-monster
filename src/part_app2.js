@@ -1850,14 +1850,14 @@ function viewGame(){
   const rvn=revengeWords().length;
   const rev=rvn?`<button class="mcard revcard" data-act="revenge"><span class="mart">👻</span><span class="mname">復仇怪</span><span class="mles">答錯的單字變成怪物回來了</span><span class="mnum">${rvn} 個字等你復仇${rvn>REV_MAX?`（每次 ${REV_MAX} 個）`:''}</span></button>`:'';
   return `<div class="ghead"><div class="gtitle"><span class="glogo">⚔️</span><div><b>單字打怪王</b><span>答對攻擊、答錯被反擊</span></div></div>
-    <div class="gnav"><button class="link" data-act="snd" aria-label="音效">${g.snd?'🔊 音效':'🔇 靜音'}</button><button class="link" data-act="practice">練習模式</button><button class="link" data-act="test" aria-label="測試工具（家長／老師用）">🧪 測試</button></div></div>
+    <div class="gnav"><button class="link" data-act="snd" aria-label="音效">${g.snd?'🔊 音效':'🔇 靜音'}</button><button class="link" data-act="practice">練習模式</button><button class="link" data-act="test" aria-label="測試工具">🧪 測試</button></div></div>
   <section class="card gplayer"><div class="prow"><div class="heroav"><div class="heroimg">${heroImg()}</div><div class="lvbadge sm">Lv.${lv}</div></div>
     <div class="pinfo"><div class="xprow"><b>經驗值</b><span>${g.xp-a}/${b-a}</span></div><div class="gtrack"><i style="width:${pct}%"></i></div>
     <div class="pstats"><span>${HEART.replace('%c','')} ${pmax()}</span><span>📚 學會 ${learnedTotal()}/${ALL.length} 字</span><span>🪙 ${g.coins}</span>${g.inv.potion?`<span>🧪 ${g.inv.potion}</span>`:''}${g.inv.crystal?`<span>🔮 ${g.inv.crystal}</span>`:''}<span>🔥 連續 ${sn} 天</span></div></div></div>
     <div class="daily"><div class="xprow"><b>🎯 今日目標：答對 ${GOAL} 題</b><span>${Math.min(g.today,GOAL)}/${GOAL}${g.today>=GOAL?' ✓':''}</span></div><div class="gtrack d"><i style="width:${gp}%"></i></div></div>
     <div class="rsel"><div class="xprow"><b>🎁 額外寶箱獎勵</b></div><div class="seg s3">${rtypes.map(r=>`<button data-act="setReward" data-r="${r[0]}" aria-pressed="${g.reward===r[0]}">${r[1]}<small>${r[2]}</small></button>`).join('')}</div></div>
     <div class="btnrow"><button class="btn" data-act="coll">📖 怪物圖鑑</button><button class="btn" data-act="heroes">🦸 更換主角</button><button class="btn" data-act="shop">🛒 道具商店</button></div></section>
-  <section class="mapsec"><div class="sec-h"><h2>選一隻怪物開打</h2></div>${rev?`<div class="mgrid">${rev}</div>`:''}<p class="soft">每週：打完全部課文（2★以上）→ 挑戰精英怪；每兩週：兩位精英都通過 → 挑戰魔王。</p>${cards}</section>${S.tpw?`<div class="tpwbg"><form class="card tpw" onsubmit="return false"><h3>🧪 測試工具</h3><p class="soft">家長／老師用，請輸入密碼</p>
+  <section class="mapsec"><div class="sec-h"><h2>選一隻怪物開打</h2></div>${rev?`<div class="mgrid">${rev}</div>`:''}<p class="soft">每週：打完全部課文（2★以上）→ 挑戰精英怪；每兩週：兩位精英都通過 → 挑戰魔王。</p>${cards}</section>${S.tpw?`<div class="tpwbg"><form class="card tpw" onsubmit="return false"><h3>🧪 測試工具</h3><p class="soft">請輸入密碼</p>
     <input id="tpwin" type="password" inputmode="numeric" autocomplete="off" aria-label="密碼">${S.tpw==='bad'?'<p class="tpwbad">密碼不對，再試一次</p>':''}
     <div class="btnrow"><button type="button" class="btn" data-act="testno">取消</button><button type="submit" class="btn primary" data-act="testgo">進入</button></div></form></div>`:''}`;
 }
@@ -1943,7 +1943,7 @@ function tlSetup(){if(!TL.hid)TL.hid=G().heroId;if(!TL.mon)TL.mon=RMON[0].id;if(
 function tlType(){return (MBY[TL.mon]||{}).t||'fire';}
 function tlName(){const h=HEROES.find(x=>x.id===TL.hid)||HEROES[0],m=MBY[TL.mon]||RMON[0];return h.zh+' ('+h.id+') vs '+m.zh+' ('+m.id+' · '+((TYPES.find(t=>t[0]===m.t)||[])[1]||m.t)+')'+(typeof BGS!=='undefined'?' · 場景：'+((BGS[TL.bg||BGT[m.t]||BGT['default']]||{}).zh||''):'');}
 // the test lab is for parents/teachers: a password keeps kids out (asked once per visit). Change it here.
-const TEST_PW='2580';
+const TEST_PW='0828';
 function tpwTry(v){if(String(v||'').trim()===TEST_PW){S.tpw=false;S.tpOK=true;S.view='test';tlStop();tlSetup();render();window.scrollTo&&window.scrollTo(0,0);}else{S.tpw='bad';render();}}
 function viewTest(){
   if(!TL.hid||!TL.mon)tlSetup();
